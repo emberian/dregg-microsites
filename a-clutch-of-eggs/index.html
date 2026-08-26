@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>A clutch of eggs</title>
+  <meta name="description" content="The Dragon's Clutch lexicon: Realms, Hoards, Eggs and the Hatch · a market protocol with no liquidations, where claims are curves and resolution is something anyone can recompute.">
+  <meta name="theme-color" content="#10110c">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/a-clutch-of-eggs/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="A clutch of eggs">
+  <meta property="og:description" content="Realms, Hoards, Eggs and the Hatch · a market protocol with no liquidations, where claims are curves and resolution is recomputation.">
+  <style>
+    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--orange); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(52px, 9vw, 104px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--orange); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--green); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    .lexicon { border-top: 4px solid var(--paper); margin: 24px 0 8px; }
+    .word { display: grid; grid-template-columns: 150px 1fr; gap: 18px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+    .word h3 { margin: 0; font: 850 20px/1.2 var(--display); letter-spacing: .01em; text-transform: uppercase; color: var(--green); }
+    .word p { margin: 0; font-size: 14.5px; }
+    .promise {
+      margin: 36px 0; padding: 24px 26px; border: 1px solid var(--rule); border-left: 4px solid var(--orange);
+    }
+    .promise p { margin: 0; font: 700 17px/1.55 var(--mono); color: var(--paper); max-width: none; }
+    .promise .who { margin-top: 10px; font: 600 10.5px/1 var(--mono); color: var(--dimmer); letter-spacing: .1em; text-transform: uppercase; }
+    pre { overflow-x: auto; margin: 22px 0; padding: 18px 20px; background: #0a0b07; border: 1px solid var(--rule); border-left: 3px solid var(--green); font: 500 12.5px/1.75 var(--mono); color: #c9c6b8; }
+    pre .r { color: var(--orange); }
+    .status { margin-top: 44px; padding-top: 14px; border-top: 1px solid var(--rule); font: 600 11px/1.8 var(--mono); color: var(--dimmer); letter-spacing: .05em; text-transform: uppercase; }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 56px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    @media (max-width: 560px) { .word { grid-template-columns: 1fr; gap: 4px; } }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">04 · Dragon's Clutch</span>
+  </header>
+
+  <section class="titleblock">
+    <p class="kicker">Dragon's Clutch · the lexicon, and the theorem under it</p>
+    <h1>A clutch<br>of <span>eggs.</span></h1>
+    <p class="dek">Dragon's Clutch is a market protocol that compiles a bounded
+    question about the world into conserved payoff assets. It has its own
+    vocabulary, and the vocabulary is worth learning first · because the
+    protocol's central promise is written in it.</p>
+  </section>
+
+  <h2>The <em>words.</em></h2>
+  <div class="lexicon">
+    <div class="word"><h3>Realm</h3><p>An immutable collateral profile: one
+    mint, one token program, frozen presets. The protocol never mixes
+    collateral across Realms.</p></div>
+    <div class="word"><h3>Hoard</h3><p>The market-local vault. Reserved
+    exclusively for claimants · Hoard principal cannot fund fees, rent,
+    operations, or anyone's convenience.</p></div>
+    <div class="word"><h3>Egg</h3><p>One basis claim over the outcome space.
+    Categorical at degree zero; a smooth spline weight at degrees one through
+    three.</p></div>
+    <div class="word"><h3>Clutch</h3><p>One complete set: one unit of every Egg.
+    A clutch can always be recombined into its collateral before resolution ·
+    split and merge are exact inverses.</p></div>
+    <div class="word"><h3>Feed · Window</h3><p>A shared authenticated
+    observation series, and an immutable derived result over a frozen interval
+    of it. Provider transport is not product truth.</p></div>
+    <div class="word"><h3>Hatch</h3><p>Resolution: an immutable,
+    evidence-derived transition that assigns each Egg its exact integer weight
+    and lets it redeem.</p></div>
+  </div>
+
+  <h2>The <em>promise.</em></h2>
+  <p>Most venues manage risk with machinery pointed at you: margin calls,
+  liquidation engines, insurance funds, socialized losses. Dragon's Clutch has
+  none of those, because it never creates the debt they exist to chase. Its
+  promise is narrower and stronger:</p>
+  <div class="promise">
+    <p>For every reachable protocol state, the market's Hoard covers the
+    maximum payout allowed by its immutable terms.</p>
+    <p class="who">no debt · no margin calls · no liquidations · no socialized loss</p>
+  </div>
+  <p>Solvency is an invariant, not an operations team:
+  <strong>V&nbsp;≥&nbsp;max<sub>p</sub>&nbsp;liability(p)</strong> · the vault
+  holds enough for the worst payout the terms can produce, on every path.
+  Splitting a clutch adds the same quantity to every Egg and to the Hoard;
+  merging reverses it; trading changes no total liability at all.</p>
+
+  <h2>Claims are <em>curves.</em></h2>
+  <p>Event markets today answer every question with a cliff. Five bands on a
+  price means a knife edge at every boundary: one atom of movement across a
+  line flips a full unit of payout. Adding bins multiplies the edges; it never
+  makes a curve.</p>
+  <p>Clutch's basis is a <strong>partition of unity</strong> · B-splines on a
+  frozen grid, degree zero through three. Degree zero is exactly today's bins.
+  Degrees one through three are native curved claims: nearby Eggs overlap,
+  stay nonnegative, and their weights sum exactly to one. "Pay me
+  proportionally to how far it fell," a capped ramp, a smooth tail hedge · these
+  become coefficient vectors over Eggs, not new vaults with new liabilities.</p>
+  <p>And curved claims change what a market can price. In one executable
+  exhibit, two estimators · a Gaussian fit and an empirical resample of the
+  same history · each stated its belief <strong>as a density</strong> over the
+  same eight-Egg basis. The clearing relation settled their portfolios at an
+  integer price vector that is, checkably, the moment vector of an explicit
+  probability measure lying between the two beliefs. <strong>A market pricing
+  disagreement between models, instead of only between moods.</strong></p>
+
+  <h2>Resolution is <em>recomputation.</em></h2>
+  <p>A resolution here is not "oracle says 123." It is a chain of artifacts ·
+  terms, authenticated source occurrences, a sealed window, the statistic, the
+  exact payout vector · that anyone can recompute. The resolver submits a
+  transaction; it does not adjudicate anything. In the current laboratory
+  campaign, one market ran its whole life against real provider data on a
+  local validator:</p>
+  <pre>
+create → endow → split → trade → freeze → resolve → redeem → withdraw
+
+52 signed transactions · listener-audited local validator
+wrong-config attempt:   <span class="r">refused · SourceAdmissionFailed (0x7a) · atomic rollback</span>
+wrong-feed attempt:     <span class="r">refused · SourceAdmissionFailed (0x7a) · atomic rollback</span>
+final accounting:       all 128 collateral atoms accounted for</pre>
+  <p>The refusals are the point. A protocol shows you what it is by what it
+  declines to do, with which error, leaving which state behind.</p>
+
+  <p>And the kernel does not privilege one way of trading. Signed-intent
+  <strong>Direct</strong> settlement is the ordinary path; <strong>General</strong>,
+  a frequent-batch venue with exact simplex prices and atomic portfolios, exists
+  for when it earns its complexity; <strong>Dealer</strong> attaches covered,
+  quiescence-gated capital. Every venue must produce the same conservation and
+  settlement receipts · venues compete, the theorem doesn't.</p>
+
+  <h2>Built <em>three times.</em></h2>
+  <p>Dragon's Clutch is being deliberately rebuilt · the first build mined what
+  could exist, the second learned what must be true, the third is making the
+  semantics machine-checkable. That story is its own essay:
+  <a href="../plan-to-compost-at-least-three/">Plan to compost at least
+  three</a>.</p>
+
+  <p>The protocol also has a second life, as evidence: it is the named witness
+  behind <a href="../trust-me-in-latin/">six positions prepared for the
+  CFTC</a> · feasibility claims, a sentence at a time, with a checkable
+  trail.</p>
+
+  <p class="status">Status, plainly: a research protocol in laboratory
+  environments. No deployment, no customers, no public market, no value at
+  risk. The lifecycle above ran against captured provider fixtures on a local
+  validator · which is exactly the point: checkable before live.</p>
+
+  <footer>
+    <span>DREGG research field notes · Dragon's Clutch</span>
+    <span>Plain HTML · no trackers</span>
+  </footer>
+</main>
+</body>
+</html>

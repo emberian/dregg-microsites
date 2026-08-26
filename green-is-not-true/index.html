@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Green is not true</title>
+  <meta name="description" content="Selvage, the machine-checked compilation layer of a proof system · built on the assumption that AI-scale proving fails silently, with instruments required to demonstrate they can fire.">
+  <meta name="theme-color" content="#10110c">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/green-is-not-true/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Green is not true">
+  <meta property="og:description" content="Selvage, the machine-checked compilation layer of a proof system · built on the assumption that AI-scale proving fails silently.">
+  <style>
+    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--orange); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(52px, 9vw, 104px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--green); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--orange); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    p code, li code { font: 600 13px/1 var(--mono); color: var(--paper); }
+    pre {
+      overflow-x: auto; margin: 22px 0; padding: 18px 20px;
+      background: #0a0b07; border: 1px solid var(--rule); border-left: 3px solid var(--green);
+      font: 500 12.5px/1.7 var(--mono); color: #c9c6b8;
+    }
+    pre .bad { color: var(--orange); font-weight: 700; }
+    pre .ok { color: var(--green); }
+    .law {
+      margin: 40px 0; padding: 22px 24px; border: 1px solid var(--rule); border-left: 4px solid var(--orange);
+      font: 700 17px/1.5 var(--mono); color: var(--paper);
+    }
+    .status { margin-top: 44px; padding-top: 14px; border-top: 1px solid var(--rule); font: 600 11px/1.8 var(--mono); color: var(--dimmer); letter-spacing: .05em; text-transform: uppercase; }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 70px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">07 · Selvage</span>
+  </header>
+
+  <section class="titleblock">
+    <p class="kicker">Selvage · the compilation layer, machine-checked</p>
+    <h1>Green is<br>not <span>true.</span></h1>
+    <p class="dek">Machine-checked developments fail in ways the kernel cannot
+    see: a soundness theorem quantified over a type nothing inhabits; a bound
+    proved "explicit" and never exhibited below 1; a spec that hypothesizes
+    exactly the gap that is the bug. At AI-assisted proving speed these are the
+    dominant failure mode · the prover never tires of producing green things.
+    Selvage is a proof system built assuming that.</p>
+  </section>
+
+  <h2>The middle <em>nobody holds.</em></h2>
+  <p>Published soundness analyses stop at "the interactive protocol is
+  round-by-round sound." Deployed systems begin at "the verifier accepts only
+  true things." Between those two sentences sits the compilation half of the
+  SNARK stack · Fiat–Shamir, the BCS transform, accumulation · and it is where
+  the bodies are buried. Selvage lives there: <strong>138 files, ~68K lines of
+  Lean, zero <code>sorry</code>, zero <code>axiom</code> declarations</strong>,
+  today holding, proved:</p>
+  <pre>
+RBR → Fiat–Shamir compiler        <span class="ok">fsKeystone_proved</span> · (t+k)·ε_rbr,
+                                  over an inhabited lazy-sampling oracle
+BCS transform soundness           at the deployed alphabet · roots,
+                                  opened columns, opening proofs
+state-restoration soundness       proved
+accumulation depth composition    proved · with a correction (below)
+sponge indifferentiability        proved · the simulator constructed,
+                                  the capacity price named</pre>
+
+  <h2>Mechanization must be able to <em>disagree.</em></h2>
+  <p>The accumulation-depth theorem this field leans on is written up in WARP
+  (ePrint 2025/753, Thm B.4). Selvage mechanized it and found the literal
+  statement <strong>fails at a degenerate corner case</strong>:</p>
+  <pre>
+theorem OB2_depth_composition_false :
+    ¬ OB2_depth_composition          <span class="bad">-- the published statement, refuted</span>
+
+theorem OB2_depth_composition_nonneg_proved : …
+                                     <span class="ok">-- the one-guard repair, proved</span></pre>
+  <p>Both live in the same file, refutation beside repair. Mechanization that
+  only ever confirms the paper is not earning its keep.</p>
+
+  <h2>Instruments must <em>fire.</em></h2>
+  <p>Every safeguard here is treated as itself needing a demonstration that it
+  can fail. The light-client grinding bound carries a try-count factor, and
+  rather than assume the factor matters, the adversary that needs it is
+  <strong>exhibited</strong>: <code>phantomGrind_beats_fixed_bound</code>
+  constructs the two-candidate grinder that beats the fixed-chain bound. The
+  sampling keystone is proved <strong>attained</strong> · equality, not ≤, at a
+  named small field (<code>sampling_bridge_tight</code>) · so the bound is not
+  improvable in general.</p>
+  <p>The same discipline prices the deployed configuration. Its composed
+  soundness error is proved <strong>≤ 2⁻⁵⁵ and &gt; 2⁻⁵⁶</strong>, with the
+  dominant term named. A bound that is merely "explicit" can be vacuously
+  loose; a two-sided bound cannot.</p>
+
+  <h2>The assumption we <em>never made.</em></h2>
+  <p>Proof systems are prime-field-pinned for one usual reason: a smooth
+  multiplicative subgroup of order 2ᵏ, which cannot exist in GF(2ᵏ). A census
+  of the whole tree:</p>
+  <pre>
+IsPrimitiveRoot   <span class="ok">0 occurrences</span>
+rootsOfUnity      <span class="ok">0 occurrences</span>
+primitiveRoot     <span class="ok">0 occurrences</span>
+
+every Reed–Solomon code:   reedSolomonCode (dom : ι ↪ F) (d : ℕ)
+                           · an abstract embedding, distance by root counting</pre>
+  <p>There is no multiplicative evaluation domain in the repository, so the
+  usual wall does not apply. Scored keystone by keystone: <strong>13 of 18
+  transfer to binary fields with no new mathematics.</strong> The escape
+  everyone else engineers, this tree gets by never having assumed the thing
+  being escaped.</p>
+
+  <h2>The gate at the <em>door.</em></h2>
+  <p>Hash design has a house rule now: a candidate linear layer's branch number
+  is computed <strong>before any other analysis</strong> · the exact-branch
+  instrument runs in 6.8 seconds on a laptop. The rule is a paid lesson, and
+  the first candidate's epitaph states the price: <em>the alignment thesis
+  imports the code's triangularity, and triangularity is the opposite of
+  diffusion.</em> Its branch number:</p>
+  <pre>
+Weft novel-eval E      GF(2³²), t=24    branch  <span class="bad">6</span>    ☠ killed
+Cauchy dense D         GF(2³²), t=24    branch <span class="ok">25</span>    the MDS yardstick
+E·D  ·  D·E            composites       ∈ [8,21] · [8,11]   ☠ killed
+systematic-RS  A=V₂·V₁⁻¹               branch <span class="ok">25</span>    exact, by theorem
+Poseidon2 M_E          BabyBear, 16     branch  8    the bar to beat</pre>
+  <p>An afternoon is cheap. A deployed hash with branch number 6 is not. Every
+  candidate since has met the gate first, and the one that passed
+  (systematic-RS) passes <strong>by theorem</strong>, not by sampling.</p>
+
+  <div class="law">A green build says the kernel accepted the terms.<br>
+  Whether the terms say anything is a separate instrument's job.</div>
+
+  <h2>Status, <em>plainly.</em></h2>
+  <p>Selvage is currently theory ahead of its own runtime. The deployed engine
+  is a 433-line degree-1 sumcheck; there is no multilinear commitment; the
+  accumulation architecture the theorems describe is not yet what any deployed
+  prover here runs. Some sharp results are proved at small domains while the
+  deployed-parameter statements carry named hypotheses · the per-file
+  docstrings say which is which. Publishing that distance is part of the
+  method.</p>
+
+  <p class="status">Counts measured 26 August 2026 against the tree at HEAD.
+  The instruments are the part of this work we most want challenged.</p>
+
+  <footer>
+    <span>DREGG research field notes · Selvage / minidregg</span>
+    <span>Plain HTML · no trackers · refutations kept beside repairs</span>
+  </footer>
+</main>
+</body>
+</html>

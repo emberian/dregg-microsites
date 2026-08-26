@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>The fix is a theorem</title>
+  <meta name="description" content="drorb, a formally verified network engine in Lean 4 · the wire as total transition systems, a response-splitting bug found on our own reactor and closed as a theorem, and a tailnet whose coordinator is proven.">
+  <meta name="theme-color" content="#10110c">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/the-fix-is-a-theorem/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="The fix is a theorem">
+  <meta property="og:description" content="A formally verified network engine · a response-splitting bug found on our own reactor and closed as a theorem, and a tailnet whose coordinator is proven.">
+  <style>
+    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--orange); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(52px, 9vw, 104px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--green); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--orange); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    pre {
+      overflow-x: auto; margin: 22px 0; padding: 18px 20px;
+      background: #0a0b07; border: 1px solid var(--rule); border-left: 3px solid var(--green);
+      font: 500 12.5px/1.7 var(--mono); color: #c9c6b8;
+    }
+    pre .bad { color: var(--orange); font-weight: 700; }
+    pre .ok { color: var(--green); }
+    .law {
+      margin: 40px 0; padding: 22px 24px; border: 1px solid var(--rule); border-left: 4px solid var(--orange);
+      font: 700 17px/1.5 var(--mono); color: var(--paper);
+    }
+    .status { color: var(--dimmer); font-size: 14px; }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 70px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">10 · The Orb</span>
+  </header>
+
+  <section class="titleblock">
+    <p class="kicker">drorb · a formally verified network engine, in Lean 4</p>
+    <h1>The fix is<br>a <span>theorem.</span></h1>
+    <p class="dek">Most fast network stacks ask for your trust: they parse your
+    traffic, terminate your TLS, route your requests, and you take their word
+    that they did what they said. drorb hands you a proof instead · a
+    reverse-proxy whose behaviour is stated and proved as theorems,
+    machine-checked by the Lean kernel, and driven over real sockets by an
+    untrusted IO shell that never touches the proven core.</p>
+  </section>
+
+  <h2>The wire, as <em>theorems.</em></h2>
+  <p>HTTP/1.1. HTTP/2 · framing, HPACK, streams. HTTP/3 and QPACK. QUIC.
+  TLS&nbsp;1.3. WebSocket. DNS parsing, SSE, 103 Early Hints. Each one lives in
+  the engine as a <strong>total transition system with safety theorems</strong> ·
+  well-formedness, framing, in-bounds, termination.</p>
+  <p>For the HTTP/1.1 parser the claim is upgraded from safety to
+  <strong>correctness</strong>: the request-line and header fields resolve to
+  <em>exactly</em> their input bytes · not just in-bounds, but right. The same
+  soundness is proved for the HPACK and QPACK literal field case. And the
+  honest boundary, said plainly: most lanes are safety-only so far. The
+  safety-to-correctness upgrade is ongoing, not finished.</p>
+  <p>Routing has a stronger property than a filter: a literal
+  <code>../</code> escaping the root is <strong>impossible</strong>, not
+  caught. The JWT algorithm-confusion vulnerability is <strong>proven
+  absent</strong>. The kernel-lending ring at the bottom recycles every buffer
+  <em>exactly once</em>, under every adversarial interleaving · including ones
+  no test would reach.</p>
+  <pre>
+GET /health          → <span class="ok">200</span>, with HSTS + security headers (proven stages)
+GET /admin           → <span class="ok">401</span> (the real JWT gate short-circuits)
+GET /..%2fetc/passwd → <span class="ok">404</span> (a literal ../ escaping the root is blocked, not filtered)</pre>
+
+  <h2>We attacked our own <em>server.</em></h2>
+  <p>HTTP response splitting is an old class of bug: if a server will echo a
+  carriage return where one doesn't belong, an attacker can end your response
+  early and write their own. We went looking for it in drorb · and found it,
+  <strong>real and demonstrated, on our own shipped reactor</strong>.</p>
+  <p>A hostile upstream got a stock <code>curl</code> to read an injected
+  <code>Set-Cookie</code> · and then a whole second response · out of a
+  response head drorb never saw those fields in. Session fixation, on a
+  reachable configuration. No advisory, no CVE, no one else's report: our own
+  red team, against our own engine.</p>
+  <p>The fix did not go in as a patch. The default forwarding path gained a
+  gate, and the guarantee about every emitted head · that the client parses
+  exactly what the proof says it parses · was <strong>re-proved through the
+  gate</strong>. When the same shape turned up on an opt-in seam path, that
+  was closed too, and the stream-faithfulness theorems were restated under the
+  gate rather than loosened around it.</p>
+  <div class="law">Finding it ourselves, first, is the whole game.<br>
+  The fix is a theorem, not a patch note.</div>
+
+  <h2>A tailnet with a proven <em>coordinator.</em></h2>
+  <p>drorb also speaks the Tailscale coordination protocol · as the control
+  plane, not a client. A <strong>stock tailscale client</strong>, unmodified,
+  enrolls against it:</p>
+  <pre>
+tailscale up --login-server=https://drorb/     (keyless)
+  → AuthURL issued
+  → drorb-ctl approve
+  → node authorized · <span class="ok">Running</span> · 100.64.0.4 allocated
+  → key self-expiry → live re-auth</pre>
+  <p>The netmap the client receives carries its peers, a DERP map naming
+  drorb's own relay, and a packet filter that is not <em>derived from</em> the
+  ACL policy but <strong>proven equal to the ACL compiler's output</strong> ·
+  the served filter is a theorem about the policy file. Key expiry is
+  enforced; pushes are targeted. What stands demonstrated here is
+  control-plane truth: enrolment, policy, the map.</p>
+
+  <h2>The floor under the <em>crypto.</em></h2>
+  <p>House rule, standing: verified-Lean or audited primitives only. Nothing
+  else ships. TLS&nbsp;1.3 and QUIC key schedules run over verified
+  EverCrypt/HACL* · the assumed properties are theorems proved upstream, not
+  hand-waved.</p>
+  <p>And the post-quantum surface went further: <strong>every PQ operation in
+  the stack · verify, sign, encapsulate, decapsulate, and both keygens ·
+  dispatches a verified core.</strong> No crate-authoritative PQ path is left.
+  The claim is checked against the artifact, not the source tree: the shipped
+  release binary confirms all six verified cores by symbol inspection,
+  openssl-free. The Keccak permutation underneath refines FIPS&nbsp;202. An
+  audited dependency was the floor; this is the ceiling.</p>
+
+  <h2>What is trusted, <em>named.</em></h2>
+  <p>The theorems are about the models, and two things are trusted out loud:
+  the Lean kernel · small, audited, published · and the IO shell: the socket,
+  accept loop, and connection lifecycle. The shell is validated by testing;
+  everything above it is proved. That boundary is stated in the README rather
+  than discovered in an incident report, which is the difference this project
+  exists to demonstrate.</p>
+  <p class="status">Status, plainly: drorb reached a deliberate quiescence
+  point in late July · lanes drained, ledgers current, the next moves written
+  down in the repo for whoever picks the thread back up. Parked is not
+  abandoned; parked is a clean workbench.</p>
+
+  <footer>
+    <span>DREGG research field notes · The Orb</span>
+    <span>Plain HTML · no trackers · every no has a repro</span>
+  </footer>
+</main>
+</body>
+</html>

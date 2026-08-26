@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Prove the turn</title>
+  <meta name="description" content="Minidregg, the semantic computer · the zkVM industry proves that a machine executed; this kernel proves that an authorized semantic turn happened, and hands you the receipt.">
+  <meta name="theme-color" content="#10110c">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/prove-the-turn/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Prove the turn">
+  <meta property="og:description" content="The zkVM industry proves that a machine executed. This kernel proves that an authorized semantic turn happened, and hands you the receipt.">
+  <style>
+    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--orange); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(46px, 8.4vw, 96px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--green); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--orange); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    pre {
+      overflow-x: auto; margin: 22px 0; padding: 18px 20px;
+      background: #0a0b07; border: 1px solid var(--rule); border-left: 3px solid var(--green);
+      font: 500 12.5px/1.7 var(--mono); color: #c9c6b8;
+    }
+    pre .ok { color: var(--green); }
+    pre .hot { color: var(--orange); }
+    .menu { border-top: 4px solid var(--paper); margin: 26px 0; }
+    .exit { display: grid; grid-template-columns: 96px 1fr; gap: 18px; padding: 13px 0; border-bottom: 1px solid var(--rule); }
+    .exit h3 { margin: 0; font: 800 17px/1.3 var(--display); letter-spacing: .01em; text-transform: uppercase; color: var(--green); }
+    .exit p { margin: 0; font-size: 14px; }
+    .law {
+      margin: 40px 0; padding: 22px 24px; border: 1px solid var(--rule); border-left: 4px solid var(--orange);
+      font: 700 17px/1.5 var(--mono); color: var(--paper);
+    }
+    .status { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--rule); font: 600 11px/1.8 var(--mono); color: var(--dimmer); letter-spacing: .05em; text-transform: uppercase; }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 56px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    @media (max-width: 560px) { .exit { grid-template-columns: 64px 1fr; } }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">08 · Minidregg</span>
+  </header>
+
+  <section class="titleblock">
+    <p class="kicker">Minidregg · the semantic computer</p>
+    <h1>Prove the turn,<br>not the <span>machine.</span></h1>
+    <p class="dek">The zero-knowledge VM industry proves, over and over, the same
+    sentence: "a RISC-V machine executed." Users never asked about the
+    machine. They asked whether their transaction happened, whether it was
+    authorized, and what exactly changed. Minidregg is a kernel that proves
+    <em>that</em> sentence instead.</p>
+  </section>
+
+  <h2>The statement nobody <em>asked for.</em></h2>
+  <p>Generality is paid for at proving time, forever. Measured in SP1, one
+  general RAM access costs <strong>~502 trace cells</strong>; the same value
+  as read-only or write-once memory costs about 6. The instruction being
+  proved costs 39–44. The industry's cost curve is dominated by emulating
+  machinery · instruction fetch, general RAM, an ISA · that exists only
+  because the statement was "a machine ran," not "a thing happened."</p>
+  <p>A statement-level lever compounds with every prover trick underneath it.
+  So the kernel here proves the smallest statement that is actually true and
+  actually wanted: <strong>this authorized semantic turn happened, and here
+  is its receipt.</strong></p>
+
+  <h2>Founded on an <em>audit.</em></h2>
+  <p>Minidregg began by auditing its own predecessor: a ~2.89M-line system ·
+  1.82M Rust, 913K Lean · that had built and proved every piece of the
+  derivation machine, demonstrated each at n=1, and wired almost none of them
+  into the load path. An eDSL with a complete verified vertical slice, used
+  exactly once, while 63 apps and ~962 theorems were written by hand beside
+  it. A proof that the kernel is three verbs, never executed. The audit's
+  verdict, verbatim:</p>
+  <div class="law">The corpus contains its own refactor plan, proved as
+  theorems, and did not execute it.</div>
+  <p>The founding move is the inversion: <strong>the derived path is the only
+  path</strong>, so n=1 and n=all coincide by construction. Nothing lands
+  beside; everything replaces. The audit priced the system's actual meaning
+  at a few tens of thousands of lines · semantic core ~25K, irreducible
+  kernel 800–1,200 · and set the successor's budget at a tenth of the
+  original. It is currently well under it.</p>
+
+  <h2>What a turn <em>is.</em></h2>
+  <p>The constitution fits in one sentence: <strong>a turn is the exercise of
+  an attenuable, proof-carrying token over owned state, leaving a verifiable
+  receipt.</strong> The pipeline that realizes it:</p>
+  <pre>
+typed request + current authority + canonical pre-state
+        │
+        ▼
+Lean-owned effect family
+        │
+        ▼
+accepted effect + exact validated patch
+        │
+        ▼
+one balanced multi-cell semantic <span class="ok">hyperedge</span>
+        │
+   ┌────┴────┐
+   ▼         ▼
+durable    causal receipt / history
+settlement      │
+              <span class="ok">Selvage</span> proof / checkpoint</pre>
+  <p>No instruction fetch anywhere in the picture. An agent plans several
+  effects and publishes them as one balanced hyperedge; the proof is about
+  the hyperedge; the receipt is what another device checks.</p>
+
+  <h2>Promises with a <em>ladder.</em></h2>
+  <p>Every pillar of the system advances through five named levels, and the
+  levels are a public promise-vocabulary · a claim states its rung or it
+  overstates itself:</p>
+  <div class="menu">
+    <div class="exit"><h3>S</h3><p>A semantic carrier and theorem exist.</p></div>
+    <div class="exit"><h3>A</h3><p>A Lean-owned admission controller decides real bytes, with a real error path.</p></div>
+    <div class="exit"><h3>P</h3><p>Concrete cryptographic reductions and an error game price the security.</p></div>
+    <div class="exit"><h3>D</h3><p>Artifact, handler, storage, and a consumer actually deployed.</p></div>
+    <div class="exit"><h3>B</h3><p>A reproducible, matched-workload benchmark.</p></div>
+  </div>
+  <p><strong>An S theorem cannot be advertised as D.</strong> No consumer is
+  replaced before D, and no performance conclusion is accepted before B. The
+  ladder is not modesty; it is the interface other people's trust plugs
+  into.</p>
+
+  <h2>Instruments that can <em>fire.</em></h2>
+  <p>At AI proving speed, the dangerous failures are silent: a soundness
+  theorem quantified over a type nothing inhabits, a bound proved "explicit"
+  and never exhibited, a green build that means nothing. The prover never
+  tires of producing green things. So the tree carries instruments, and every
+  instrument must demonstrate it can fail:</p>
+  <p>A <strong>carrier census</strong> mechanically hunts types that are
+  quantified over somewhere and constructed nowhere · the signature of
+  vacuous quantification. It found four provably-uninhabitable schemas in
+  this very tree, and it self-tests against carriers whose status is known
+  by construction, because an instrument that silently stops detecting looks
+  exactly like a clean tree. Keystone theorems ship with a satisfying witness
+  <em>and</em> a falsifying case. "The theorem is conditional on H" is
+  admitted only with a witness for H or a named, tracked obligation. And
+  facts worth asserting are named theorems with pinned axiom footprints ·
+  never anonymous compiled checks whose record deletes itself.</p>
+
+  <h2>Where it stands, <em>plainly.</em></h2>
+  <pre>
+Lean files          <span class="ok">487</span>        (counted fresh, 26 Aug 2026)
+lines of Lean       <span class="ok">217,341</span>
+`sorry` in proofs   <span class="ok">0</span>          `axiom` declarations   <span class="ok">0</span>
+proof system        Selvage · 138 files
+axiom footprints    pinned · a regression <span class="hot">fails the build</span></pre>
+  <p>Those numbers are the cheap part, and the tree says so itself. The
+  semantic and admission layers are the mature rungs; physical storage
+  refinement, concrete cryptographic prices, production key custody, and
+  consumer cutover are named open work on lower rungs · held at S or A until
+  they are earned upward. The ladder is doing exactly what it is for.</p>
+
+  <p class="status">Status, plainly: a research tree, weeks old, moving fast
+  under instruments built for that speed. Project site:
+  <a href="https://emberian.github.io/minidregg/">emberian.github.io/minidregg</a>.</p>
+
+  <footer>
+    <span>DREGG research field notes · Minidregg</span>
+    <span>Plain HTML · no trackers</span>
+  </footer>
+</main>
+</body>
+</html>

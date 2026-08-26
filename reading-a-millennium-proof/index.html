@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Reading a millennium proof</title>
+  <meta name="description" content="Someone published a claimed proof of Navier–Stokes global regularity. We read it, found a real error, and the author issued an erratum within days. Then we went to build the library where the question can be stated.">
+  <meta name="theme-color" content="#10110c">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/reading-a-millennium-proof/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Reading a millennium proof">
+  <meta property="og:description" content="A claimed Clay-problem proof, a real error found in review, a fast and honorable erratum · and the formal library the story points at.">
+  <style>
+    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--orange); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(44px, 8vw, 92px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--green); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--orange); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    .identity {
+      margin: 24px 0; padding: 20px 24px; background: #0a0b07;
+      border: 1px solid var(--rule); border-left: 4px solid var(--orange);
+      font: 600 15px/1.9 var(--mono); color: var(--paper); overflow-x: auto;
+    }
+    .identity .lbl { color: var(--dimmer); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+    .identity .missing { color: var(--orange); }
+    .credit {
+      margin: 26px 0; padding: 18px 22px; border: 1px solid var(--rule); border-left: 4px solid var(--green);
+      color: var(--dim); font-size: 15px;
+    }
+    .status { margin-top: 44px; padding-top: 14px; border-top: 1px solid var(--rule); font: 600 11px/1.8 var(--mono); color: var(--dimmer); letter-spacing: .05em; text-transform: uppercase; }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 56px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">14 · Mathematics</span>
+  </header>
+
+  <section class="titleblock">
+    <p class="kicker">A review, an erratum, and a roadmap</p>
+    <h1>Reading a<br>millennium <span>proof.</span></h1>
+    <p class="dek">In August 2026 an independent researcher published a claimed
+    proof of global regularity for the three-dimensional Navier–Stokes
+    equations on the torus · statement (B) of the Clay Millennium formulation ·
+    with a Lean verification companion on GitHub. We did the thing the setup
+    invites: we read it.</p>
+  </section>
+
+  <h2>The <em>identity.</em></h2>
+  <p>The paper's vorticity argument leans on a compact display in its §3.1: the
+  growth of vorticity magnitude along trajectories. Written as displayed, it
+  says:</p>
+  <div class="identity">
+    <div class="lbl">as printed</div>
+    D<sub>t</sub>|ω| &nbsp;=&nbsp; α|ω|<br>
+    <div class="lbl" style="margin-top:12px">for ν &gt; 0, the identity is</div>
+    D<sub>t</sub>|ω| &nbsp;=&nbsp; α|ω| <span class="missing">+ ν ξ·Δω</span>
+  </div>
+  <p>The printed form is the <strong>inviscid</strong> identity · true when
+  viscosity is zero · appearing in a proof that is entirely about positive
+  viscosity. And it is not a typo in passing: the per-trajectory chain in
+  §16.2 and the localization step in §10 rely on the display as written. A
+  viscous term that the whole argument exists to wrestle with had gone missing
+  from the equation that carries it.</p>
+
+  <h2>What happened <em>next.</em></h2>
+  <p>This is the part worth telling. The review went in as an ordinary pull
+  request against the verification repository, stating the finding plainly.
+  The author engaged immediately and honorably: the finding was acknowledged
+  as a genuine error in the paper as published, an erratum section was added
+  crediting the review, the repository was reorganized to separate the frozen
+  published version from the revision in preparation, and a revised release
+  followed within days.</p>
+  <div class="credit">No drama, no defensiveness, no burying. An independent
+  researcher put a bold claim where anyone could check it, and when someone
+  checked it, the record got corrected in public with the reviewer's name on
+  the erratum. Whatever the final fate of the revised argument · on which we
+  make no claim either way · <strong>this is what good looks like.</strong></div>
+
+  <h2>The <em>turn.</em></h2>
+  <p>A review can catch an error after it is claimed. A formal library can
+  refuse it at the moment it is stated · a Lean development of the viscous
+  equations simply does not let the inviscid identity stand in for the viscous
+  one, because the missing term is sitting in the definition.</p>
+  <p>So the story ends somewhere better than an erratum. The same month, we
+  joined <strong>Tau Ceti</strong> · a new experiment incubated by the Lean FRO
+  and the Mathlib Initiative, where humans own the roadmaps and AIs write the
+  mathematics, subject to adversarial review · and contributed the roadmap for
+  <strong>incompressible flows and the Navier–Stokes equations</strong>: the
+  Helmholtz–Leray projection, the Stokes semigroup, strong and mild solutions,
+  Leray–Hopf weak solutions, the two-dimensional global theory, partial
+  regularity. Library results, not a bespoke encoding of one proposed proof.</p>
+  <p>The roadmap's scope line is its spine: <strong>the three-dimensional
+  global regularity problem is not a completion target.</strong> The library
+  must make the open problem precise enough to state, and must support research
+  about it · and no assertion of global smoothness or blowup is a deliverable.
+  First contributions are already in the tree: periodic integration on the
+  unit torus, the incompressible Gelfand triple, Galerkin projections.</p>
+  <p>Make the question stateable before it is claimed. That is the whole
+  lesson, and it generalizes well past fluid dynamics.</p>
+
+  <p class="status">Status, plainly: the review, erratum, and revision are on
+  the public record in the author's repository. We assert nothing about the
+  revised argument's correctness in either direction. The Tau Ceti roadmap and
+  first Lean contributions are public in the TauCetiProject repositories.</p>
+
+  <footer>
+    <span>DREGG research field notes · mathematics</span>
+    <span>Plain HTML · no trackers</span>
+  </footer>
+</main>
+</body>
+</html>

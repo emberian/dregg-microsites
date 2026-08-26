@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Promises, priced</title>
+  <meta name="description" content="Preoscript · a language for composing promises, future-relative evidence, and proof-carrying repair plans, defined by three refusals its compiler will not waive.">
+  <meta name="theme-color" content="#10110c">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/promises-priced/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Promises, priced">
+  <meta property="og:description" content="Preoscript · a language for composing promises, future-relative evidence, and proof-carrying repair plans, defined by three refusals.">
+  <style>
+    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--orange); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(52px, 9vw, 104px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--green); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--orange); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    p code, li code { font: 600 13.5px/1 var(--mono); color: var(--paper); background: #0a0b07; padding: 1px 5px; border: 1px solid var(--rule); }
+    pre {
+      overflow-x: auto; margin: 22px 0; padding: 18px 20px;
+      background: #0a0b07; border: 1px solid var(--rule); border-left: 3px solid var(--green);
+      font: 500 12.5px/1.75 var(--mono); color: #c9c6b8;
+    }
+    pre .kw { color: var(--green); font-weight: 700; }
+    pre .cm { color: var(--dimmer); }
+    .law {
+      margin: 32px 0; padding: 22px 24px; border: 1px solid var(--rule); border-left: 4px solid var(--orange);
+      font: 700 17px/1.5 var(--mono); color: var(--paper);
+    }
+    .status { margin-top: 44px; padding-top: 14px; border-top: 1px solid var(--rule); font: 600 11px/1.8 var(--mono); color: var(--dimmer); letter-spacing: .05em; text-transform: uppercase; }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 56px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">12 · Preoscript</span>
+  </header>
+
+  <section class="titleblock">
+    <p class="kicker">Preoscript · a language growing inside the two-phones library</p>
+    <h1>Promises,<br><span>priced.</span></h1>
+    <p class="dek">The <a href="../two-phones/">two-phones library</a> maps
+    which promises survive two devices meeting, and prices the exits when they
+    can't. Preoscript is the language where you <em>write</em> such promises ·
+    and the compiler holds you to the physics. It is easiest to define by the
+    three things it refuses to let you say.</p>
+  </section>
+
+  <h2>Refusal one: <em>stable against what?</em></h2>
+  <p>"This value is final" is not a sentence in preoscript. Final against
+  delivery of what was already sent? Against new writers? Against a roster
+  change? A stability claim must name the future it is stable against, and the
+  certificate that proves it is indexed by that exact future ·
+  <strong>a certificate for another future or world does not
+  typecheck</strong>. Evidence cannot escape the scope it was earned in and be
+  quietly reused somewhere braver.</p>
+
+  <h2>Refusal two: <em>no fork collapsed by accident.</em></h2>
+  <p>When two replicas produce genuinely different answers, downstream code
+  that renders one of them as "the" answer does not compile. But "you cannot
+  silently collapse a fork" never means "you cannot pick." The enforceable
+  property is narrower and sharper:</p>
+  <div class="law">No branch selection occurs through an implicit coercion.</div>
+  <p>Resolution is explicit and retained in the type:
+  <code>resolve verdict by era_order</code> yields
+  <code>ResolvedBy EraOrder Claim</code> · the value carries the policy that
+  chose it, and, where disclosure rules allow, the alternatives it suppressed.
+  A branch can be chosen. It cannot be chosen invisibly.</p>
+
+  <h2>Refusal three: <em>optimism about cost.</em></h2>
+  <p>Coordination has a price, and preoscript treats the two directions of a
+  budget check as different kinds of evidence. A semantic lower bound can
+  <strong>reject</strong> a budget: no plan preserving this promise fits under
+  that ceiling. But nothing short of a <strong>witnessed plan with a proved
+  cost</strong> can <strong>accept</strong> one · a floor or a bare number
+  alone cannot accept the budget. The compiler is not allowed to be optimistic
+  on your behalf, and there are theorems in the tree that refuse exactly that:
+  acceptance cannot be derived from a crossing count or a peer-meeting floor.</p>
+  <p>The tree is honest about the boundary, in its own ledger: the unrestricted
+  "floor" of a workload is <strong>not a function</strong> · a
+  <code>ForcedFloor</code> is <em>a</em> forced floor, witnessed by one
+  decomposition, never "the" supremum. What ships instead is an executable
+  finite contract: over an explicitly supplied universe of decompositions, the
+  checker returns an achieved maximum with a proof no listed decomposition
+  beats it, an exhaustive proof that none is valid, or an over-cap refusal that
+  states exactly what it would have had to search. Reading any of those as the
+  unrestricted floor is the scope error the types exist to prevent.</p>
+
+  <h2>The <em>receipts.</em></h2>
+  <p>The quickstart is executable today, and it is deliberately explicit · one
+  checked term at every stage:</p>
+  <pre><span class="kw">preo_program</span> Journey            <span class="cm">· binds app state to a typed schema; queries, holes,
+                                  and analyses all come from this one checked term</span>
+QueryFuture                     <span class="cm">· names WHICH future the question is asked against</span>
+<span class="kw">preo_certificate</span> QueryCertificate
+                                <span class="cm">· indexed by that exact future · any other refuses</span>
+<span class="kw">preo_plan</span> JourneyPlan           <span class="cm">· searches a capped, authored action universe;
+                                  retains the selected plan's proof</span>
+<span class="kw">preo_budget</span> JourneyBudget      <span class="cm">· consumes the plan's ProfileUpperBound ·
+                                  a floor or a number alone cannot accept</span></pre>
+  <p>From there the program's rows are assembled into a canonical binary
+  artifact through checked additions only, and the claim doesn't stop at
+  "serialization exists": <code>v3_bytes_reopen_exact</code> proves the
+  canonical bytes decode back to exactly the term you wrote, and
+  <code>v3_bytes_executable_exact</code> proves the stack-safe emitted bytes
+  equal those canonical bytes. Inspection tools read any frame or journal back.
+  The language ships its own receipts.</p>
+  <p>Budgets, when they arrive at acceptance, are pointwise over
+  <strong>five separate currencies</strong> rather than one number · because a
+  peer barrier, an arbiter cut, a round, a rollback, and a user prompt are not
+  the same coin, and a deployment that fears rollback should not be forced to
+  share a scalar with one that fears meetings.</p>
+
+  <h2>How it got its <em>type system.</em></h2>
+  <p>The core design was reshaped in public correspondence. An external
+  reviewer read the first memo and returned a verdict · the design had crossed
+  the line into being <strong>language-worthy</strong> · followed by a
+  counterexample that rebuilt its center. The draft had a scalar coordination
+  grade: a session costs <em>n</em> meetings. But minimizing after composing
+  is not composing the minimums:</p>
+  <div class="law">min<sub>σ</sub>(c₁(σ) + c₂(σ)) ≠ min<sub>σ</sub> c₁(σ) + min<sub>σ</sub> c₂(σ)</div>
+  <p>Each stream alone might have a seam that frees it, while no single seam
+  frees both · so a scalar undercounts precisely when components share a
+  strategy. The repair became the language's spine:
+  <strong>type obligations, not counts</strong>. A declaration carries what it
+  demands · frontiers, seals, certificates, strategy variables · and the number
+  is a projection computed after composition, when the shared choices are
+  actually known. The count is an interpretation of the object. It is not the
+  object's type.</p>
+
+  <p class="status">Status, plainly: a growing fragment inside a research
+  library · <a href="https://github.com/emberian/lean-uwueave">lean-uwueave</a> ·
+  not a released language. The surface syntax will change. The three refusals
+  won't.</p>
+
+  <footer>
+    <span>DREGG research field notes · preoscript</span>
+    <span>Plain HTML · no trackers</span>
+  </footer>
+</main>
+</body>
+</html>

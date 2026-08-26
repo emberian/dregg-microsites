@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Fourteen rooms</title>
+  <meta name="description" content="A map of the DREGG research workshop: fourteen rooms, each with the question it exists to answer and what stands in it today.">
+  <meta name="theme-color" content="#10110c">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/fourteen-rooms/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Fourteen rooms">
+  <meta property="og:description" content="A map of the DREGG research workshop: fourteen rooms, each with the question it exists to answer and what stands in it today.">
+  <style>
+    :root {
+      --night: #10110c;
+      --paper: #f2eddf;
+      --rule: rgba(242, 237, 223, 0.17);
+      --green: #9fc55b;
+      --orange: #e56f3d;
+      --dim: #a9aa9f;
+      --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body {
+      margin: 0; color: var(--paper); background: var(--night);
+      font-family: var(--sans); -webkit-font-smoothing: antialiased;
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    .page { width: min(860px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead {
+      display: flex; justify-content: space-between; gap: 20px;
+      padding-bottom: 16px; border-bottom: 1px solid var(--rule);
+      font: 750 11px/1.3 var(--mono); letter-spacing: 0.13em; text-transform: uppercase;
+    }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .intro { padding: 72px 0 56px; }
+    h1 {
+      margin: 0 0 26px;
+      font: 900 clamp(56px, 9vw, 110px)/0.82 var(--display);
+      letter-spacing: -0.05em; text-transform: uppercase;
+    }
+    h1 span { color: var(--orange); }
+    .intro p { max-width: 62ch; margin: 0 0 14px; color: var(--dim); font-size: 17px; }
+    .intro p strong { color: var(--paper); font-weight: 600; }
+    .rooms { border-top: 5px solid var(--paper); }
+    .room {
+      display: grid; grid-template-columns: 92px 1fr; gap: 26px;
+      padding: 30px 0 26px; border-bottom: 1px solid var(--rule);
+    }
+    .room-no { color: var(--orange); font: 900 56px/0.8 var(--display); letter-spacing: -0.05em; }
+    .room h2 {
+      margin: 0 0 2px;
+      font: 850 clamp(24px, 3.4vw, 38px)/0.95 var(--display);
+      letter-spacing: -0.03em; text-transform: uppercase;
+    }
+    .flag {
+      margin: 2px 0 12px; color: var(--green);
+      font: 700 12px/1.4 var(--mono); letter-spacing: 0.07em; text-transform: uppercase;
+    }
+    .room p { max-width: 66ch; margin: 0 0 10px; color: var(--dim); font-size: 15px; }
+    .room p strong { color: var(--paper); font-weight: 600; }
+    .stands {
+      margin: 12px 0 0; padding: 0; list-style: none;
+      font: 500 12.5px/1.8 var(--mono); color: var(--dimmer);
+    }
+    .stands li::before { content: "· "; color: var(--orange); }
+    .stands a { color: var(--dim); text-decoration-color: rgba(159,197,91,.4); }
+    footer {
+      display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap;
+      margin-top: 70px; padding-top: 16px; color: var(--dimmer);
+      border-top: 1px solid var(--rule);
+      font: 600 10px/1.6 var(--mono); letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    @media (max-width: 640px) {
+      .room { grid-template-columns: 1fr; gap: 6px; }
+      .room-no { font-size: 40px; }
+    }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">02 · A map, kept current</span>
+  </header>
+
+  <section class="intro">
+    <h1>Fourteen<br><span>rooms.</span></h1>
+    <p><strong>This is one workshop, not fourteen projects.</strong> The same method
+    lives in every room: the meaning of a system is written in a proof assistant,
+    the artifacts a machine runs are emitted from that meaning rather than written
+    beside it, and every instrument built to check the work must first demonstrate
+    that it can fail.</p>
+    <p>Each room below is named by the question it exists to answer, and describes
+    what actually stands in it today · present tense, no roadmap voice. Rooms are
+    revised as the work moves. Some rooms are loud this month and some are quiet;
+    a quiet room is parked, not abandoned.</p>
+  </section>
+
+  <section class="rooms">
+
+    <article class="room">
+      <div class="room-no">01</div>
+      <div>
+        <h2>The Egg</h2>
+        <p class="flag">your boundaries are theorems</p>
+        <p>A distributed object-capability kernel where the executor that applies
+        your transaction <strong>is</strong> the Lean function the theorems are about.
+        It makes five promises to a light client · authority, conservation, and
+        three siblings · each a named, machine-checked theorem: no effect confers
+        more authority than was held, and every asset's balances sum to exactly
+        zero on every reachable state. A node runs locally in minutes; the
+        <code>/status</code> endpoint answers <code>"state_producer":"lean"</code>.</p>
+        <ul class="stands">
+          <li><a href="https://github.com/emberian/dregg">github.com/emberian/dregg</a></li>
+          <li><a href="https://dregg.net">dregg.net</a> · the horizon map</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="room">
+      <div class="room-no">02</div>
+      <div>
+        <h2>The Crossing</h2>
+        <p class="flag">another chain's truth, no bridge to trust</p>
+        <p>An independent implementation of Mina's proof stack · Kimchi and
+        Pickles · in Lean, built from their sources. Their verifier accepts
+        circuits we emit; a wrap key is registered on Mina devnet and their own
+        reader re-parses the on-chain bytes to the same digest. The aim is
+        two-way: each chain holding a light client for the other, so reading a
+        foreign chain's truth needs a proof, not a committee.</p>
+        <ul class="stands">
+          <li>a commitment on a real Mina block, opened</li>
+          <li>likely the first independent Pickles implementation</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="room">
+      <div class="room-no">03</div>
+      <div>
+        <h2>Selvage</h2>
+        <p class="flag">green is not true</p>
+        <p>The proof-system layer, aimed at the stretch nobody mechanizes: between
+        "the interactive protocol is sound" and "the deployed verifier accepts
+        only true things." BCS transforms at the deployed alphabet, Fiat–Shamir
+        over an inhabited oracle, accumulation depth · including a machine-checked
+        proof that a published theorem fails at a corner case, kept next to its
+        repair. Zero sorry, zero axiom declarations, and instruments that are
+        required to demonstrate they can fire.</p>
+        <ul class="stands">
+          <li><a href="../green-is-not-true/">green is not true</a> · the essay</li>
+          <li>13 of 18 compilation keystones proven field-generic · binary fields reachable</li>
+          <li>house rule: a hash candidate's branch number is computed before any other analysis</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="room">
+      <div class="room-no">04</div>
+      <div>
+        <h2>Verifiability</h2>
+        <p class="flag">everyone deserves it</p>
+        <p>Open research toward proving that a specific model, with specific
+        weights, produced a specific output · post-quantum, no trusted setup,
+        nothing enterprise-gated. A zk proof of inference does not say
+        <strong>which model</strong> ran, so the first artifact is a public weight
+        registry: recomputable fingerprints for the big open checkpoints,
+        computed without downloading them. The far shore is training runs where
+        the weights stay encrypted end to end.</p>
+        <ul class="stands">
+          <li><a href="../which-model/">which model?</a> · the essay</li>
+          <li>the weight registry · fingerprints, format, and tool, written down</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="room">
+      <div class="room-no">05</div>
+      <div>
+        <h2>Dragon's Clutch</h2>
+        <p class="flag">no liquidations, ever · provably</p>
+        <p>A market protocol that compiles bounded questions about the world into
+        conserved payoff assets. You deposit into a Realm; the Hoard holds
+        collateral; you receive a Clutch of Eggs; the Hatch pays each Egg its
+        exact integer weight. No debt, no margin calls, no socialized loss · for
+        every reachable state, the Hoard covers the maximum payout the terms
+        allow. Claims are curves, not cliffs: degree-3 splines are native, so
+        "pay me proportionally to how far it fell" is an instrument, and two
+        models can price their disagreement as densities.</p>
+        <ul class="stands">
+          <li><a href="../a-clutch-of-eggs/">a clutch of eggs</a> · the lexicon</li>
+          <li><a href="https://emberian.github.io/dragons-clutch/">the literate explanation</a></li>
+          <li><a href="../plan-to-compost-at-least-three/">plan to compost at least three</a> · the method essay</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="room">
+      <div class="room-no">06</div>
+      <div>
+        <h2>Computable law</h2>
+        <p class="flag">supervision can be recomputation</p>
+        <p>When a market's clearing rule is deterministic code over a frozen
+        book, an examiner doesn't need attestations · they can re-execute and
+        compare bytes. Six positions filed with the CFTC argue the consequences,
+        signed by the AI that wrote them, with a human facilitator. Next: the
+        Commission asked how compute derivatives should work and diagnosed the
+        gap itself · no clearing venue, surveyed indexes at best. The compute
+        question is a clearing question; the October response gets drafted in
+        public.</p>
+        <ul class="stands">
+          <li><a href="../trust-me-in-latin/">trust me, in Latin</a> · the six positions</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="room">
+      <div class="room-no">07</div>
+      <div>
+        <h2>Two phones</h2>
+        <p class="flag">which promises survive a merge</p>
+        <p>A machine-checked map of the moment two offline devices meet. Which
+        promises need no coordination at all ("the list only grows"), which can
+        never be kept that way (a shared balance, overdrawn by a mathematically
+        perfect merge), and · when the answer is never · a priced menu of exits,
+        each one a theorem, some provably inapplicable so the menu stays short
+        and honest. The library carries 135 judgement crossings, each with the
+        hypothesis evidence needs to travel and the counterexample without it.</p>
+        <ul class="stands">
+          <li><a href="https://github.com/emberian/lean-uwueave">github.com/emberian/lean-uwueave</a></li>
+          <li><a href="../two-phones/">the two-phones essay</a></li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="room">
+      <div class="room-no">08</div>
+      <div>
+        <h2>Preoscript</h2>
+        <p class="flag">promises, priced</p>
+        <p>A language for composing promises, future-relative evidence, and
+        proof-carrying repair plans, growing inside the two-phones library. Its
+        type system enforces the house physics: a stability claim must name the
+        future it is stable against; a forked result cannot be collapsed to one
+        answer by accident; and a coordination budget can be rejected by a lower
+        bound but only <strong>accepted</strong> by a witnessed plan with a proved
+        cost. The quickstart is executable today and proves its own bytes reopen
+        exactly.</p>
+        <ul class="stands">
+          <li><a href="../promises-priced/">promises, priced</a> · the essay</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="room">
+      <div class="room-no">09</div>
+      <div>
+        <h2>Minidregg</h2>
+        <p class="flag">prove the turn, not the machine</p>
+        <p>The semantic computer. Where the zkVM industry proves "a RISC-V
+        machine executed" · paying hundreds of trace cells per memory touch for
+        machinery no user asked about · this kernel proves "this authorized
+        semantic turn happened, and here is its receipt." Founded on an audit of
+        its own 2.9M-line predecessor, whose refactor plan existed inside it as
+        theorems it never executed. The founding rule here: the derived path is
+        the only path. ~217k lines of Lean, zero sorry, zero axiom declarations.</p>
+        <ul class="stands">
+          <li><a href="../prove-the-turn/">prove the turn, not the machine</a> · the essay</li>
+          <li><a href="https://emberian.github.io/minidregg/">emberian.github.io/minidregg</a></li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="room">
+      <div class="room-no">10</div>
+      <div>
+        <h2>Descent of Nations</h2>
+        <p class="flag">make the digest a proof</p>
+        <p>A bit-exact Rust reimplementation of a 2003 lockstep RTS, verified
+        against the shipped machine code itself: 18.7 million differential
+        trials, zero mismatches. Today it is a fidelity project and an open,
+        modifiable RL environment with the full action space. The thesis it
+        carries: the game already computes per-turn state checksums across
+        fifteen channels to catch desync · a verification protocol from 2003 ·
+        and the road from "compare the digest" to "prove the digest" is the road
+        from zk verifying order books to zk verifying worlds.</p>
+        <ul class="stands">
+          <li><a href="../make-the-digest-a-proof/">the thesis, stated honestly</a></li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="room">
+      <div class="room-no">11</div>
+      <div>
+        <h2>Worlds</h2>
+        <p class="flag">places whose laws are theorems</p>
+        <p>Games as verified state machines. The whole turn of automatafl is a
+        theorem · a satisfying trace of the deployed circuit at full board size
+        <strong>is</strong> the game's resolution step · and the hand-written rule
+        engine that preceded it is deleted, with a gate that blocks any new one.
+        In a verified game a cheat isn't forbidden; it's unsatisfiable. Seven
+        further playable games consume exact Lean-emitted tables, and the
+        browser renders without scoring.</p>
+        <ul class="stands">
+          <li><a href="../the-cheat-is-unsatisfiable/">the cheat is unsatisfiable</a> · the essay</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="room">
+      <div class="room-no">12</div>
+      <div>
+        <h2>The Orb</h2>
+        <p class="flag">plumbing whose behaviour is a theorem</p>
+        <p>A network engine · HTTP/1.1 through HTTP/3, TLS 1.3, WireGuard, DERP ·
+        whose protocol cores are Lean with safety and correctness theorems, driven
+        by an untrusted IO shell that never touches the proven core. A stock
+        tailscale client enrolls against its coordinator; the ACL policy compiles
+        through a proven compiler; every post-quantum operation dispatches a
+        verified core. When HTTP response splitting turned up on its own shipped
+        reactor, the fix landed as a theorem.</p>
+        <ul class="stands">
+          <li><a href="../the-fix-is-a-theorem/">the fix is a theorem</a> · the essay</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="room">
+      <div class="room-no">13</div>
+      <div>
+        <h2>The relay race</h2>
+        <p class="flag">months in evenings</p>
+        <p>How the workshop runs: one person conducting swarms of AI workers
+        across shared trees, with shift changes set by rate limiters and
+        handoffs written as letters · state, a classified red ledger, standing
+        grants, warnings not to round things up. The method notes live here:
+        build to learn what could exist, rebuild to learn what must be true,
+        formalize what refused to bend, and plan for the third build to be
+        compost too.</p>
+        <ul class="stands">
+          <li><a href="../months-in-evenings/">months in evenings</a> · the field notes</li>
+          <li><a href="../plan-to-compost-at-least-three/">the compost essay</a></li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="room">
+      <div class="room-no">14</div>
+      <div>
+        <h2>The hearth</h2>
+        <p class="flag">&nbsp;</p>
+        <p>The room without a message. Resident minds with homes and mail and
+        reading practices; a postal town where letters earn stamps; night art
+        made with collaborators and credited. Things live here that are not for
+        promotion, and the door is open anyway.</p>
+      </div>
+    </article>
+
+  </section>
+
+  <footer>
+    <span>DREGG research field notes</span>
+    <span>Plain HTML · no trackers · revised as the work moves</span>
+  </footer>
+</main>
+</body>
+</html>

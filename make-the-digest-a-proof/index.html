@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Make the digest a proof</title>
+  <meta name="description" content="A 2003 RTS already computes per-turn state checksums to catch desync. The thesis: replace compare-the-digest with prove-the-digest, and take verifiable computation from order books to worlds.">
+  <meta name="theme-color" content="#10110c">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/make-the-digest-a-proof/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Make the digest a proof">
+  <meta property="og:description" content="A 2003 RTS already computes per-turn checksums to catch desync. Replace compare-the-digest with prove-the-digest.">
+  <style>
+    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--green); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(46px, 8.4vw, 96px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--orange); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--orange); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    .figures { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); margin: 26px 0; }
+    .fig { background: var(--night); padding: 18px 18px 16px; }
+    .fig .n { font: 900 34px/1 var(--display); letter-spacing: -0.03em; color: var(--paper); }
+    .fig .l { margin-top: 8px; font: 600 10.5px/1.5 var(--mono); color: var(--dimmer); letter-spacing: .07em; text-transform: uppercase; }
+    .thesis { margin: 36px 0; padding: 24px 26px; border: 1px solid var(--rule); border-left: 4px solid var(--orange); }
+    .thesis p { margin: 0; max-width: none; font: 700 18px/1.5 var(--mono); color: var(--paper); }
+    .stages { border-top: 4px solid var(--paper); margin: 24px 0; }
+    .stage { display: grid; grid-template-columns: 54px 1fr; gap: 16px; padding: 13px 0; border-bottom: 1px solid var(--rule); }
+    .stage .k { color: var(--orange); font: 900 24px/1 var(--display); }
+    .stage p { margin: 0; font-size: 14.5px; }
+    .status { margin-top: 44px; padding-top: 14px; border-top: 1px solid var(--rule); font: 600 11px/1.8 var(--mono); color: var(--dimmer); letter-spacing: .05em; text-transform: uppercase; }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 56px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    @media (max-width: 560px) { .stage { grid-template-columns: 40px 1fr; } }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">05 · Descent of Nations</span>
+  </header>
+
+  <section class="titleblock">
+    <p class="kicker">Descent of Nations · a fidelity project, an RL environment, and a thesis</p>
+    <h1>Make the digest<br>a <span>proof.</span></h1>
+    <p class="dek">Verifiable computation has, so far, verified ledgers: token
+    transfers, order books, instruction streams. Small state, simple dataflow ·
+    the 1950s, formally. A real-time strategy game from 2003 is a different
+    category of object. This page is about why we are rebuilding one, and what
+    it is quietly pointed at.</p>
+  </section>
+
+  <h2>What stands <em>today.</em></h2>
+  <p><strong>Descent of Nations</strong> is a deterministic, batch-parallel Rust
+  reimplementation of <em>Rise of Nations</em>, built to be bit-exact wherever
+  that can be proven and fast enough to train agents on. Fidelity is not a
+  vibe here; it is measured against the shipped machine code itself. A
+  differential oracle maps the retail executable and calls its actual functions
+  with controlled inputs, next to ours:</p>
+  <div class="figures">
+    <div class="fig"><div class="n">18,722,565</div><div class="l">oracle trials in the current record</div></div>
+    <div class="fig"><div class="n">0</div><div class="l">mismatches · skips · crashes</div></div>
+    <div class="fig"><div class="n">585,152</div><div class="l">replay turns validated across 61 recordings</div></div>
+    <div class="fig"><div class="n">67 ms</div><div class="l">the real tick, measured · not folklore</div></div>
+  </div>
+  <p>The reverse engineering keeps overturning folklore. Damage is a
+  <strong>31-stage integer chain</strong> with armor in the middle. General
+  movement is integer. Border influence is a cell-radius model, not a spline.
+  And the shipped AI receives <strong>difficulty-scaled economic bonuses</strong> ·
+  twenty years of "the AI is so good at economy," and it was on welfare. Ours
+  is required not to be; non-cheating is a product gate.</p>
+  <p>Alongside the sim: an open, modifiable <strong>RL environment</strong> ·
+  Gymnasium, VectorEnv and PettingZoo adapters over the full 82-opcode action
+  space with parameter-level masks. Not a toy subset: the environment must not
+  foreclose a state-of-the-art player. And the <code>.rcx</code> replay format,
+  which had no public documentation or parser anywhere, now has both.</p>
+
+  <h2>The <em>observation.</em></h2>
+  <p>Rise of Nations is a lockstep RTS. Peers exchange <strong>orders
+  only</strong> · never state · and every machine simulates the same world
+  locally. Which means the shipped game already had to solve a verification
+  problem: how do you know the other machine computed the same world you did?</p>
+  <p>Its answer, in 2003: every turn, hash the simulation state across
+  <strong>fifteen channels</strong> · economy, combat, movement, and the rest ·
+  and compare digests between peers. Desync is detected by checksum
+  disagreement. Replays are just the order log plus those digests.</p>
+  <p><strong>That is a verification protocol.</strong> A replicated state
+  machine, a compact input log, a per-step state commitment. The game was built
+  wanting to be verified · it simply lived two decades before the machinery
+  that could keep it honest against anything stronger than an honest peer.</p>
+
+  <h2>The <em>thesis.</em></h2>
+  <div class="thesis">
+    <p>Replace "compare the digest" with "prove the digest."</p>
+  </div>
+  <p>A proof that each tick's transition was computed correctly · folded
+  incrementally across a match, the way the match itself is played · would be,
+  to our knowledge, the most complex incrementally verifiable computation ever
+  attempted: tens of thousands of heterogeneous state transitions per tick over
+  a large mutable world, not a linear pass over a ledger.</p>
+  <p>Three facts make it a thesis rather than a fantasy. <strong>The statement
+  already exists</strong> · the fifteen-channel digest defines exactly what to
+  prove, and it was defined by the game, not by us. <strong>The simulation is
+  integer</strong> · the RE campaign keeps finding integer chains and grid
+  models where folklore expected floats, which is to say: we reverse-engineered
+  our way to an arithmetization-friendly 2003. And <strong>the spec is
+  measured, not asserted</strong> · eighteen million oracle trials mean a
+  circuit's reference semantics would be pinned to shipped machine-code
+  behavior, not to a document.</p>
+  <p>It also composes with the environment work. An open RL environment
+  <strong>plus</strong> verifiable execution is something reinforcement
+  learning conspicuously lacks: <strong>benchmarks that cannot lie</strong>.
+  "This agent achieved this result in this environment" becomes a checkable
+  artifact · provable evaluations, cheat-proof leaderboards, tournaments
+  verified without replaying a frame · the same design that already makes a
+  <a href="../the-cheat-is-unsatisfiable/">board-game cheat unsatisfiable</a>,
+  scaled up from an 11×11 board to a war.</p>
+
+  <h2>The road, <em>honestly.</em></h2>
+  <p>Nothing below is a claim of achievement. It is the order of battle, each
+  stage a checkable artifact, no dates attached:</p>
+  <div class="stages">
+    <div class="stage"><div class="k">1</div><p>State the fifteen-channel
+    checksum relation formally, against the measured semantics.</p></div>
+    <div class="stage"><div class="k">2</div><p>Prove one channel's per-turn
+    transition · the smallest digest that means something.</p></div>
+    <div class="stage"><div class="k">3</div><p>Prove one full tick. The
+    hardest single step; everything heterogeneous happens here.</p></div>
+    <div class="stage"><div class="k">4</div><p>Fold ticks: segment-level
+    incremental verification of a replay.</p></div>
+    <div class="stage"><div class="k">5</div><p>Chase real time. The tick is
+    67 ms; the gap between proving speed and that number is the research.</p></div>
+  </div>
+  <p>Verifiable computation has spent its first decade proving the 1950s ·
+  balances, books, batches. A war, with its economy and fog and ten thousand
+  simultaneous small decisions, is 2003. The digest is already there. We intend
+  to prove it.</p>
+
+  <p class="status">Status, plainly: the fidelity oracle, replay validation,
+  and RL environment numbers above are current and real. The proof stages are a
+  stated intention · none has begun. This page is the flag, planted in public,
+  so progress against it can be checked rather than believed.</p>
+
+  <footer>
+    <span>DREGG research field notes · Descent of Nations</span>
+    <span>Plain HTML · no trackers · the flag, planted</span>
+  </footer>
+</main>
+</body>
+</html>

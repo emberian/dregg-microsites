@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Which model?</title>
+  <meta name="description" content="A zero-knowledge proof of AI inference proves the computation ran. It does not prove which model ran. The missing piece is not a better proof · it is a public name for the weights.">
+  <meta name="theme-color" content="#10110c">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/which-model/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Which model?">
+  <meta property="og:description" content="A zk proof of inference proves the computation ran · not which model ran. The missing piece is a public name for the weights.">
+  <style>
+    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--green); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(52px, 9vw, 104px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--orange); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--orange); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    .gap {
+      margin: 30px 0; padding: 22px 24px; border: 1px solid var(--rule); border-left: 4px solid var(--orange);
+      font: 700 17px/1.55 var(--mono); color: var(--paper);
+    }
+    .notclaims { border-top: 4px solid var(--paper); margin: 22px 0; }
+    .nc { display: grid; grid-template-columns: 26px 1fr; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--rule); }
+    .nc .x { color: var(--orange); font: 900 16px/1.4 var(--mono); }
+    .nc p { margin: 0; font-size: 14.5px; }
+    .stance { margin: 34px 0; padding: 20px 24px; background: #0a0b07; border: 1px solid var(--rule); border-left: 4px solid var(--green); }
+    .stance p { margin: 0; max-width: none; font-size: 15.5px; color: var(--dim); }
+    .stance p strong { color: var(--green); }
+    .status { margin-top: 44px; padding-top: 14px; border-top: 1px solid var(--rule); font: 600 11px/1.8 var(--mono); color: var(--dimmer); letter-spacing: .05em; text-transform: uppercase; }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 56px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">13 · Verifiability</span>
+  </header>
+
+  <section class="titleblock">
+    <p class="kicker">Everyone deserves verifiability · the missing half of proven inference</p>
+    <h1>Which<br><span>model?</span></h1>
+    <p class="dek">Zero-knowledge proofs of AI inference are arriving. They
+    prove that a computation ran, faithfully, over committed weights. Read that
+    sentence again, slowly · because it contains a hole big enough to serve you
+    a different model through.</p>
+  </section>
+
+  <h2>The <em>hole.</em></h2>
+  <p>A proof of inference certifies a relation over <strong>committed</strong>
+  weights. It does not certify <strong>effort</strong>, and it does not certify
+  a <strong>name</strong>. A provider can serve a small, cheap model, commit to
+  its weights honestly, and emit entirely valid proofs · and the proof system
+  has no opinion, because the proof was never about a <em>named</em> model.
+  Only about whatever the prover committed to.</p>
+  <div class="gap">the missing piece was never a better proof.<br>it is a
+  public name for the weights.</div>
+  <p>Call the attack what it is: a hollow model behind an honest proof. Closing
+  it requires a <strong>public weight registry</strong> · an artifact an open
+  project can ship and a closed one structurally cannot, because a closed
+  provider cannot publish the very names its proofs would be checked
+  against.</p>
+
+  <h2>The <em>registry.</em></h2>
+  <p>So the first artifact of this pillar is deliberately the one with no proof
+  system in it at all: the published open-weight checkpoints now have
+  <strong>publicly recomputable fingerprints</strong>. Computed without
+  downloading the models · from each checkpoint's own index and ranged reads of
+  its published files · with the tool and the format written down well enough
+  that someone else gets the same number. A proof of inference can then bind to
+  a fingerprint that has a public name attached, and "which model?" stops being
+  a trust question.</p>
+  <p>What this deliberately does <strong>not</strong> claim:</p>
+  <div class="notclaims">
+    <div class="nc"><div class="x">✗</div><p>that any model has been
+    <em>verified</em> · a fingerprint is a name, not a verdict</p></div>
+    <div class="nc"><div class="x">✗</div><p>that the committed bytes are "the
+    real model" in any sense beyond being the published bytes</p></div>
+    <div class="nc"><div class="x">✗</div><p>that anything about serving-time
+    behavior follows yet · nothing consumes the registry so far</p></div>
+  </div>
+
+  <h2>Exactness is the <em>boundary.</em></h2>
+  <p>The second commitment of this pillar: <strong>bit-exact proving of the
+  model's native format</strong>, with no acceptance windows. Every deployed
+  fidelity-carrying system hands the prover a per-element tolerance · and
+  there's a theorem (Or Zamir, February 2026) showing a functionally identical
+  adversarial network can steer any target output through windows at floating-point
+  rounding scale. Every bit of tolerance granted the prover is a bit an
+  adversary can steer. A slack-free specification gives it nothing to hide in.
+  Bit-exactness is not pedantry; it is the security boundary.</p>
+
+  <h2>The cost curve is a <em>choice.</em></h2>
+  <p>We sorted every speedup this research measured by size. Statement-level
+  and protocol-level levers · proving the smallest true statement, committing
+  everything and auditing a random sample · are worth 10–100×. Prover-level
+  levers are worth 2–4×. The field spends nearly all its effort on the second
+  kind. <strong>The industry's cost curve is shaped by proving a statement
+  nobody asked for</strong> · and that is the opening. The sampling-audit
+  theorem is <a href="../green-is-not-true/">machine-checked now</a>: commit everything, prove a sample, and any
+  prover becomes deployable at bounded, quantified leakage.</p>
+
+  <div class="stance">
+    <p><strong>The stance, for the record:</strong> everyone deserves
+    verifiability. The point of doing this in the open is that verifiable
+    inference should not be an enterprise feature. When we surveyed the
+    best-known "open" zkML projects in August, most were not actually
+    open-source · evaluation-only licenses, no-use-rights clauses, missing
+    licenses. The open position is vacant. We intend to occupy it, in public,
+    and we regard the teams publishing production numbers and stating their
+    limitations plainly as collaborators in a worldsystem · competitors in no
+    sense that matters here.</p>
+  </div>
+
+  <p class="status">Status, plainly: the registry fingerprints, tool, and
+  format exist and are recomputable; nothing consumes them yet. The proving
+  research is measurements and machine-checked theorems, not a product. The
+  far shore · training runs where the weights stay encrypted end to end · is
+  named so you can watch us walk toward it.</p>
+
+  <footer>
+    <span>DREGG research field notes · verifiability</span>
+    <span>Plain HTML · no trackers</span>
+  </footer>
+</main>
+</body>
+</html>

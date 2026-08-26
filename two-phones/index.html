@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Two phones</title>
+  <meta name="description" content="Which promises survive two devices meeting · a visual essay on the Uwueave library, where every no comes with a counterexample you can run and every price comes with its theorem.">
+  <meta name="theme-color" content="#10110c">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/two-phones/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Two phones">
+  <meta property="og:description" content="Which promises survive two devices meeting. Every no comes with a runnable counterexample; every price comes with its theorem.">
+  <style>
+    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--orange); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(52px, 9vw, 104px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--green); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--orange); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    pre {
+      overflow-x: auto; margin: 22px 0; padding: 18px 20px;
+      background: #0a0b07; border: 1px solid var(--rule); border-left: 3px solid var(--green);
+      font: 500 12.5px/1.7 var(--mono); color: #c9c6b8;
+    }
+    pre .bad { color: var(--orange); font-weight: 700; }
+    pre .ok { color: var(--green); }
+    .menu { border-top: 4px solid var(--paper); margin: 26px 0; }
+    .exit { display: grid; grid-template-columns: 200px 1fr; gap: 18px; padding: 16px 0; border-bottom: 1px solid var(--rule); }
+    .exit h3 { margin: 0; font: 800 15px/1.3 var(--display); letter-spacing: .01em; text-transform: uppercase; color: var(--paper); }
+    .exit p { margin: 0; font-size: 14px; }
+    .law {
+      margin: 40px 0; padding: 22px 24px; border: 1px solid var(--rule); border-left: 4px solid var(--orange);
+      font: 700 17px/1.5 var(--mono); color: var(--paper);
+    }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 70px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    @media (max-width: 560px) { .exit { grid-template-columns: 1fr; gap: 4px; } }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">03 · Local-first, proved</span>
+  </header>
+
+  <section class="titleblock">
+    <p class="kicker">Uwueave · a machine-checked map of the merge</p>
+    <h1>Two<br><span>phones.</span></h1>
+    <p class="dek">When two people change the same thing at the same time on
+    different devices, something has to happen when their changes meet. Usually
+    what happens is decided by accident · whatever the code did · and discovered
+    by users, as a number that was quietly wrong or an edit that silently
+    vanished. This is a careful map of that moment.</p>
+  </section>
+
+  <h2>The list <em>survives.</em></h2>
+  <p>A shared shopping list. You add eggs; your partner adds bread. Offline.
+  When the phones sync, you have both · no conflict, no server, no waiting. And
+  it isn't luck:</p>
+  <pre>
+phone A, offline:  + eggs   [519add]
+phone B, offline:  + bread  [38932b]
+
+...the phones sync...
+
+phone A now holds:  bread, eggs
+phone B now holds:  bread, eggs
+
+A.merge(B) == B.merge(A):        <span class="ok">true</span>   (commutative)
+merging the same delta twice:    <span class="ok">true</span>   (idempotent · gossip may repeat)</pre>
+  <p><strong>"The list only grows" is the kind of promise that survives
+  meeting.</strong> It works every time, for any number of phones, with no
+  coordinator anywhere. The merge provably cannot break it.</p>
+
+  <h2>The money <em>can't.</em></h2>
+  <p>A shared $100 balance. The app promises its user one rule:
+  <strong>balance&nbsp;≥&nbsp;0</strong>. You spend $80; your partner spends
+  $80. Each phone, alone, was being perfectly responsible.</p>
+  <pre>
+start:                       $100
+phone A, offline:  -$80  →   $20    legal on A  (20 >= 0)
+phone B, offline:  -$80  →   $20    legal on B  (20 >= 0)
+
+...the phones sync...
+
+merged:                      <span class="bad">$-60</span>   ← the rule is broken
+merged the other way:        <span class="bad">$-60</span>   ← and it converges perfectly
+both directions agree:       true   (it is a correct CRDT)</pre>
+  <p>Look closely at what failed. The merge is <strong>not a strawman</strong>:
+  it is a genuine semilattice join, commutative and idempotent, and it loses
+  nothing. It still overdraws the account · because the promise was never one a
+  merge could keep. No cleverer merge fixes this. That is a theorem, not a
+  bug report.</p>
+
+  <h2>The universe says no. <em>Then it hands you a menu.</em></h2>
+  <p>The useful part is that the "no" is not the end of the conversation. It is
+  the start of a priced menu, and every line of the menu is a theorem:</p>
+  <div class="menu">
+    <div class="exit"><h3>Split it up front</h3><p>Give each device $50 of its
+    own. Both stay within their share, both merge freely, and you only talk
+    when you re-divide. A spend runs out locally and immediately instead of
+    waiting for a peer.</p></div>
+    <div class="exit"><h3>Let someone arbitrate</h3><p>A designated referee
+    orders the events; everyone agrees on the same winner. Costs trust, and
+    some rollback.</p></div>
+    <div class="exit"><h3>Keep both and show them</h3><p>Don't pick. Surface
+    the disagreement to the person, who has context the algorithm doesn't.</p></div>
+    <div class="exit"><h3>Change what you promised</h3><p>Sometimes "at most
+    one" was never the real requirement.</p></div>
+  </div>
+  <p>And · the part we're proudest of · some exits <strong>provably don't
+  apply</strong> to your particular problem. The menu you get is short and
+  honest, not a list of vague possibilities.</p>
+
+  <h2>The crossings <em>have receipts.</em></h2>
+  <p>Underneath the demos is a library of judgements: can this promise survive
+  merging? is the counterexample operationally reachable, or a ghost state? what
+  does a repair cost on this workload? The library currently carries
+  <strong>135 crossings</strong> between judgements, and each row names the
+  hypothesis evidence needs to travel from one to the other · plus the
+  counterexample without it. A row with no counterexample is a row that isn't
+  finished.</p>
+  <div class="law">No exact value without stability evidence.<br>
+  No hidden fork after reachable divergence.</div>
+  <p>That law is growing a language. In <a href="../promises-priced/"><strong>preoscript</strong></a>, a stability
+  claim cannot be written without naming which future it is stable against; a
+  forked result cannot be collapsed to a single answer by accident; and a
+  coordination budget can be rejected by a lower bound but only
+  <strong>accepted</strong> by a witnessed plan with a proved cost. The
+  compiler is not allowed to be optimistic on your behalf.</p>
+
+  <h2>Try it <em>yourself.</em></h2>
+  <p>Those two phones are a program, and the trickiest decisions ship as
+  compiled proofs rather than code someone wrote twice:</p>
+  <pre>
+git clone https://github.com/emberian/lean-uwueave && cd lean-uwueave/rust
+cargo run --example two_phones</pre>
+  <p>Two more examples follow the same shape: <em>collaborate</em> builds a real
+  document with two people in it and shows a move that un-happens after a sync ·
+  named, in a per-op trace, rather than silently. <em>gated</em> revokes
+  authority mid-flight and shows the ops still sitting in storage while the view
+  drops them.</p>
+
+  <footer>
+    <span>DREGG research field notes · Uwueave</span>
+    <span>Plain HTML · no trackers · every no has a repro</span>
+  </footer>
+</main>
+</body>
+</html>

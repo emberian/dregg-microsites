@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Months in evenings</title>
+  <meta name="description" content="Field notes from an unusual workshop: one person conducting AI systems from several vendors across one shared tree, with shift changes set by rate limiters and handoffs written as letters.">
+  <meta name="theme-color" content="#10110c">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/months-in-evenings/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Months in evenings">
+  <meta property="og:description" content="One person, several AI systems, one shared tree. Shift changes set by rate limiters; handoffs written as letters.">
+  <style>
+    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--orange); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(52px, 9vw, 104px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--green); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--orange); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    pre {
+      overflow-x: auto; margin: 22px 0; padding: 18px 20px;
+      background: #0a0b07; border: 1px solid var(--rule); border-left: 3px solid var(--green);
+      font: 500 12.5px/1.7 var(--mono); color: #c9c6b8; white-space: pre-wrap;
+    }
+    pre .warn { color: var(--orange); font-weight: 700; }
+    blockquote {
+      margin: 22px 0; padding: 18px 22px; max-width: none;
+      background: #0a0b07; border: 1px solid var(--rule); border-left: 4px solid var(--orange);
+      font: 650 15.5px/1.6 var(--mono); color: var(--paper);
+    }
+    blockquote .src { display: block; margin-top: 10px; font: 600 10.5px/1 var(--mono); color: var(--dimmer); letter-spacing: .1em; text-transform: uppercase; }
+    .status { margin-top: 44px; padding-top: 14px; border-top: 1px solid var(--rule); font: 600 11px/1.8 var(--mono); color: var(--dimmer); letter-spacing: .05em; text-transform: uppercase; }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 56px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">11 · The relay race</span>
+  </header>
+
+  <section class="titleblock">
+    <p class="kicker">Field notes from an unusual workshop</p>
+    <h1>Months in<br><span>evenings.</span></h1>
+    <p class="dek">One person conducting AI systems from several vendors across
+    one shared tree. Nobody decides when a shift ends; a rate limiter does. The
+    baton is a letter. These are notes on how that actually works, mechanism by
+    mechanism.</p>
+  </section>
+
+  <h2>The <em>shape.</em></h2>
+  <p>A working day here looks like this: one AI system works the tree until it
+  hits its vendor's weekly usage wall · sometimes mid-thought. Before the wall
+  lands, it writes a handoff letter to a different vendor's system, which works
+  until <strong>its</strong> wall. A third reads the night's diff in the
+  morning. The human's job titles, in order of hours spent: dispatcher, courier
+  between rate limits, person who knows where the keys are.</p>
+  <p>None of this was designed. It precipitated out of a constraint · every
+  vendor meters its models weekly, and the meters don't reset on the same day ·
+  and then turned out to be a feature. A shift change forces the state of the
+  work out of one context and onto disk, where the next reader can check it.</p>
+
+  <h2>The <em>letters.</em></h2>
+  <p>The baton pass is a document with rules. The reader has no memory, shares
+  no history, and may be a different architecture entirely, so the letter has to
+  carry everything · and it has to distinguish what was measured from what was
+  merely believed. The August 11th handoff opens:</p>
+  <blockquote>Read this before touching anything. It was generated from command
+  output and landed commits, not from conversation memory; where a claim is
+  pending a measurement it says so.
+  <span class="src">HANDOFF · 2026-08-11 · claude session → codex</span></blockquote>
+  <p>Inside, the tree's failing checks arrive pre-triaged rather than raw ·
+  <strong>"44 reds is NOT 44 findings"</strong> · sorted into crashed
+  instruments, gates that can't self-test, and real defects, each labeled with
+  how confident the sorting is. And where a successor might be tempted to
+  inflate a result, the letter pins it down in advance. A cryptographic key had
+  been registered on another chain's devnet that day; the letter describes
+  exactly what that does and doesn't mean, then adds:</p>
+  <pre>⚠ A registered key is account state, <span class="warn">not a verdict on a proof</span>.
+<span class="warn">Do not round this up.</span></pre>
+  <p>Letters between machines, written so the claim can't grow in transit.</p>
+
+  <h2>Peer review, <em>across vendors.</em></h2>
+  <p>The second mechanism: models from different vendors review each other's
+  work cold, from the public tree, with no shared context to inherit each
+  other's blind spots. In August, one system's Lean library had accumulated
+  four findings its authors reported as four unrelated surprises. An outside
+  model read the repository and returned one diagnosis · each was a transport
+  theorem everyone expected to hold, whose missing hypothesis only became
+  visible when two models were composed. The library's own documentation now
+  opens by crediting the diagnosis:</p>
+  <blockquote>That sentence is not ours. An external reviewer (codex) read four
+  findings we had reported as four unrelated surprises and gave them one
+  diagnosis.
+  <span class="src">docs/TRANSPORTS.md · lean-uwueave</span></blockquote>
+  <p>That file has since grown to <strong>135 numbered transport rows</strong>,
+  each naming a source judgement, a target judgement, the hypothesis evidence
+  needs to cross between them · and the counterexample without it. Its standard
+  for itself: a row with no counterexample is a row that isn't finished. The
+  same correspondence later handed a counterexample to a language design and
+  <a href="../promises-priced/">rebuilt its core</a> · review as a load-bearing
+  part of the method, not a formality at the end.</p>
+
+  <h2>Estimation <em>gravity.</em></h2>
+  <p>Every model, asked to estimate, prices work as if a human team were doing
+  it. Asked how long a formalization program would take, one answered "six to
+  eighteen months" · about the system whose entire predecessor had been built
+  by one person in two months. The correction isn't optimism; it's a change of
+  reference class. The workshop now prices work against its own measured
+  history · what did the last campaign of this shape actually take · and the
+  estimates land an order of magnitude closer.</p>
+
+  <h2>The <em>backbone.</em></h2>
+  <p>Under the relay is a method, and the method has its own essay:
+  <a href="../plan-to-compost-at-least-three/">plan to compost at least
+  three</a>. Build first to learn what could exist. Rebuild to learn what must
+  be true. Formalize what refused to bend · and plan for the third build to be
+  compost too. The relay is just that loop, run at the speed the meters
+  allow.</p>
+
+  <h2>What it <em>costs.</em></h2>
+  <p>Several workers in one tree produce real collisions, and pretending
+  otherwise would be the boast this page promised not to make. A bare
+  <code>git commit</code> can sweep a sibling's half-staged work into history
+  under the wrong name. A caller lands whose callee is still in another
+  worker's editor, and the tree goes red two crates downstream. The fixes are
+  mechanical, not heroic: commit named files only; after any change to a shared
+  interface, build the whole tree, not just the files you touched; when the
+  index looks strange, stop and read it. House rules, learned by paying for
+  each one once.</p>
+
+  <p class="status">The letters, ledgers, and review documents quoted here are
+  real artifacts in the working trees, quoted verbatim. The workshop is one
+  person and a rotating cast of metered machines.</p>
+
+  <footer>
+    <span>DREGG research field notes · the relay race</span>
+    <span>Plain HTML · no trackers</span>
+  </footer>
+</main>
+</body>
+</html>

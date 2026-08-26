@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>The cheat is unsatisfiable</title>
+  <meta name="description" content="Automatafl, a board game whose whole turn is a theorem · the hand-written rule engine is deleted, the proven circuit is the sole authority, and an illegal move isn't forbidden, it's unsatisfiable.">
+  <meta name="theme-color" content="#10110c">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/the-cheat-is-unsatisfiable/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="The cheat is unsatisfiable">
+  <meta property="og:description" content="Automatafl: a board game whose whole turn is a theorem. An illegal move isn't forbidden · it's unsatisfiable.">
+  <style>
+    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--orange); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(46px, 8.4vw, 96px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--green); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--orange); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    pre {
+      overflow-x: auto; margin: 22px 0; padding: 18px 20px;
+      background: #0a0b07; border: 1px solid var(--rule); border-left: 3px solid var(--green);
+      font: 500 12.5px/1.7 var(--mono); color: #c9c6b8;
+    }
+    pre .hot { color: var(--orange); font-weight: 700; }
+    .law {
+      margin: 40px 0; padding: 22px 24px; border: 1px solid var(--rule); border-left: 4px solid var(--orange);
+      font: 700 17px/1.5 var(--mono); color: var(--paper);
+    }
+    .commits { border-top: 4px solid var(--paper); margin: 24px 0; }
+    .commit { padding: 14px 0; border-bottom: 1px solid var(--rule); }
+    .commit p { margin: 0; font: 500 13px/1.7 var(--mono); color: var(--dim); max-width: none; }
+    .commit p strong { color: var(--green); font-weight: 700; }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 70px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">09 · Worlds</span>
+  </header>
+
+  <section class="titleblock">
+    <p class="kicker">Automatafl · a game whose whole turn is a theorem</p>
+    <h1>The cheat is<br><span>unsatisfiable.</span></h1>
+    <p class="dek">Every multiplayer game enforces its rules the same way: a
+    referee · human or software · watches the moves and objects. This page is
+    about a board game where the referee is a proof system, and an illegal
+    move doesn't get rejected. It fails to exist.</p>
+  </section>
+
+  <h2>The <em>game.</em></h2>
+  <p><strong>Automatafl</strong> is a turn-based board game where all players
+  move at once. Each player secretly writes a rook-style move; the moves are
+  revealed simultaneously, and if two players grabbed the same piece or aimed
+  at the same square, that's a <strong>conflict</strong> · everyone involved
+  must re-enter, and the fought-over coordinate is marked off-limits for the
+  redo. Once the round is clean, the moves resolve together, and then the
+  <strong>Automaton</strong> · a neutral piece with its own convoluted step
+  rules · takes its step. You win by luring the Automaton into your corner.</p>
+  <p>Simultaneous secret moves, recursive conflict re-entry, and a rule-driven
+  neutral actor: it is exactly the kind of game whose disputes are miserable
+  to referee by hand · and exactly the kind of state machine a proof system
+  can hold whole.</p>
+
+  <h2>The <em>theorem.</em></h2>
+  <p>The deployed circuit doesn't merely check moves. The correspondence goes
+  all the way up: <strong>a satisfying trace of the deployed descriptor at the
+  real 11×11 board <em>is</em> the game's resolution step.</strong> The
+  capstone theorem, <code>turn_sat_imp_roundStep</code>, composes the resolve
+  leg and the automaton leg over a fold-enforced seam · so a proof that the
+  circuit accepted your turn is a proof that the board evolved by the rules,
+  cell for cell.</p>
+  <p>Conflicts included. The multi-round capstone,
+  <code>braid_sat_imp_runTurn</code>, extends the theorem across conflict
+  re-entry rounds · clash, re-enter, clash again, resolve · with termination
+  proved (a turn ends within n² rounds), and the whole braid folds into
+  <strong>one verifying STARK proof</strong>. The first full multi-round turn
+  proved end to end took 1,663 seconds of prover time. A real number, from a
+  real fold, at the deployed board size.</p>
+
+  <h2>Seven <em>wounds.</em></h2>
+  <p>Proving that correspondence was not a formality, and that's the point of
+  telling it. On the way to the capstone, the correspondence campaign surfaced
+  <strong>seven distinct defects</strong> in how the circuit's board rewrite
+  and the game's actual rules lined up · a two-cycle that behaved wrong in
+  vacuum, an occupancy-blind swap, a flow-through on exclusive occlusion,
+  four more. Each one was pinned with a machine-verified falsifier: a concrete
+  board where the old circuit and the real game disagreed, checked by
+  <code>decide</code>, flipping green when the fix landed. The audit for an
+  eighth came back clean · identical-move handling was sound as written.</p>
+  <p>Earlier still, an executable differential between the Lean rules and the
+  original running prototype found <strong>four real bugs in the
+  prototype</strong>. The spec didn't just describe the game. It debugged
+  it.</p>
+
+  <h2>The <em>deletion.</em></h2>
+  <p>Once the proven descriptor held the whole turn, the scaffolding came down
+  · and the commit log says it plainly:</p>
+  <div class="commits">
+    <div class="commit"><p><strong>automatafl SHIP:</strong> DELETE the
+    hand-written Rust AIR · the proven Lean descriptor is now the SOLE
+    authority</p></div>
+    <div class="commit"><p><strong>automatafl:</strong> DELETE the Rust game
+    oracle · the proven Lean IS the oracle now, with NO Rust fallback of any
+    kind</p></div>
+  </div>
+  <p>There is no second implementation to drift from the first. The house law
+  behind those deletions is standing policy across the whole project: rule
+  systems are authored in the proof assistant and emitted; nothing hand-written
+  survives beside the proven object as a "fallback," because a fallback is a
+  future disagreement.</p>
+
+  <h2>What a cheat <em>looks like now.</em></h2>
+  <p>Remember the conflict rule: after a clash, the fought-over coordinate is
+  marked, and playing it again in the redo round is illegal. In the shipped
+  circuit that rule is not an <code>if</code> statement. It is a gate over the
+  committed marks:</p>
+  <pre>
+play a marked coordinate in the redo round:
+  the legality gate over the accumulated marks cannot be satisfied
+  <span class="hot">→ no witness exists → no proof exists → the turn never happened</span>
+
+forge the middle board between rounds:
+  the fold's board-window seam binds each round to the last
+  <span class="hot">→ the forged-mid canary bites · the substitution refuses</span></pre>
+  <p>The commit that shipped it: <em>"the marked-move cheat is now UNSAT at
+  the deployed prover."</em> That's the whole design in one line. A cheat
+  isn't caught, reported, or punished. It is a statement with no witness ·
+  <strong>the dishonest game is a board state that cannot be constructed.</strong></p>
+
+  <h2>The <em>room this lives in.</em></h2>
+  <p>Automatafl is the sharpest example of a wider room: games as verified
+  state machines. On a live game platform built with a collaborator, seven
+  further playable games consume exact Lean-emitted rule tables · the browser
+  renders and the player plays, but nothing client-side ever scores. Judged
+  play settles as a finalized turn on the same substrate the theorems govern.
+  Places whose laws are theorems · and whose cheats, therefore, are
+  unsatisfiable.</p>
+
+  <footer>
+    <span>DREGG research field notes · automatafl</span>
+    <span>Plain HTML · no trackers · no rust fallback of any kind</span>
+  </footer>
+</main>
+</body>
+</html>
