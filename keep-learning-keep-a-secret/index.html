@@ -80,6 +80,19 @@
       <a class="source-link" href="https://github.com/emberian/zkml-research/blob/0a89a256eecf0f26f10f06b84b77c57319953046/research/learn_infer_only/experiments/end_to_end/useful_learner_2026_09_08/README.md">Run the teach/query learner ↗</a>
     </section>
 
+    <section class="progress-builds" aria-labelledby="progress-title">
+      <p class="eyebrow">8 September / the next constructions are running</p>
+      <h2 id="progress-title">Teach. Prove.<br><em>Keep going.</em></h2>
+      <p class="progress-intro">Two new teaching sentences now become encrypted class memories, each with a fresh proof and durable commit. A new query then gets a proof for <strong>both class computations before either answer is read</strong>. The complete fresh run took <strong>21.20 seconds, including startup</strong>.</p>
+      <ol class="native-path" aria-label="Recorded native teaching workflow"><li><span>01</span>Two teachings</li><li><span>02</span>Prove and commit</li><li><span>03</span>Prove both scores</li><li><span>04</span>Read the answer</li></ol>
+      <p class="progress-caption">The ATM-fee query selected the withdrawal-fee class: 238,227 versus 211,756. Both scores matched. Omitting a class was refused without a read or state change. Encoding, parsing and decryption remain outside the arithmetic proofs, and a full BFV reader survives. <a href="https://github.com/emberian/zkml-research/blob/dev/research/vfhe_2026_09_08/proved_journal/fast_live_successor/REPORT.md">Run and evidence ↗</a></p>
+      <div class="progress-pieces">
+        <article><p class="piece-kind">NARROWER READ AUTHORITY</p><h3>Sixteen query keys.<br>No universal reader constructed.</h3><p>A separate ring learner completed six encrypted teachings and two expiries. Its recipients obtained <strong>96 matching scores</strong> using independent keys for sixteen fixed semantic queries.</p><p>Each key can still read its projection on every retained input; the coalition gets the whole sixteen-query span. Known public data, honest setup and conditional hardness remain explicit. These updates have no attached proof or history-bound release.</p><a class="source-link" href="https://github.com/emberian/zkml-research/blob/dev/research/learn_infer_only/experiments/end_to_end/restricted_query_learner_2026_09_08/REPORT.md">Restricted-key learner ↗</a></article>
+        <article><p class="piece-kind">NONLINEAR ENCRYPTED LEARNING</p><h3>Square the similarities.<br>Learn a new class.</h3><p>A BFV kernel learner executed <strong>320 ciphertext squares</strong>, producing 2,560 matching individual values and 48 matching decisions. Two new teachings changed a live answer to the new <code>travel_insurance</code> class.</p><p>The reused-data comparison found no gain over its same-feature linear control. Its recipient retains a full reader. A separate generated proof now covers the actual nine-to-four modulus rescale over <strong>all 24,576 coefficient positions</strong>. Six proofs cover 98,304 output residues; preceding multiplication and whole-learner coverage remain open.</p><a class="source-link" href="https://github.com/emberian/zkml-research/blob/dev/research/learn_infer_only/experiments/end_to_end/nonlinear_successor_2026_09_08/REPORT.md">Nonlinear learner ↗</a><br><a class="source-link" href="https://github.com/emberian/zkml-research/blob/dev/research/vfhe_2026_09_08/whole_rescale_runtime/REPORT.md">Native rescale proof ↗</a></article>
+      </div>
+      <p class="progress-caption">These are separate running constructions. Below, you can check the earlier learner update and both class computations from the new query. The restricted-key learner is a separate backend.</p>
+    </section>
+
     <section class="vfhe-band" aria-labelledby="vfhe-title">
       <p class="eyebrow">03 / verifiable fully homomorphic encryption</p>
       <h2 id="vfhe-title">Show the work.<br><em>Keep the state.</em></h2>
@@ -90,17 +103,18 @@
 
     <section class="proof-demo" aria-labelledby="proof-demo-title">
       <p class="eyebrow">Run the actual verifier</p>
-      <h2 id="proof-demo-title">One real update.<br><em>Check it here.</em></h2>
-      <p>A class memory gains a new example and loses its oldest one. This proof checks the encrypted arithmetic of update 65 from the running text learner, using a relation generated from Lean.</p>
+      <h2 id="proof-demo-title">Check the update.<br><em>Check the query.</em></h2>
+      <p>Verify the encrypted arithmetic of learner update 65, or check both class computations from the new two-class query. These are actual proofs using relations generated from Lean; the verifier runs on your device.</p>
       <div class="proof-equation" aria-label="New encrypted memory equals prior encrypted memory plus fresh example minus expired example"><span>prior memory</span><b>+</b><span>fresh example</span><b>−</b><span>expired example</span><b>=</b><span>new memory</span></div>
       <div class="proof-console">
-        <div class="proof-stats"><span><b>16,384</b> residue equations</span><span><b>509 kB</b> proof</span><span><b>0</b> secret keys needed</span></div>
-        <div class="proof-actions"><button type="button" id="verify-update">Verify recorded update</button><button type="button" id="verify-changed">Try a changed output</button></div>
+        <div class="proof-stats"><span><b>509 kB</b> update proof</span><span><b>1.69 MB</b> two query proofs</span><span><b>0</b> secret keys needed</span></div>
+        <div class="proof-actions"><button type="button" id="verify-update">Verify recorded update</button><button type="button" id="verify-changed">Try a changed output</button><button type="button" id="verify-query">Verify both class computations</button></div>
         <div class="proof-result" id="proof-result" role="status" aria-live="polite" data-state="idle"><strong id="proof-verdict">Not checked yet.</strong><p id="proof-detail">Verification runs on your device. The second button changes one public output digit and submits the original proof.</p></div>
       </div>
-      <p class="proof-scope">This checks the selected ciphertext coefficient equation. It does not check the text encoder, whether this example was authorized, the expiry policy, or the absence of a full reader. First use downloads about 4.3 MB; verification usually takes a few seconds.</p>
+      <p class="proof-scope">These checks cover the selected ciphertext coefficient equations. They do not prove text encoding, authorization, expiry policy, decryption, ranking or the absence of a full reader. First use downloads about 4.3 MB for the update or 7 MB for both class computations; the verifier module is shared.</p>
       <noscript><p>Enable JavaScript to run the WebAssembly verifier, or use the standalone verifier linked below.</p></noscript>
       <a class="source-link" href="https://github.com/emberian/zkml-research/blob/ceac1e1b62778419ac78a475a795229739ef615e/research/vfhe_2026_09_08/browser_verifier/README.md">Proof, generated relation and standalone verifier ↗</a>
+      <br><a class="source-link" href="https://github.com/emberian/zkml-research/blob/dev/research/vfhe_2026_09_08/query_browser_verifier/fast_successor/README.md">Both query proofs and standalone consumer ↗</a>
     </section>
 
     <div class="essay-grid">

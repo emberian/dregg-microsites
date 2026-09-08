@@ -24,3 +24,19 @@ correctness or remove the learner's full reader key. No secret keys are included
 The page reports acceptance only after the verifier returns it. Its changed-output
 button changes public row zero's output digit 43 and calls the same verifier with
 the same proof.
+
+## Two-class query consumer
+
+The shared query worker, application pins and consumer come from
+`research/vfhe_2026_09_08/query_browser_verifier/`. The replacement application
+pins and two public cases come from its `fast_successor/` package and live in
+`../query-bundle/fixtures/`: they are the actual fast001 query from the21.20-second
+complete run. The page requires its specific case ID as well as both proof acceptances. The worker reuses the exact WASM module above and accepts only
+after both actual proofs verify against the pinned template and coefficient rows.
+The standalone consumer passed under Node WASM; no browser-engine execution was
+available during integration. The page glue passed JavaScript syntax checks.
+
+This covers both plaintext products and their subtraction for each class. The
+consumer pins the saved request context but does not prove authorization, ciphertext
+decoding, text encoding, private decryption or the final plaintext ranking.
+Incremental public assets are about4.96MB uncompressed; no second WASM copy is used.

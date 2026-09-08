@@ -71,3 +71,53 @@ async function verify(changed) {
 
 document.getElementById('verify-update').addEventListener('click', () => verify(false));
 document.getElementById('verify-changed').addEventListener('click', () => verify(true));
+
+function runQueryWorker() {
+  return new Promise((resolve, reject) => {
+    const worker = new Worker(new URL('./proof/shared-query-worker.js', import.meta.url), { type: 'module' });
+    const timeout = setTimeout(() => finish(new Error('Verification took longer than 90 seconds.')), 90000);
+    let finished = false;
+    function finish(error, value) {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timeout);
+      worker.terminate();
+      if (error) reject(error); else resolve(value);
+    }
+    worker.onerror = event => finish(new Error(event.message || 'The query verifier could not start on this device.'));
+    worker.onmessage = ({ data }) => {
+      if (data.id !== 'two-class-query') return;
+      if (data.type === 'progress') {
+        const progress = data.progress;
+        if (progress.stage === 'verifying') {
+          show('busy', `Checking class ${progress.completed + 1} of ${progress.total}…`, 'The actual verifier is checking both products and their subtraction for this class.');
+        }
+      } else if (data.type === 'result') {
+        finish(null, data.result);
+      }
+    };
+    worker.postMessage({ id: 'two-class-query', bundleBaseUrl: new URL('./query-bundle/', import.meta.url).href });
+  });
+}
+
+async function verifyQuery() {
+  buttons.forEach(button => { button.disabled = true; });
+  show('busy', 'Loading both query proofs…', 'Only public coefficient rows, proof data and the shared verifier are downloaded.');
+  try {
+    const result = await runQueryWorker();
+    if (result.verified === true && result.caseId === 'fast001-new-two-class-query') {
+      const seconds = Number.isFinite(result.elapsedMs) ? ` ${(result.elapsedMs / 1000).toFixed(2)} seconds including loading on this device.` : '';
+      show('accepted', 'Both class computations verified.', `The real verifier accepted the complete coefficient relation for each of the two recorded classes.${seconds} This does not verify decryption or the final class choice.`);
+    } else if (result.stage === 'proof' && result.error?.startsWith('proof rejected:')) {
+      show('rejected', 'Query proof rejected.', result.error);
+    } else {
+      show('error', 'Could not complete query verification.', result.error || 'Both approved class proofs were not accepted.');
+    }
+  } catch (error) {
+    show('error', 'Could not complete query verification.', String(error.message || error));
+  } finally {
+    buttons.forEach(button => { button.disabled = false; });
+  }
+}
+
+document.getElementById('verify-query').addEventListener('click', verifyQuery);
