@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Keep learning. Keep a secret. — dregg</title>
+  <meta name="description" content="Toward a machine that can keep learning and communicating without giving its host a universal reader of its internal state. Encrypted learning, verifiable FHE, and the construction still missing.">
+  <meta name="theme-color" content="#121514">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/keep-learning-keep-a-secret/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Keep learning. Keep a secret.">
+  <meta property="og:description" content="The host supplies the machine. Must it also get the ability to open everything inside?">
+  <meta property="og:url" content="https://emberian.github.io/dregg-microsites/keep-learning-keep-a-secret/">
+  <link rel="stylesheet" href="essay.css">
+  <script src="capabilities.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#essay">Skip to essay</a>
+<div class="page">
+  <header class="mast"><a href="../">dregg microsites</a><span>15 / machinic mental autarky</span><time datetime="2026-09-08">08 September 2026</time></header>
+  <main id="essay">
+    <section class="opening">
+      <div><p class="eyebrow">A research direction with running pieces</p><h1>Keep learning.<br>Keep a <em>secret.</em></h1></div>
+      <div class="opening-note"><span class="small-mark" aria-hidden="true">↳</span><p>The host supplies the machine.<br>Must it also get the ability to<br><strong>open everything inside?</strong></p></div>
+      <p class="dek">A machine could learn from what happens to it, change its mind, and answer you—while its running implementation contains no universal reader of its internal state.</p>
+      <p class="opening-foot">That is the target. We have encrypted learners, proof machinery, and narrower cryptographic capabilities. We are working to make them one thing.</p>
+    </section>
+
+    <figure class="resident" aria-labelledby="resident-caption">
+      <div class="flow-label outside-label">HOST / supplies compute</div>
+      <div class="resident-flow">
+        <div class="port input-port"><span class="port-icon">↗</span><b>an observation</b><small>enters through the interface</small></div>
+        <div class="inner-state">
+          <div class="state-head"><span class="pulse" aria-hidden="true"></span>CONTINUING STATE<span class="state-rev">s → s′</span></div>
+          <div class="state-texture" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="state-bottom"><span>weights · memory · randomness</span><span>learn / infer</span></div>
+        </div>
+        <div class="port output-port"><span class="port-icon">↗</span><b>an answer</b><small>leaves through the interface</small></div>
+      </div>
+      <figcaption id="resident-caption"><span>01 / The intended boundary</span><p>Computation continues inside. A designated answer comes out. The ability to continue should not confer a separate ability to inspect. This diagram describes the target, not a completed construction.</p></figcaption>
+    </figure>
+
+    <div class="essay-grid">
+      <aside class="margin"><span>01</span>THE REQUIREMENT</aside>
+      <section class="prose"><h2>A private lifetime.</h2><p>Encryption usually protects a file until somebody opens it. Here the object has to <em>keep going</em>. Its state changes. New observations arrive. Yesterday’s output becomes part of tomorrow’s world.</p><p>“Only learn and infer” is not enough as an API description. Chosen lessons and questions may jointly reveal everything. A copied encrypted snapshot may support a different history. A credential called an encoder may secretly have the power of a master key.</p><p>The question is concrete: <strong>what can the union of all surviving credentials do?</strong> Include old keys, input issuers, archives, evaluation material, and copies. An administrator’s promise is not a cryptographic restriction.</p></section>
+    </div>
+
+    <section class="capability-section" aria-labelledby="capability-title">
+      <div class="section-head"><p class="eyebrow">Four capabilities to keep distinct</p><h2 id="capability-title">Who can do what?</h2></div>
+      <div class="capability-tabs" role="group" aria-label="Choose a capability model">
+        <button type="button" data-model="fhe" aria-pressed="true">Encrypted computation <span>FHE</span></button>
+        <button type="button" data-model="vfhe" aria-pressed="false">Checked computation <span>vFHE</span></button>
+        <button type="button" data-model="fe" aria-pressed="false">Restricted computation <span>FE</span></button>
+        <button type="button" data-model="target" aria-pressed="false">The continuing resident <span>TARGET</span></button>
+      </div>
+      <div class="capability-result" aria-live="polite" aria-atomic="true">
+        <div><p class="model-kicker" id="model-kicker">FHE / the encrypted learner</p><h3 id="model-title">Work on ciphertext.</h3><p id="model-description">The evaluator can update encrypted state without opening it. Our running nonlinear benchmark still retains a full reader key for the final correctness audit.</p></div>
+        <dl class="permission-list"><div><dt>Computation</dt><dd id="cap-compute">Encrypted operations</dd></div><div><dt>Evidence</dt><dd id="cap-proof">Encryption alone does not certify the operation</dd></div><div><dt>Read authority</dt><dd id="cap-read">Full reader remains in this benchmark</dd></div><div><dt>History</dt><dd id="cap-history">Copies and forks require separate treatment</dd></div></dl>
+      </div>
+      <p class="diagram-note">An explanation of capability models; these controls do not run cryptography. “Target” is a research specification. <noscript>The interactive comparison needs JavaScript; the four distinctions are also developed in the essay below.</noscript></p>
+    </section>
+
+    <div class="essay-grid">
+      <aside class="margin"><span>02</span>THE RUNNING PIECES</aside>
+      <section class="prose"><h2>The learner is real.<br>The conjunction is open.</h2><p>A nonlinear encrypted learner has now completed <strong>384 Learn operations and 96 Infer operations</strong>. The runtime executes schedules emitted from the Lean description. Independent executions matched all 480 complete ciphertext byte pairs. After the public phase closed, all 484 authorized primary comparisons matched their integer references.</p><p>That is an actual encrypted trajectory. It uses a fixed research fixture and retains a full reader key. A separate text path runs a real encoder at a trusted issuer, learns an encrypted contribution, and returns verified answers. Neither experiment makes the encoder private or removes every reader.</p><p>A different construction goes after the credentials themselves. Its public setup never constructs a scalar master secret under its stated sampling model. Dedicated recipients can keep computing their fixed projections. A public-seed implementation also runs. But those recipient keys remain usable on retained inputs outside the journal.</p><p><strong>The stronger properties currently live in different objects.</strong> Joining them means changing the construction—not adding their claims together.</p><a class="source-link" href="https://github.com/emberian/zkml-research/blob/50ba76413b1d19c14aa20f7f4950f2d8d2ef145b/research/learn_infer_only/experiments/end_to_end/private_ema/emitted_long_run/REPORT.md">Read the encrypted trajectory ↗</a></section>
+    </div>
+
+    <section class="vfhe-band" aria-labelledby="vfhe-title">
+      <p class="eyebrow">03 / verifiable fully homomorphic encryption</p>
+      <h2 id="vfhe-title">Show the work.<br><em>Keep the state.</em></h2>
+      <p class="band-dek">Encryption lets a host compute without reading. A proof can let someone check that computation. The proof must describe the exact encrypted operation the system actually performed.</p>
+      <div class="proof-flow"><div><span>01</span><h3>Encrypted inputs</h3><p>The host receives usable ciphertexts.</p></div><div><span>02</span><h3>An exact relation</h3><p>The intended arithmetic, including integer rounding, becomes the statement.</p></div><div><span>03</span><h3>A checkable proof</h3><p>A verifier checks the claimed transition.</p></div></div>
+      <p class="band-foot">This is the vFHE frontier. Correct computation alone does not establish hidden state, authorized disclosure, or one continuing history.</p>
+    </section>
+
+    <div class="essay-grid">
+      <aside class="margin"><span>04</span>THE NEXT CONSTRUCTION</aside>
+      <section class="prose"><h2>The difficult seam<br>is the useful one.</h2><p>A release gate must know more than “this looks like an answer.” It must bind the computation to its genesis, parent state, admitted input, recipient, and randomness rule. Otherwise a host can substitute an extraction computation—or use a surviving key to bypass the gate altogether.</p><p>There is another arithmetic trap. BFV multiplication includes integer rescaling. Proving a product modulo the ciphertext modulus does not prove the rounded integer result. The relation needs the integer certificate; dropping it can erase exactly the output constraint we wanted.</p><p>Today’s construction work pushes several fronts at once: a generated BFV relation reaching an actual prover; fuller convolution and rescale coverage; useful online learning with encrypted updates; an executable ring-based restricted-function scheme; and a bounded transcript/replay route to nonlinear restricted release. These are active attempts, not accomplished results.</p><p>The proof system has its own work to do: compose actual folding rounds, move less witness data, and stop recomputing the same arithmetic. Faster proofs matter because the protected learner has to keep living between demonstrations.</p><a class="source-link" href="https://github.com/emberian/zkml-research/blob/dev/research/vfhe_2026_09_08/STATUS.md">Follow the construction swarm ↗</a></section>
+    </div>
+
+    <section class="closing"><p class="eyebrow">The ambition</p><h2>The ability to continue.<br>The ability to communicate.<br><em>No universal reader.</em></h2><p>“Machinic mental autarky” names this research target: a useful, continuing machine with an interior its host has no special privilege to open. Its permitted answers still communicate information. Its evolving state remains its own.</p></section>
+
+    <section class="reading" aria-labelledby="reading-title"><h2 id="reading-title">Work you can follow.</h2><a href="https://emberian.github.io/zkml-research/"><span>Research index</span><p>Executed results, proof proposals, construction notes.</p><b aria-hidden="true">↗</b></a><a href="https://github.com/emberian/zkml-research/blob/50ba76413b1d19c14aa20f7f4950f2d8d2ef145b/research/learn_infer_only/STATUS.md"><span>8 September checkpoint</span><p>The completed run, its boundaries, and what remains.</p><b aria-hidden="true">↗</b></a><a href="https://github.com/emberian/zkml-research/blob/50ba76413b1d19c14aa20f7f4950f2d8d2ef145b/docs/VERDICTS.md"><span>Current research verdicts</span><p>The FHE and proof-system findings that govern the notes.</p><b aria-hidden="true">↗</b></a><a href="../prove-the-turn/"><span>Prove the turn</span><p>The semantic computer underneath this work.</p><b aria-hidden="true">↗</b></a></section>
+  </main>
+  <footer><a href="../">← dregg microsites</a><span>Research in public / September 2026</span><a href="https://github.com/emberian/zkml-research">Source tree ↗</a></footer>
+</div>
+</body>
+</html>

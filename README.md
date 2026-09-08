@@ -4,6 +4,8 @@ Small, self-contained visual essays from the DREGG research process.
 
 ## Published
 
+- [Keep learning. Keep a secret.](https://emberian.github.io/dregg-microsites/keep-learning-keep-a-secret/)
+
 - [Plan to compost at least three](https://emberian.github.io/dregg-microsites/plan-to-compost-at-least-three/)
 - [Fourteen rooms](https://emberian.github.io/dregg-microsites/fourteen-rooms/)
 - [Two phones](https://emberian.github.io/dregg-microsites/two-phones/)
