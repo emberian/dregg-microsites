@@ -4,6 +4,7 @@ Small, self-contained visual essays from the DREGG research process.
 
 ## Published
 
+- [The whole way through](https://emberian.github.io/dregg-microsites/the-whole-way-through/)
 - [Keep learning. Keep a secret.](https://emberian.github.io/dregg-microsites/keep-learning-keep-a-secret/)
 
 - [Plan to compost at least three](https://emberian.github.io/dregg-microsites/plan-to-compost-at-least-three/)
