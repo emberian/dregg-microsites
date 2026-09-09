@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Keep the next example — dregg</title>
+  <meta name="description" content="A continuing encrypted learner: fresh teaching, all-class proofs, eight-example memory and durable restart. Explore the recorded workload and the arithmetic that made the next version faster.">
+  <meta name="theme-color" content="#f7f8fa">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/keep-the-next-example/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Keep the next example">
+  <meta property="og:description" content="A machine that keeps learning, an arithmetic shortcut that is exact, and the reader that still survives.">
+  <meta property="og:url" content="https://emberian.github.io/dregg-microsites/keep-the-next-example/">
+  <link rel="stylesheet" href="essay.css">
+  <script src="record.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to essay</a>
+<div class="page">
+  <header class="mast"><a href="../">dregg<span class="mast-mark" aria-hidden="true"> / </span>microsites</a><span>Field note 17</span><time datetime="2026-09-09">9 September 2026</time></header>
+  <main id="main">
+    <section class="opening">
+      <div class="opening-top"><p class="eyebrow">Encrypted learning / a continuing system</p><span class="edition">Research, executed locally</span></div>
+      <h1>Keep the<br><em>next</em> example<span class="full-stop">.</span></h1>
+      <div class="opening-bottom"><p class="dek">A learner has to survive its next input. This local application accepts more teaching, answers against the updated encrypted memory, makes room when it fills, and reopens the same state.</p><div class="opening-aside"><p>The new proof backend also speaks the arithmetic’s own language. Complete updates now take seconds to prove.</p><a class="jump" href="#record">Walk through the record <span aria-hidden="true">↓</span></a></div></div>
+    </section>
+
+    <section class="record-section" id="record" aria-labelledby="record-title">
+      <div class="section-heading"><div><p class="eyebrow">01 / Continuity</p><h2 id="record-title">One model.<br>More than one moment.</h2></div><p>One public issue-routing workload, two scoring and proof profiles. Select a checkpoint to inspect its memory and its recorded answer.</p></div>
+      <div class="record-shell">
+        <div class="record-top"><div><span class="record-dot" aria-hidden="true"></span><strong>Recorded execution</strong><span class="record-date" id="record-date"></span></div><a href="public-record.json" download>Download record <span aria-hidden="true">↗</span></a></div>
+        <div class="engine-row"><label for="engine">Run</label><select id="engine" disabled><option>Loading recorded data…</option></select><span class="run-completion" id="run-completion"></span></div>
+        <div class="run-summary" id="run-summary"></div>
+        <div class="timeline" role="group" aria-label="Recorded checkpoints">
+          <button type="button" data-checkpoint="initial" aria-pressed="true"><span>01</span><strong>First teaching</strong><small>Two examples per class</small></button>
+          <button type="button" data-checkpoint="after_teaching" aria-pressed="false"><span>02</span><strong>Keep learning</strong><small>The first class fills up</small></button>
+          <button type="button" data-checkpoint="after_expiry" aria-pressed="false"><span>03</span><strong>Make room</strong><small>The two oldest expire</small></button>
+          <button type="button" data-checkpoint="after_restart" aria-pressed="false"><span>04</span><strong>Open it again</strong><small>The same saved revision</small></button>
+        </div>
+        <div id="checkpoint" class="checkpoint" aria-live="polite" aria-atomic="false">
+          <p class="loading-message">The recorded lifecycle is loading. Its complete source data is also available in the download above.</p>
+        </div>
+        <div class="record-foot"><span>This page reads retained data. It does not run encryption, produce a proof or contact the local learner.</span><span id="record-source"></span></div>
+      </div>
+      <noscript><p>The interactive record needs JavaScript. The <a href="public-record.json">downloadable record</a> contains the checkpoint states and measured outcomes; the rest of this essay works without it.</p></noscript>
+    </section>
+
+    <section class="continuation essay-section" aria-labelledby="continuation-title">
+      <div class="section-heading"><div><p class="eyebrow">What had to stay joined</p><h2 id="continuation-title">The next request<br>is part of the machine.</h2></div><p>This is an executable research app with a browser interface and a durable journal. A job can outlive its browser tab. The service can resume unfinished work from a completed phase.</p></div>
+      <div class="continuation-grid">
+        <article><span class="article-number">A</span><h3>Teaching changes<br>the accepted state.</h3><p>A fresh text becomes an encrypted example. The service checks its update proof against the current model before committing the next revision.</p></article>
+        <article><span class="article-number">B</span><h3>An answer includes<br>every active class.</h3><p>The service computes and independently verifies each complete class result. It waits for all of them before the local reader returns the scores.</p></article>
+        <article><span class="article-number">C</span><h3>Memory has<br>a real boundary.</h3><p>Each class retains eight examples. The ninth teaching subtracts the oldest encrypted contribution and adds the new one. Restart reopens the durable state.</p></article>
+      </div>
+      <p class="source-note"><span class="claim">Source</span> Application behavior and scope: <a data-source="continuing_system/README.md" href="https://github.com/emberian/zkml-research/blob/main/research/vfhe_2026_09_08/continuing_system/README.md">continuing learner</a>. This working-tree application depends on retained local builds and an encoder environment; it is not yet a portable installation.</p>
+    </section>
+
+    <section class="arithmetic essay-section" id="arithmetic" aria-labelledby="arithmetic-title">
+      <div class="section-heading"><div><p class="eyebrow">02 / The arithmetic</p><h2 id="arithmetic-title">Stop translating<br>the same equation.</h2></div><p>The encrypted computation works modulo four BFV primes. The earlier proof system expressed that arithmetic inside BabyBear, a different field, using carry and range machinery. The new backend proves directly over each BFV field.</p></div>
+      <figure class="equation-figure">
+        <div class="equation-label"><span>One exact update</span><span>Each ciphertext coefficient · each BFV prime</span></div>
+        <div class="equation" aria-label="New memory equals previous memory plus fresh example minus oldest example, modulo q"><span class="equation-output">new</span><b>=</b><span>previous</span><b>+</b><span class="equation-fresh">fresh</span><b>−</b><span class="equation-old">oldest</span><small>mod q</small></div>
+        <figcaption>The field equation is the intended modular equation. No bit, carry or range witnesses are needed for this relation. Canonical parsing still checks that the public inputs are valid residues.</figcaption>
+      </figure>
+      <div class="arithmetic-copy"><p>The same small arithmetic relation covers the complete update and the eleven-stage linear dot computation, including rotations and key switching. It constrains every row, including the last. The commitments and transcript use domain-separated SHA-256.</p><p>The first full trial reused the <em>inputs</em> from a real expiry in the continuing learner, then made fresh proofs. Both resulting ciphertexts matched the original captured bytes. The consumer independently accepted all 384 proofs.</p></div>
+      <div class="cost-block">
+        <div class="cost-heading"><div><p class="eyebrow">Measured / one worker / shared machine</p><h3>Complete operations.<br>Actual wall time.</h3></div><p>Separate proof production and independent consumption. The linear row covers one class, not a whole two-class query.</p></div>
+        <div class="table-scroll"><table class="cost-table"><caption class="visually-hidden">Matched-field FIFO-expiry trial costs</caption><thead><tr><th scope="col">Operation</th><th scope="col">Produce</th><th scope="col">Consume</th><th scope="col">Proof data</th></tr></thead><tbody><tr><th scope="row">Expiry update <small>32 proofs</small></th><td>2.61<span> s</span></td><td>1.20<span> s</span></td><td class="bytes">5.72 <span>MB</span></td></tr><tr><th scope="row">Full linear class <small>352 proofs</small></th><td>45.05<span> s</span></td><td>14.20<span> s</span></td><td class="bytes">64.34 <span>MB</span></td></tr></tbody></table></div>
+        <p class="cost-foot">Proof data uses decimal MB: 5,721,926 and 64,336,438 bytes. Production includes the producer’s own checks; consumption is a separate run. <a data-source="matched_field/experiments/fifo-expiry-run001.json" href="https://github.com/emberian/zkml-research/blob/main/research/vfhe_2026_09_08/matched_field/experiments/fifo-expiry-run001.json">Exact record ↗</a></p>
+      </div>
+      <div class="honest-comparison"><div><h3>Faster arithmetic is useful.<br>The comparison still has a shape.</h3><p>The compact predecessor’s first complete two-class squared query took 1,103.216 seconds and generated 232 proofs totaling 235,624,423 bytes. The successor’s first two-class linear query took 113.070 seconds. It changes both the score and the proof profile. These are observations of different systems, not a security-equivalent speedup ratio. <a href="#record">Inspect both recorded queries.</a></p></div><div><h3>Checking is still expensive.</h3><p>For the new one-class trial, native public FHE computation took 0.370 seconds. Independent proof consumption took 14.20 seconds, dominated by rebuilding public preprocessing commitments. This small model does not establish an outsourcing efficiency win.</p></div></div>
+      <details class="technical"><summary>What changed in the proof, and what is still assumed</summary><p>The experimental profile uses 8× low-degree extension, 64 FRI queries, quartic challenges and no proof of work. It has no derived numerical security level. Its new Rust AIR and field integration are not the predecessor’s generated Lean descriptor or a new end-to-end formal theorem.</p><p>The public coefficient rows, canonical parsers and transforms, patched Plonky3 verifier, SHA-256 binding, Fiat–Shamir model and application controller remain assumptions or proof obligations. The polynomial commitment is nonhiding; its operands are already public ciphertexts, evaluation-key coefficients or deterministic public transforms. <a data-source="matched_field/README.md" href="https://github.com/emberian/zkml-research/blob/main/research/vfhe_2026_09_08/matched_field/README.md">Construction and profile.</a></p></details>
+    </section>
+
+    <section class="utility essay-section" id="utility" aria-labelledby="utility-title">
+      <div class="section-heading"><div><p class="eyebrow">03 / Did it learn something useful?</p><h2 id="utility-title">Continuation is a capability.<br>Improvement is a result.</h2></div><p>We fixed twelve public teaching texts and twenty held-out issues before encoding. The task routes an issue to proof integrity or runtime performance. The reference evaluation gives a plain answer.</p></div>
+      <div class="utility-grid"><div class="utility-chart"><div class="utility-chart-top"><span>Correct answers / 20 held-out issues</span><span>Plaintext reference evaluation</span></div><div class="utility-row"><span>Initial</span><div class="utility-track"><i style="--score:100%"></i></div><strong>20/20</strong></div><div class="utility-row"><span>Later teaching</span><div class="utility-track"><i style="--score:95%"></i></div><strong>19/20</strong></div><div class="utility-row"><span>After expiry</span><div class="utility-track"><i style="--score:90%"></i></div><strong>18/20</strong></div><p>Both current linear and squared scores have these aggregate accuracies. The frozen initial model stays at <strong>20/20</strong>; the balanced majority control is <strong>10/20</strong>.</p></div><div class="utility-copy"><p class="utility-conclusion">The later examples changed the model.<br>They did not make it better on this set.</p><p>That observation supports choosing the simpler linear score for this workload. It does not establish equivalence on other inputs or a general accuracy advantage.</p><p>The twenty-item accuracy check is public reference arithmetic. The encrypted lifecycle repeats one held-out query at its four checkpoints and checks every returned lane against that reference. Those are different pieces of evidence.</p></div></div>
+      <p class="source-note"><span class="claim">Executed + derived</span> <a data-source="continuing_system/workload.json" href="https://github.com/emberian/zkml-research/blob/main/research/vfhe_2026_09_08/continuing_system/workload.json">Fixed authored workload</a> and <a data-source="continuing_system/prepared/reference.json" href="https://github.com/emberian/zkml-research/blob/main/research/vfhe_2026_09_08/continuing_system/prepared/reference.json">per-example reference results</a>. No benchmark-dataset or held-out-tuning claim.</p>
+    </section>
+
+    <section class="packed essay-section" id="packed" aria-labelledby="packed-title">
+      <p class="eyebrow">Next / A completed change in layout</p>
+      <h2 id="packed-title">Eight classes<br>share the work.</h2>
+      <div class="packed-copy">
+        <p>Then we changed what an encrypted bank holds. One fixed lane now carries the sum of a class’s up to eight recent encrypted examples; eight classes share one bank. Inference returns exact <strong>sum / count</strong> scores. A teaching still subtracts the exact expired contribution before adding the new example.</p>
+        <p>On a <strong>separate nine-class authored workload</strong>, the complete run finished all 22 operations: eighteen teachings, three queries and an actual restart, exercising two FIFO expirations. It produced and independently consumed <strong>2,336 fresh proofs</strong>, totaling 424,195,924 bytes, in 499.706 seconds of recorded worker-attempt wall time.</p>
+        <p>The first query answered <strong>eight classes from one bank</strong>: 352 proofs, 64,340,276 bytes, 87.672 seconds. Adding the ninth class needed a second bank: 704 proofs, 128,680,095 bytes, 162.888 seconds. A fresh query after restart took 120.437 seconds and returned the same class sums and ranking. Across the three queries, all forty bank lanes—including padding—matched the reference.</p>
+        <p>The separate nine-item plaintext check went from 8/9 to 9/9 after the previously untaught ninth class was introduced. That change does not establish a general learning gain. This is a different corpus from the two-class explorer above; these timings do not supply a comparison on the same corpus at an equal security level. The substantive change is that one proved bank computation now answers up to eight classes.</p>
+      </div>
+      <p class="source-note"><span class="claim">Executed + derived</span> <a data-source="continuing_system/results/packed-matched/RESULT.json" href="https://github.com/emberian/zkml-research/blob/main/research/vfhe_2026_09_08/continuing_system/results/packed-matched/RESULT.json">Complete packed lifecycle</a> · <a data-source="continuing_system/results/packed-matched/steps/query_one_bank/completed.json" href="https://github.com/emberian/zkml-research/blob/main/research/vfhe_2026_09_08/continuing_system/results/packed-matched/steps/query_one_bank/completed.json">one-bank query</a> · <a data-source="continuing_system/results/packed-matched/steps/query_two_banks/completed.json" href="https://github.com/emberian/zkml-research/blob/main/research/vfhe_2026_09_08/continuing_system/results/packed-matched/steps/query_two_banks/completed.json">two-bank query</a> · <a data-source="continuing_system/results/packed-matched/steps/query_restart/completed.json" href="https://github.com/emberian/zkml-research/blob/main/research/vfhe_2026_09_08/continuing_system/results/packed-matched/steps/query_restart/completed.json">fresh restart query</a>.</p>
+    </section>
+
+    <section class="reader essay-section" aria-labelledby="reader-title">
+      <div class="reader-header"><p class="eyebrow">04 / The unfinished property</p><h2 id="reader-title">The machine continues.<br>The full reader survives.</h2></div>
+      <div class="reader-columns"><p class="reader-lead">The service checks before it reads. The key can still read without that service.</p><div><p>The local instance retains the full BFV secret key. A successful proof-gated query does not remove that credential or turn it into a restricted reader.</p><p>The E5 text encoder also runs in plaintext at the trusted issuer. The assembled application does not claim privacy against its operator, the absence of a master reader, or whole-system post-quantum security.</p></div></div>
+      <div class="reader-routes" role="img" aria-label="The application route checks proofs and then uses a full reader to return an answer. The surviving full reader can also read retained ciphertext directly."><div class="route-state">Encrypted<br>memory</div><div class="route-lines"><div><span class="route-line"></span><p>Complete proofs <b>→</b> service gate <b>→</b> full reader <b>→</b> answer</p><small>Application route</small></div><div class="bypass"><span class="route-line"></span><p>Surviving full reader <b>→</b> retained ciphertext</p><small>Still possible</small></div></div></div>
+      <p class="reader-last">A continuing machine without unrestricted read authority is still the construction we are working toward.</p>
+    </section>
+
+    <section class="evidence essay-section" aria-labelledby="evidence-title"><div class="section-heading"><div><p class="eyebrow">Carry it forward</p><h2 id="evidence-title">Use the app.<br>Read the evidence.</h2></div><p>The learner runs locally in the research workspace. This public page is a recorded companion; the source includes the service, prepared workload and retained measurement reports.</p></div><div class="evidence-links"><a data-source="continuing_system/README.md" href="https://github.com/emberian/zkml-research/blob/main/research/vfhe_2026_09_08/continuing_system/README.md"><span>01</span><div><h3>The continuing application</h3><p>Teaching, queries, durable state and how to run the local service.</p></div><b aria-hidden="true">↗</b></a><a data-source="matched_field/README.md" href="https://github.com/emberian/zkml-research/blob/main/research/vfhe_2026_09_08/matched_field/README.md"><span>02</span><div><h3>The exact-field backend</h3><p>The full arithmetic relation, first expiry trial, consumer costs and assumptions.</p></div><b aria-hidden="true">↗</b></a><a href="public-record.json"><span>03</span><div><h3>The record behind this page</h3><p>Public texts, checkpoint states, lifecycle measurements and source hashes.</p></div><b aria-hidden="true">↗</b></a><a href="../the-whole-way-through/"><span>04</span><div><h3>The preceding join</h3><p>How fresh teaching and complete encrypted inference became one session.</p></div><b aria-hidden="true">↗</b></a></div></section>
+  </main>
+  <footer><a href="../">← dregg microsites</a><span>A research construction, in public.</span><a href="#main">Back to the top ↑</a></footer>
+</div>
+</body>
+</html>

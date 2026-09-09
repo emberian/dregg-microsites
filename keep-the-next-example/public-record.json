@@ -1,0 +1,863 @@
+{
+  "schema": "keep-the-next-example-public-record-v1",
+  "claim": "[EXECUTED + DERIVED] Recorded research data; this page performs no cryptographic computation.",
+  "source_revision": "a5268000a2b94cd3689f07c215eef64f67cd835d",
+  "source_base": "https://github.com/emberian/zkml-research/blob/a5268000a2b94cd3689f07c215eef64f67cd835d/research/vfhe_2026_09_08/",
+  "default_run": "linear-matched",
+  "capacity": 8,
+  "corpus_provenance": "Author-written public issue texts fixed before feature encoding or evaluation. No private profile data, benchmark-dataset claim, held-out tuning, or external model inference service.",
+  "workload_sha256": "cc5bbe33245ac48b7cbc63b5499afba30957a71bb2b86882b427f408ec03eed2",
+  "reference_sha256": "50d9d39cc68190348d8da0b16432b3a3d8ac057c5ed7b4dcb462d8540521c138",
+  "query_text": "An attacker changes the claimed final result and the verifier still accepts. Which missing boundary condition allows this forgery?",
+  "texts": [
+    {
+      "id": "pi01",
+      "label": "proof_integrity",
+      "text": "The prover can put an out-of-range value into the witness and still pass verification. We need a constraint that rejects the invalid assignment."
+    },
+    {
+      "id": "pi02",
+      "label": "proof_integrity",
+      "text": "A negative integer is being interpreted as a large field residue. Establish the signed arithmetic contract and prove that the conversion preserves the claimed result."
+    },
+    {
+      "id": "rp01",
+      "label": "runtime_performance",
+      "text": "Generating the proof takes too long because every multiplication emits a separate trace. Batch the work and measure total latency and memory consumption."
+    },
+    {
+      "id": "rp02",
+      "label": "runtime_performance",
+      "text": "The cryptographic kernel spends most of its time allocating and copying coefficient buffers. Reuse storage and benchmark the complete request before and after the change."
+    },
+    {
+      "id": "pi03",
+      "label": "proof_integrity",
+      "text": "The receipt identifies the output but does not identify the parent state. Bind the complete transition context so a proof cannot be attached to a different history."
+    },
+    {
+      "id": "pi04",
+      "label": "proof_integrity",
+      "text": "A theorem assumes a relation that has no satisfying witness. Construct a nonzero valid example and identify the premise that makes the soundness statement meaningful."
+    },
+    {
+      "id": "pi05",
+      "label": "proof_integrity",
+      "text": "The last row of the execution trace is not checked by the transition constraint. Make sure a malicious final output cannot escape the verifier's checks."
+    },
+    {
+      "id": "pi06",
+      "label": "proof_integrity",
+      "text": "The verifier checks each polynomial separately, but the openings may not describe the same committed computation. Prove consistency of the batch and its shared challenge."
+    },
+    {
+      "id": "pi07",
+      "label": "proof_integrity",
+      "text": "The certificate proves equality modulo a prime but the application needs rounded integer division. State the quotient and remainder bounds and rule out wraparound."
+    },
+    {
+      "id": "pi08",
+      "label": "proof_integrity",
+      "text": "A cached acceptance can be replayed against a changed model revision. Require the accepted proof to match the current model, query and designated recipient."
+    },
+    {
+      "id": "pi09",
+      "label": "proof_integrity",
+      "text": "After an old checkpoint is restored, a spent authorization becomes available again. Specify the finality rule and demonstrate that the restored branch cannot spend it twice."
+    },
+    {
+      "id": "pi10",
+      "label": "proof_integrity",
+      "text": "The proof system validates an intermediate value while the reader decrypts a different ciphertext. Connect the exact verified output bytes to the released answer."
+    }
+  ],
+  "checkpoints": {
+    "initial": {
+      "revision": 4,
+      "model": {
+        "proof_integrity": {
+          "queue": [
+            {
+              "lane": 0,
+              "text_id": "pi01"
+            },
+            {
+              "lane": 1,
+              "text_id": "pi02"
+            }
+          ],
+          "teaches": 2
+        },
+        "runtime_performance": {
+          "queue": [
+            {
+              "lane": 0,
+              "text_id": "rp01"
+            },
+            {
+              "lane": 1,
+              "text_id": "rp02"
+            }
+          ],
+          "teaches": 2
+        }
+      },
+      "claim": "[DERIVED] Fixed workload state; query acceptance comes only from a retained receipt."
+    },
+    "after_teaching": {
+      "revision": 10,
+      "model": {
+        "proof_integrity": {
+          "queue": [
+            {
+              "lane": 0,
+              "text_id": "pi01"
+            },
+            {
+              "lane": 1,
+              "text_id": "pi02"
+            },
+            {
+              "lane": 2,
+              "text_id": "pi03"
+            },
+            {
+              "lane": 3,
+              "text_id": "pi04"
+            },
+            {
+              "lane": 4,
+              "text_id": "pi05"
+            },
+            {
+              "lane": 5,
+              "text_id": "pi06"
+            },
+            {
+              "lane": 6,
+              "text_id": "pi07"
+            },
+            {
+              "lane": 7,
+              "text_id": "pi08"
+            }
+          ],
+          "teaches": 8
+        },
+        "runtime_performance": {
+          "queue": [
+            {
+              "lane": 0,
+              "text_id": "rp01"
+            },
+            {
+              "lane": 1,
+              "text_id": "rp02"
+            }
+          ],
+          "teaches": 2
+        }
+      },
+      "claim": "[DERIVED] Fixed workload state; query acceptance comes only from a retained receipt."
+    },
+    "after_expiry": {
+      "revision": 12,
+      "model": {
+        "proof_integrity": {
+          "queue": [
+            {
+              "lane": 2,
+              "text_id": "pi03"
+            },
+            {
+              "lane": 3,
+              "text_id": "pi04"
+            },
+            {
+              "lane": 4,
+              "text_id": "pi05"
+            },
+            {
+              "lane": 5,
+              "text_id": "pi06"
+            },
+            {
+              "lane": 6,
+              "text_id": "pi07"
+            },
+            {
+              "lane": 7,
+              "text_id": "pi08"
+            },
+            {
+              "lane": 0,
+              "text_id": "pi09"
+            },
+            {
+              "lane": 1,
+              "text_id": "pi10"
+            }
+          ],
+          "teaches": 10
+        },
+        "runtime_performance": {
+          "queue": [
+            {
+              "lane": 0,
+              "text_id": "rp01"
+            },
+            {
+              "lane": 1,
+              "text_id": "rp02"
+            }
+          ],
+          "teaches": 2
+        }
+      },
+      "claim": "[DERIVED] Fixed workload state; query acceptance comes only from a retained receipt."
+    },
+    "after_restart": {
+      "revision": 12,
+      "model": {
+        "proof_integrity": {
+          "queue": [
+            {
+              "lane": 2,
+              "text_id": "pi03"
+            },
+            {
+              "lane": 3,
+              "text_id": "pi04"
+            },
+            {
+              "lane": 4,
+              "text_id": "pi05"
+            },
+            {
+              "lane": 5,
+              "text_id": "pi06"
+            },
+            {
+              "lane": 6,
+              "text_id": "pi07"
+            },
+            {
+              "lane": 7,
+              "text_id": "pi08"
+            },
+            {
+              "lane": 0,
+              "text_id": "pi09"
+            },
+            {
+              "lane": 1,
+              "text_id": "pi10"
+            }
+          ],
+          "teaches": 10
+        },
+        "runtime_performance": {
+          "queue": [
+            {
+              "lane": 0,
+              "text_id": "rp01"
+            },
+            {
+              "lane": 1,
+              "text_id": "rp02"
+            }
+          ],
+          "teaches": 2
+        }
+      },
+      "claim": "[DERIVED] Fixed workload state; query acceptance comes only from a retained receipt."
+    }
+  },
+  "utility": {
+    "after_expiry": {
+      "accuracy": 0.9,
+      "balanced_majority_accuracy": 0.5,
+      "balanced_majority_correct": 10,
+      "balanced_majority_label": "proof_integrity",
+      "correct": 18,
+      "examples": 20,
+      "frozen_initial_accuracy": 1.0,
+      "frozen_initial_correct": 20,
+      "linear_accuracy": 0.9,
+      "linear_correct": 18
+    },
+    "after_restart": {
+      "accuracy": 0.9,
+      "balanced_majority_accuracy": 0.5,
+      "balanced_majority_correct": 10,
+      "balanced_majority_label": "proof_integrity",
+      "correct": 18,
+      "examples": 20,
+      "frozen_initial_accuracy": 1.0,
+      "frozen_initial_correct": 20,
+      "linear_accuracy": 0.9,
+      "linear_correct": 18
+    },
+    "after_teaching": {
+      "accuracy": 0.95,
+      "balanced_majority_accuracy": 0.5,
+      "balanced_majority_correct": 10,
+      "balanced_majority_label": "proof_integrity",
+      "correct": 19,
+      "examples": 20,
+      "frozen_initial_accuracy": 1.0,
+      "frozen_initial_correct": 20,
+      "linear_accuracy": 0.95,
+      "linear_correct": 19
+    },
+    "initial": {
+      "accuracy": 1.0,
+      "balanced_majority_accuracy": 0.5,
+      "balanced_majority_correct": 10,
+      "balanced_majority_label": "proof_integrity",
+      "correct": 20,
+      "examples": 20,
+      "frozen_initial_accuracy": 1.0,
+      "frozen_initial_correct": 20,
+      "linear_accuracy": 1.0,
+      "linear_correct": 20
+    }
+  },
+  "utility_scope": "Fixed author-written held-out set; no tuning, encryption or private-resident claim.",
+  "runs": [
+    {
+      "id": "linear-matched",
+      "label": "Linear score / matched BFV fields",
+      "score_label": "Mean signed dot",
+      "claim": "[EXECUTED] Completed lifecycle operations and public query receipts, exactly as retained at the snapshot time.",
+      "complete": true,
+      "completed_operations": 17,
+      "required_operations": 17,
+      "updated_utc": "2026-09-09T05:30:53.018141+00:00",
+      "worker_attempt_wall_seconds": 638.0213993747602,
+      "metrics": {
+        "accepted_fresh_proofs": 3200,
+        "answered_queries": 4,
+        "committed_updates": 12,
+        "discarded_phase_attempts": 0,
+        "private_reads": 8,
+        "proof_bytes": 583046239,
+        "proofs_generated": 3200,
+        "proofs_verified": 3200
+      },
+      "freshness_accounting": "Metrics describe each unique stable request once across all invocations. Reused or resumed requests are not counted as fresh work in this invocation.",
+      "result_sha256": "0878fda84d535a02c63434013f20ef3f1ac1d5e7361a3933998242c5e84caa2a",
+      "source_url": "https://github.com/emberian/zkml-research/blob/a5268000a2b94cd3689f07c215eef64f67cd835d/research/vfhe_2026_09_08/continuing_system/results/linear-matched/RESULT.json",
+      "queries": [
+        {
+          "id": "query_initial",
+          "checkpoint": "initial",
+          "revision": 4,
+          "prediction": "proof_integrity",
+          "ranking": [
+            "proof_integrity",
+            "runtime_performance"
+          ],
+          "class_scores": [
+            {
+              "count": 2,
+              "label": "proof_integrity",
+              "mean_denominator": 2,
+              "mean_numerator": 26527,
+              "sum_dot": 26527,
+              "sum_score": 26527
+            },
+            {
+              "count": 2,
+              "label": "runtime_performance",
+              "mean_denominator": 2,
+              "mean_numerator": 24893,
+              "sum_dot": 24893,
+              "sum_score": 24893
+            }
+          ],
+          "public_accepted": true,
+          "full_reader": true,
+          "metrics": {
+            "accepted_fresh_proofs": 704,
+            "answered_queries": 1,
+            "committed_updates": 0,
+            "discarded_phase_attempts": 0,
+            "phase_elapsed_seconds": {
+              "class000-prove": 45.283557249989826,
+              "class000-read": 0.17989899998065084,
+              "class000-verify": 16.606376874959096,
+              "class001-prove": 35.853785625018645,
+              "class001-read": 0.17154116602614522,
+              "class001-verify": 14.439812417025678
+            },
+            "private_reads": 2,
+            "proof_bytes": 128677569,
+            "proofs_generated": 704,
+            "proofs_verified": 704
+          },
+          "checks": {
+            "compared_score_values": 16,
+            "every_score_lane_equal": true,
+            "every_signed_dot_lane_equal": true,
+            "exact_rational_ranking_equal": true,
+            "lane_values_key": "dot_values",
+            "prediction_correct_for_intended_label": true,
+            "reader_checked_repeat8_per_class": true,
+            "sum_key": "sum_dot"
+          },
+          "worker_seconds": 113.07035925000673,
+          "recorded_utc": "2026-09-09T05:22:31.181714+00:00",
+          "completed_record_sha256": "4cedb4c2f5c04699daa5acb49b6b1f4acffde6113c47bce438afb9db7c945932"
+        },
+        {
+          "id": "query_later",
+          "checkpoint": "after_teaching",
+          "revision": 10,
+          "prediction": "proof_integrity",
+          "ranking": [
+            "proof_integrity",
+            "runtime_performance"
+          ],
+          "class_scores": [
+            {
+              "count": 8,
+              "label": "proof_integrity",
+              "mean_denominator": 8,
+              "mean_numerator": 105654,
+              "sum_dot": 105654,
+              "sum_score": 105654
+            },
+            {
+              "count": 2,
+              "label": "runtime_performance",
+              "mean_denominator": 2,
+              "mean_numerator": 24893,
+              "sum_dot": 24893,
+              "sum_score": 24893
+            }
+          ],
+          "public_accepted": true,
+          "full_reader": true,
+          "metrics": {
+            "accepted_fresh_proofs": 704,
+            "answered_queries": 1,
+            "committed_updates": 0,
+            "discarded_phase_attempts": 0,
+            "phase_elapsed_seconds": {
+              "class000-prove": 43.674660665972624,
+              "class000-read": 0.23919379099970683,
+              "class000-verify": 18.628285375016276,
+              "class001-prove": 38.55101354100043,
+              "class001-read": 0.20200333296088502,
+              "class001-verify": 15.256075209006667
+            },
+            "private_reads": 2,
+            "proof_bytes": 128679670,
+            "proofs_generated": 704,
+            "proofs_verified": 704
+          },
+          "checks": {
+            "compared_score_values": 16,
+            "every_score_lane_equal": true,
+            "every_signed_dot_lane_equal": true,
+            "exact_rational_ranking_equal": true,
+            "lane_values_key": "dot_values",
+            "prediction_correct_for_intended_label": true,
+            "reader_checked_repeat8_per_class": true,
+            "sum_key": "sum_dot"
+          },
+          "worker_seconds": 117.23474658402847,
+          "recorded_utc": "2026-09-09T05:25:02.472612+00:00",
+          "completed_record_sha256": "1aead2e383a259ca5928a48e3b6e35a863de9de66a18a30d578c4b5633b85280"
+        },
+        {
+          "id": "query_expiry",
+          "checkpoint": "after_expiry",
+          "revision": 12,
+          "prediction": "proof_integrity",
+          "ranking": [
+            "proof_integrity",
+            "runtime_performance"
+          ],
+          "class_scores": [
+            {
+              "count": 8,
+              "label": "proof_integrity",
+              "mean_denominator": 8,
+              "mean_numerator": 105445,
+              "sum_dot": 105445,
+              "sum_score": 105445
+            },
+            {
+              "count": 2,
+              "label": "runtime_performance",
+              "mean_denominator": 2,
+              "mean_numerator": 24893,
+              "sum_dot": 24893,
+              "sum_score": 24893
+            }
+          ],
+          "public_accepted": true,
+          "full_reader": true,
+          "metrics": {
+            "accepted_fresh_proofs": 704,
+            "answered_queries": 1,
+            "committed_updates": 0,
+            "discarded_phase_attempts": 0,
+            "phase_elapsed_seconds": {
+              "class000-prove": 61.250739000039175,
+              "class000-read": 0.2808944999706,
+              "class000-verify": 19.505207124981098,
+              "class001-prove": 63.76061766699422,
+              "class001-read": 0.2180068339803256,
+              "class001-verify": 19.91347033402417
+            },
+            "private_reads": 2,
+            "proof_bytes": 128678216,
+            "proofs_generated": 704,
+            "proofs_verified": 704
+          },
+          "checks": {
+            "compared_score_values": 16,
+            "every_score_lane_equal": true,
+            "every_signed_dot_lane_equal": true,
+            "exact_rational_ranking_equal": true,
+            "lane_values_key": "dot_values",
+            "prediction_correct_for_intended_label": true,
+            "reader_checked_repeat8_per_class": true,
+            "sum_key": "sum_dot"
+          },
+          "worker_seconds": 165.72369770903606,
+          "recorded_utc": "2026-09-09T05:28:07.665653+00:00",
+          "completed_record_sha256": "67bd95d54a4b18fbbb60dc66347cbdc2b29188230cc6198fe7e515eb267312e8"
+        },
+        {
+          "id": "query_restart",
+          "checkpoint": "after_restart",
+          "revision": 12,
+          "prediction": "proof_integrity",
+          "ranking": [
+            "proof_integrity",
+            "runtime_performance"
+          ],
+          "class_scores": [
+            {
+              "count": 8,
+              "label": "proof_integrity",
+              "mean_denominator": 8,
+              "mean_numerator": 105445,
+              "sum_dot": 105445,
+              "sum_score": 105445
+            },
+            {
+              "count": 2,
+              "label": "runtime_performance",
+              "mean_denominator": 2,
+              "mean_numerator": 24893,
+              "sum_dot": 24893,
+              "sum_score": 24893
+            }
+          ],
+          "public_accepted": true,
+          "full_reader": true,
+          "metrics": {
+            "accepted_fresh_proofs": 704,
+            "answered_queries": 1,
+            "committed_updates": 0,
+            "discarded_phase_attempts": 0,
+            "phase_elapsed_seconds": {
+              "class000-prove": 53.01156120799715,
+              "class000-read": 0.19662541605066508,
+              "class000-verify": 26.622105000016745,
+              "class001-prove": 56.14445133396657,
+              "class001-read": 0.2766923340386711,
+              "class001-verify": 27.60365412500687
+            },
+            "private_reads": 2,
+            "proof_bytes": 128678216,
+            "proofs_generated": 704,
+            "proofs_verified": 704
+          },
+          "checks": {
+            "compared_score_values": 16,
+            "every_score_lane_equal": true,
+            "every_signed_dot_lane_equal": true,
+            "exact_rational_ranking_equal": true,
+            "lane_values_key": "dot_values",
+            "prediction_correct_for_intended_label": true,
+            "reader_checked_repeat8_per_class": true,
+            "restarted_process_same_model_and_every_lane": true,
+            "sum_key": "sum_dot"
+          },
+          "worker_seconds": 164.83506100001978,
+          "recorded_utc": "2026-09-09T05:30:52.999453+00:00",
+          "completed_record_sha256": "07a73091f5e55f5bef6087f0e67ff32e5fb800373863909f876ece04c7c347cd"
+        }
+      ]
+    },
+    {
+      "id": "squared-compact",
+      "label": "Squared score / compact BabyBear",
+      "score_label": "Mean squared dot",
+      "claim": "[EXECUTED] Completed lifecycle operations and public query receipts, exactly as retained at the snapshot time.",
+      "complete": true,
+      "completed_operations": 17,
+      "required_operations": 17,
+      "updated_utc": "2026-09-09T05:56:01.912110+00:00",
+      "worker_attempt_wall_seconds": 5546.017843709909,
+      "metrics": {
+        "answered_queries": 4,
+        "committed_updates": 12,
+        "private_reads": 8,
+        "proof_bytes": 1012130665,
+        "proofs_generated": 1024,
+        "proofs_verified": 1024
+      },
+      "freshness_accounting": "Metrics describe each unique stable request once across all invocations. Reused or resumed requests are not counted as fresh work in this invocation.",
+      "result_sha256": "00d2ff1bdfb6ab66ce7b0e7a2709e3bcd35991f43b9406924cbe1c16f95112e4",
+      "source_url": "https://github.com/emberian/zkml-research/blob/a5268000a2b94cd3689f07c215eef64f67cd835d/research/vfhe_2026_09_08/continuing_system/results/squared-compact/RESULT.json",
+      "queries": [
+        {
+          "id": "query_initial",
+          "checkpoint": "initial",
+          "revision": 4,
+          "prediction": "proof_integrity",
+          "ranking": [
+            "proof_integrity",
+            "runtime_performance"
+          ],
+          "class_scores": [
+            {
+              "count": 2,
+              "label": "proof_integrity",
+              "mean_denominator": 2,
+              "mean_numerator": 351884377,
+              "sum_kernel": 351884377
+            },
+            {
+              "count": 2,
+              "label": "runtime_performance",
+              "mean_denominator": 2,
+              "mean_numerator": 309835625,
+              "sum_kernel": 309835625
+            }
+          ],
+          "public_accepted": true,
+          "full_reader": true,
+          "metrics": {
+            "accepted_fresh_proofs": 232,
+            "answered_queries": 1,
+            "committed_updates": 0,
+            "discarded_phase_attempts": 0,
+            "phase_elapsed_seconds": {
+              "class000-capture": 1.6891148340073414,
+              "class000-prove": 499.4741241669981,
+              "class000-read": 0.08274824998807162,
+              "class000-verify": 34.19914379203692,
+              "class001-capture": 1.637856625020504,
+              "class001-prove": 531.3625051670242,
+              "class001-read": 0.07718249998288229,
+              "class001-verify": 34.437754291982856
+            },
+            "private_reads": 2,
+            "proof_bytes": 235624423,
+            "proofs_generated": 232,
+            "proofs_verified": 232
+          },
+          "checks": {
+            "compared_kernel_values": 16,
+            "every_kernel_lane_equal": true,
+            "exact_rational_ranking_equal": true,
+            "prediction_correct_for_intended_label": true,
+            "reader_checked_repeat8_per_class": true
+          },
+          "worker_seconds": 1103.2161561249522,
+          "recorded_utc": "2026-09-09T04:43:33.498978+00:00",
+          "completed_record_sha256": "a93ba42ce64025be9bd1139149cea5a7fad567f56e07e03498551efc0f8dcb4c"
+        },
+        {
+          "id": "query_later",
+          "checkpoint": "after_teaching",
+          "revision": 10,
+          "prediction": "proof_integrity",
+          "ranking": [
+            "proof_integrity",
+            "runtime_performance"
+          ],
+          "class_scores": [
+            {
+              "count": 8,
+              "label": "proof_integrity",
+              "mean_denominator": 8,
+              "mean_numerator": 1395750124,
+              "sum_kernel": 1395750124
+            },
+            {
+              "count": 2,
+              "label": "runtime_performance",
+              "mean_denominator": 2,
+              "mean_numerator": 309835625,
+              "sum_kernel": 309835625
+            }
+          ],
+          "public_accepted": true,
+          "full_reader": true,
+          "metrics": {
+            "accepted_fresh_proofs": 232,
+            "answered_queries": 1,
+            "committed_updates": 0,
+            "discarded_phase_attempts": 0,
+            "phase_elapsed_seconds": {
+              "class000-capture": 1.6965201669954695,
+              "class000-prove": 500.310304832994,
+              "class000-read": 0.09597370802657679,
+              "class000-verify": 39.781965041998774,
+              "class001-capture": 1.6392527500283904,
+              "class001-prove": 578.7870966250193,
+              "class001-read": 0.09319412498734891,
+              "class001-verify": 36.260126999986824
+            },
+            "private_reads": 2,
+            "proof_bytes": 235621865,
+            "proofs_generated": 232,
+            "proofs_verified": 232
+          },
+          "checks": {
+            "compared_kernel_values": 16,
+            "every_kernel_lane_equal": true,
+            "exact_rational_ranking_equal": true,
+            "prediction_correct_for_intended_label": true,
+            "reader_checked_repeat8_per_class": true
+          },
+          "worker_seconds": 1158.9569263330195,
+          "recorded_utc": "2026-09-09T05:05:14.297185+00:00",
+          "completed_record_sha256": "1760b17e053a456f8b470ae750df02ac72560e57f08f6831cfb92efdaf89ced3"
+        },
+        {
+          "id": "query_expiry",
+          "checkpoint": "after_expiry",
+          "revision": 12,
+          "prediction": "proof_integrity",
+          "ranking": [
+            "proof_integrity",
+            "runtime_performance"
+          ],
+          "class_scores": [
+            {
+              "count": 8,
+              "label": "proof_integrity",
+              "mean_denominator": 8,
+              "mean_numerator": 1390333367,
+              "sum_kernel": 1390333367
+            },
+            {
+              "count": 2,
+              "label": "runtime_performance",
+              "mean_denominator": 2,
+              "mean_numerator": 309835625,
+              "sum_kernel": 309835625
+            }
+          ],
+          "public_accepted": true,
+          "full_reader": true,
+          "metrics": {
+            "accepted_fresh_proofs": 232,
+            "answered_queries": 1,
+            "committed_updates": 0,
+            "discarded_phase_attempts": 0,
+            "phase_elapsed_seconds": {
+              "class000-capture": 1.6355012080166489,
+              "class000-prove": 618.9718796249945,
+              "class000-read": 0.15527829201892018,
+              "class000-verify": 50.83608408400323,
+              "class001-capture": 1.6829817910329439,
+              "class001-prove": 650.5382862910046,
+              "class001-read": 0.1001722079818137,
+              "class001-verify": 54.087014040967915
+            },
+            "private_reads": 2,
+            "proof_bytes": 235630039,
+            "proofs_generated": 232,
+            "proofs_verified": 232
+          },
+          "checks": {
+            "compared_kernel_values": 16,
+            "every_kernel_lane_equal": true,
+            "exact_rational_ranking_equal": true,
+            "prediction_correct_for_intended_label": true,
+            "reader_checked_repeat8_per_class": true
+          },
+          "worker_seconds": 1378.3546510829474,
+          "recorded_utc": "2026-09-09T05:29:08.768295+00:00",
+          "completed_record_sha256": "809cf7e9e5c70f89ad9c8f372a78ae9e9425d15bee742fea5cc92053987ae412"
+        },
+        {
+          "id": "query_restart",
+          "checkpoint": "after_restart",
+          "revision": 12,
+          "prediction": "proof_integrity",
+          "ranking": [
+            "proof_integrity",
+            "runtime_performance"
+          ],
+          "class_scores": [
+            {
+              "count": 8,
+              "label": "proof_integrity",
+              "mean_denominator": 8,
+              "mean_numerator": 1390333367,
+              "sum_kernel": 1390333367
+            },
+            {
+              "count": 2,
+              "label": "runtime_performance",
+              "mean_denominator": 2,
+              "mean_numerator": 309835625,
+              "sum_kernel": 309835625
+            }
+          ],
+          "public_accepted": true,
+          "full_reader": true,
+          "metrics": {
+            "accepted_fresh_proofs": 232,
+            "answered_queries": 1,
+            "committed_updates": 0,
+            "discarded_phase_attempts": 0,
+            "phase_elapsed_seconds": {
+              "class000-capture": 2.4754722499637865,
+              "class000-prove": 780.2075619579991,
+              "class000-read": 0.17010608298005536,
+              "class000-verify": 41.87950020801509,
+              "class001-capture": 2.2149650839855894,
+              "class001-prove": 729.1981922499835,
+              "class001-read": 0.16046524996636435,
+              "class001-verify": 56.00079729198478
+            },
+            "private_reads": 2,
+            "proof_bytes": 235629572,
+            "proofs_generated": 232,
+            "proofs_verified": 232
+          },
+          "checks": {
+            "compared_kernel_values": 16,
+            "every_kernel_lane_equal": true,
+            "exact_rational_ranking_equal": true,
+            "prediction_correct_for_intended_label": true,
+            "reader_checked_repeat8_per_class": true,
+            "restarted_process_same_model_and_every_lane": true
+          },
+          "worker_seconds": 1612.7447009999887,
+          "recorded_utc": "2026-09-09T05:56:01.887153+00:00",
+          "completed_record_sha256": "36cb16237780f9a15a61cd0d8347820981b80e32c55e90fc29ef5c0b21d74e36"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    "Full BFV reader survives.",
+    "E5 encoder executes in plaintext at the issuer.",
+    "No whole-system post-quantum or operator-privacy claim.",
+    "Profiles differ in score and proof configuration; no numerical security equivalence is asserted."
+  ]
+}
