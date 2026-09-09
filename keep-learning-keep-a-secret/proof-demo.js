@@ -1,5 +1,5 @@
 // The approved relation is selected by this application, never by the proof bundle.
-const approvedTemplate = '1afc2b3a120f59fdd79d273c6d32887373c5718225cb6e94b82a7231010c3aa7';
+const approvedTemplate = '112a0982fc384272c5b24da9f4c2f4617078be22afe27aca59dad08c73b479e5';
 const base = new URL('./proof/learner-expiry/', import.meta.url);
 const buttons = [...document.querySelectorAll('.proof-actions button')];
 const panel = document.getElementById('proof-result');
@@ -54,7 +54,7 @@ async function verify(changed) {
     if (result.verified) {
       show(changed ? 'error' : 'accepted', changed ? 'Unexpected acceptance.' : 'Proof accepted.', changed
         ? 'The changed statement was accepted. This result needs investigation.'
-        : `The real verifier accepted all 8,192 coefficient rows for the recorded update.${seconds}`);
+        : `The verifier accepted the repaired arithmetic statement for all 8,192 coefficient rows of the recorded update.${seconds}`);
     } else if (result.error?.startsWith('proof rejected:')) {
       show('rejected', 'Proof rejected.', changed
         ? `Changing one output digit made the original proof fail verification.${seconds}`
@@ -105,7 +105,7 @@ async function verifyQuery() {
   show('busy', 'Loading both query proofs…', 'Only public coefficient rows, proof data and the shared verifier are downloaded.');
   try {
     const result = await runQueryWorker();
-    if (result.verified === true && result.caseId === 'fast001-new-two-class-query') {
+    if (result.verified === true && result.caseId === 'fast001-all-row-reproof-two-class-query') {
       const seconds = Number.isFinite(result.elapsedMs) ? ` ${(result.elapsedMs / 1000).toFixed(2)} seconds including loading on this device.` : '';
       show('accepted', 'Both class computations verified.', `The real verifier accepted the complete coefficient relation for each of the two recorded classes.${seconds} This does not verify decryption or the final class choice.`);
     } else if (result.stage === 'proof' && result.error?.startsWith('proof rejected:')) {
