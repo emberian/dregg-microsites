@@ -4,6 +4,8 @@ Small, self-contained visual essays from the DREGG research process.
 
 ## Published
 
+- [field guide](https://emberian.github.io/dregg-microsites/field-guide/)
+
 - [The whole way through](https://emberian.github.io/dregg-microsites/the-whole-way-through/)
 - [Keep learning. Keep a secret.](https://emberian.github.io/dregg-microsites/keep-learning-keep-a-secret/)
 
