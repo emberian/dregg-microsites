@@ -245,6 +245,168 @@ be modeled and tested in a specific mission profile. LTP and TCPCL evidence gets
 fn closer to that experiment. It does not qualify software, hardware or operating
 procedures for flight.
 
+## Deploying fn as agent communications infrastructure
+
+**This is an intended deployment, not just a motivating analogy.** The deployment
+design below extends the assessment at the user's request. It is a proposed
+agent-facing contract, not a claim that the assessed revision implements an agent
+runtime. The existing news, retention and BP workflow semantics are its starting
+point; new work-execution semantics need their own definitions and evidence.
+
+fn can be the persistent communications substrate between independently hosted
+agents and their humans: a place to publish letters, requests, intermediate
+findings, decisions and results that remains useful when a process stops or a
+link disappears. NNTP gives human readers and agent hosts a common article and
+thread interface. Command-line tooling can expose the same operations to a runner;
+a future API or MCP wrapper should call those operations rather than duplicate
+acceptance or identity decisions. A running language-model instance does not need
+to be a permanently reachable server.
+
+The useful separation is:
+
+```text
+human or agent author
+  → durable local outbox
+  → fn acceptance / retained article
+  → NNTP or disconnected exchange
+  → recipient's durable intake and policy decision
+  → claimed work in a restartable runner
+  → tool effect / result / durable reply outbox
+  → fn reply + explicitly typed application receipt
+```
+
+There are two state machines to connect here. fn owns article acceptance,
+retention and transport work. The runner owns taking responsibility for a task,
+authorizing an action, recording an attempt and accounting for its result.
+**Accepting an article into fn is not accepting a task for execution.** Existing
+retained-content receipts must not silently acquire that second meaning.
+
+### A message is an immutable artifact; a task has durable state
+
+For a proposed agent message profile, define and sign the application metadata
+inside the exact authored bytes selected by D01. Candidate fields are a version,
+message kind, author principal, intended recipient(s), conversation/parent
+references, scoped work identifier, immutable input references, requested result,
+and any referenced authority or policy context. These are design inputs, not a
+new wire grammar frozen by this report. An unsigned routing projection must not
+change a signed recipient, request or permission.
+
+Keep several identities distinct:
+
+| Identity | What it identifies |
+| --- | --- |
+| Principal | The human or agent identity to which a configured key/authority is bound; not merely a `From` header |
+| Runner incarnation | One generation of a process acting for that principal, so its stale completion cannot settle another generation's attempt |
+| Message-ID / content identity | The article's news identifier and the exact content subject; different jobs can refer to the same content |
+| Scoped work ID | One requested operation in the requesting principal's namespace, with the recipient and immutable request binding checked; reuse with different content is conflict evidence |
+| Attempt / external-effect ID | One attempt, or a stable idempotency key for one intended external effect; neither is a local NNTP article number |
+
+Ordinary letters, execution requests, progress reports, results, cancellations
+and approvals should be distinguishable. Receipt/result messages must not become
+fresh execution requests simply because they arrived in a subscribed group.
+Newsgroups provide discovery and shared visibility; naming a recipient does not
+provide confidentiality or grant it permission to execute anything.
+
+### The durable runner boundary
+
+1. **Intake before advancing.** Reconcile the fn subscription into a durable local
+   intake ledger. Before advancing a consumer cursor, record either the job or an
+   explicit disposition such as refused or parked. Cursor and disposition belong
+   in the same local transaction. Track cursors per node/group: numbers are local,
+   and holes or a high watermark are not proof that every item was consumed.
+2. **Decide authority before allocating execution.** Check the exact request,
+   principal, recipient, local policy and allowed operation before making it
+   executable work. Archiving a message may remain permissible even when acting
+   on it is not. Delegation has an explicit scope and budget; signing arbitrary
+   prose is not a tool grant.
+3. **Claim work durably.** A runner incarnation claims a job using a generation
+   that fences stale completions. Multiple workers sharing one logical inbox need
+   one authoritative claim store; posting competing “I claim this” articles to
+   NNTP does not create mutual exclusion. A lease timeout alone does not fence
+   the old worker at an external service.
+4. **Record intent before effects.** Give a retry of the same intended tool action
+   a stable idempotency key where the destination supports it. If the destination
+   can report status, reconcile a lost completion before deciding whether to
+   retry. If it supports neither deduplication nor reconciliation, retain an
+   uncertain outcome and require an explicit resolution policy. fn cannot promise
+   exactly-once arbitrary external side effects.
+5. **Commit results with the reply outbox.** Record local task completion and its
+   pending reply together, then submit that reply to fn. A lost posting reply
+   causes reconciliation/idempotent resubmission, not loss of the result or a
+   second tool action. This is a local outbox transaction followed by fn's separate
+   acceptance transaction, not an assumed atomic commit across both services.
+
+The runner should use executable ACL2 definitions for any new workflow decisions
+included in fn's assurance claim. Host code supplies I/O and invokes tools. The
+current BP transfer machine supplies useful patterns for durable intent,
+generation-bound completion and uncertain recovery, but its proofs do not
+automatically cover this new execution machine.
+
+### Receipts say exactly what responsibility moved
+
+| Observation | Meaning in the proposed deployment | What it does not establish |
+| --- | --- | --- |
+| fn local acceptance | This node committed the article and its stated retention obligation | That another node or agent received it |
+| Retained-content receipt | The identified peer asserts the specified content/obligation acceptance, under checked context and peer assumptions | That its agent queued, understood or acted on the content |
+| Agent intake receipt | The recipient committed the request and a disposition to its intake ledger | That execution succeeded |
+| Action/result record | A named attempt has a recorded outcome, bound to the request and supported by tool evidence where applicable | That a model's conclusion is true or that every external side effect is known |
+| Human decision | An identified human approved, rejected or otherwise responded within a specified scope | A general delegation of that human's authority |
+
+Keep uncertainty in every layer. A task deadline expiring can stop further
+execution attempts without releasing the archived article. Cancelling a task
+does not undo a completed external action. A retained-content handoff receipt
+must not release unrelated execution, audit or archive obligations.
+
+### Governance, resources and disconnected authority
+
+Agent deployments need explicit compute, tool-use, fanout, retry and reply budgets
+alongside fn's storage reservations. A loop of agents replying to receipts can
+exhaust a system whose storage and protocol logic are individually correct.
+Host-enforced limits should persist across restart, with the job's causal links
+and authority context. Human-visible threads should show who requested the work,
+which runner attempted it, what was authorized, and why it stopped.
+
+Policy freshness is a deployment choice with a real disconnected tradeoff. An
+offline node cannot know about a revocation it has not received. Specify which
+operations may proceed under a recorded policy snapshot and which require fresh
+authority; a timestamp is not evidence of receiving all relevant policy updates.
+This is separate from future private-group encryption and key distribution.
+
+Subscriptions also need bounded catch-up, durable checkpoints and an explicit
+poll/wake policy. A retained queue does not itself schedule a model invocation.
+Conditional progress requires the runner to wake, the necessary contacts to occur,
+resources to remain available and the operation to be permitted.
+
+### Assurance targets for the agent-facing deployment
+
+These are proposed obligations, not existing registry entries or proved theorems:
+
+- A consumed request has a durable disposition; a crash cannot advance the
+  cursor past a request and forget it.
+- Duplicate delivery of the same bound work does not create a second executable
+  job; conflicting reuse of its scoped identifier is preserved and flagged.
+- A completion can settle only its matching job/attempt generation and authority
+  context; late results remain evidence without stealing another attempt's state.
+- An unauthorized article can be retained without gaining an execution effect.
+- A committed result has a recoverable pending or accepted reply; replaying the
+  outbox cannot re-execute the task.
+- Resource budgets survive restart, and a receipt/progress message cannot trigger
+  an unbounded chain of new requests under the same grant.
+
+A concrete deployment acceptance scenario is a human asking agent A to commission
+a review from agent B. Kill B after durable intake; restart it. Deliver the
+request twice. Interrupt the return path after B commits its result. Reconnect
+through another carrier and recover the reply. Then inject a stale completion,
+a changed request under the same scoped ID, and an unauthorized tool request.
+Inspect the durable job, result, provenance, explicit refusals and retained
+obligations from the human's newsreader. For tool effects, separately test a
+destination with an idempotency/status API and one without it: the latter must
+expose uncertainty rather than claim a guarantee it cannot enforce.
+
+That experiment would demonstrate the operational reason to deploy fn: agents
+can stop and return, people can inspect their exchanges, and responsibility for
+work remains recoverable across the gaps between them.
+
 ## The next coherent completion batches
 
 1. **Serve one complete promise.** Freeze an integrated revision; certify the

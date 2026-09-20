@@ -54,7 +54,8 @@
     "books/sha256.lisp": "dce8222e1b95ff23df78a6c8c67ea980aa6e7da115d5c9ad16426e6714307dd7",
     "books/stx-lace.lisp": "f6c2332e245282004f3d5ae68de4c406fcfa86f11cf313164249934d949552a2",
     "books/stx-policy.lisp": "3cb6918354c3c41f807d2f42412c74405d0abe32e392075ef23a6ff4cba578e1",
-    "tests/evidence/2026-09-20-four-node-lab.json": "a1dede69d8e4b7fc3afc361022a6db0d283dc0a8042f0a4e7acda7dbc3ea4ba7"
+    "tests/evidence/2026-09-20-four-node-lab.json": "a1dede69d8e4b7fc3afc361022a6db0d283dc0a8042f0a4e7acda7dbc3ea4ba7",
+    "specs/bp-workflow.md": "d24a9a0549c2446cf004fe96ecdfb6ce19584b9d88a7e41779ddfe82227ac9a0"
   },
   "excerpts": [
     {
@@ -344,6 +345,22 @@
       "sha256": "76043f41d7dd909a46ad863cf5a1a9044be69c2888f7bda98f0a271bdffec9b2",
       "first_line": 1,
       "last_line": 52
+    },
+    {
+      "id": "agent-workflow",
+      "title": "Existing transfer-work semantics are the starting point, not agent execution",
+      "path": "specs/bp-workflow.md",
+      "sha256": "d24a9a0549c2446cf004fe96ecdfb6ce19584b9d88a7e41779ddfe82227ac9a0",
+      "ranges": [
+        [
+          1,
+          38
+        ],
+        [
+          99,
+          116
+        ]
+      ]
     }
   ],
   "checks": [
@@ -407,5 +424,10 @@
       "url": "https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver",
       "topic": "salt and cost factor for password verification"
     }
-  ]
+  ],
+  "followup": {
+    "topic": "Deployment as agent communications infrastructure",
+    "status": "Proposed runner and application contract at user request; no implementation or proof completion claimed",
+    "scope": "Adds task intake, execution authority, result/outbox, external effects and deployment acceptance scenario. The fn assessment remains pinned to the original revision."
+  }
 }

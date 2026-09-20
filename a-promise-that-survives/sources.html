@@ -1680,4 +1680,58 @@
   49  bundle: the archive pin an accepted article holds (RET-001, `fn-retain`), and
   50  the `:forward` pin an outstanding work holds (`fn-bprl-undertake`). Both are
   51  released only by `fn-retain-release` under checked application evidence
-  52  (`fn-bprl-release-decision`, a receipt). These are what &quot;custody&quot; means in</pre></details></div><footer><a href="./">Back to the report</a><span>fn / independent assessment</span></footer></main><script>function reveal(){const e=document.getElementById(location.hash.slice(1));if(e){e.open=true;e.scrollIntoView();}}addEventListener('hashchange',reveal);reveal();</script></body></html>
+  52  (`fn-bprl-release-decision`, a receipt). These are what &quot;custody&quot; means in</pre></details><details id="agent-workflow"><summary>Existing transfer-work semantics are the starting point, not agent execution<small>specs/bp-workflow.md · L1–38 and L99–116</small></summary><p class="hash">File SHA-256 d24a9a0549c2446cf004fe96ecdfb6ce19584b9d88a7e41779ddfe82227ac9a0</p><pre>   1  # Provisional BPv7 workflow journal
+   2
+   3  This specification defines the first executable fn workflow for disconnected
+   4  BPv7 transfer.  It is a local laboratory profile.  It does not define the
+   5  portable D01 exchange grammar, choose D09 signing, prove a BPA durable, or turn
+   6  a BP status report into fn application acceptance.
+   7
+   8  The executable decisions are in `books/bp-workflow.lisp`.  They start from an
+   9  already committed `fn-node` article/archive binding.  Local posting therefore
+  10  continues to acknowledge the local archive guarantee only.  Creating onward
+  11  work is a separate journal transaction and receives its own enqueue
+  12  acknowledgment after that transaction is durable.
+  13
+  14  ## State and identity
+  15
+  16  A fixed schema-1 configuration records the local and peer EIDs, local policy
+  17  identifier, receipt authority, BP lifetime, node incarnation, and authorization
+  18  context.  Work records copy the peer, policy, incarnation, authorization
+  19  context, and terms identifier that governed their creation.  A work record is
+  20  bound to the immutable subject and archive obligation obtained from the actual
+  21  committed node binding; callers cannot supply replacements for those fields.
+  22  Local NNTP article numbers and BPA bundle identifiers are never part of portable
+  23  work identity.
+  24
+  25  Each storage intent uses a natural-number `(transaction-id,
+  26  transaction-generation)` pair.  A successful prepare reserves that pair before
+  27  its outcome is known.  The reservation remains in durable workflow history
+  28  through success, known abort, uncertainty, recovery, and restart.  A later
+  29  prepare can never reuse it.  This prevents an old completion for an aborted or
+  30  completed operation from authorizing a different enqueue, submission, or
+  31  receipt transaction.
+  32
+  33  The host journal must persist the prepare intent itself before invoking the ACL2
+  34  prepare transition.  An outcome is a separate append-only record:
+  35
+  36  - ordinary `durable` and `aborted` outcomes feed `fn-bp-complete`;
+  37  - recovery `committed` and `absent` outcomes reconstruct an indeterminate fence
+  38    and then feed `fn-bp-recover`;</pre><pre>  99  ## Application receipt
+ 100
+ 101  Transport status never releases work.  A receipt is separate application
+ 102  evidence with nine fields: receipt ID, work ID, immutable subject, issuer EID,
+ 103  peer EID, policy ID, node incarnation, authorization context, and terms ID.
+ 104  `fn-bp-prepare-receipt` requires an exact match to the durable work and fixed
+ 105  configuration plus an explicit true A-POLICY authorization input.  The boolean
+ 106  is an environmental premise at this layer; it is not a signature proof or a
+ 107  hidden trust claim.  The checked receipt then follows the same durable
+ 108  intent/outcome/fence/recovery protocol before it closes the work and enters
+ 109  receipt history.
+ 110
+ 111  Arbitrary, stale, wrong-context, or policy-unauthorized receipts are no-ops.
+ 112  Receipt recovery emits its acknowledgment only after the checked receipt record
+ 113  is known committed.  A future D09 decision must bind real verification and key
+ 114  handling to the explicit authority, incarnation, authorization-context, and
+ 115  terms fields; this experiment makes no cryptographic assurance claim.
+ 116</pre></details></div><footer><a href="./">Back to the report</a><span>fn / independent assessment</span></footer></main><script>function reveal(){const e=document.getElementById(location.hash.slice(1));if(e){e.open=true;e.scrollIntoView();}}addEventListener('hashchange',reveal);reveal();</script></body></html>
