@@ -1,0 +1,1605 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>fn · Source notebook</title><link rel="stylesheet" href="style.css"></head><body class="notebook"><main class="wrap"><a class="back" href="./">← A promise that survives</a><p class="eyebrow">Evidence / frozen 20 September 2026</p><h1>Open the<br>notebook.</h1><p class="lede">Selected source excerpts, with their original line numbers and whole-file digests. These are evidence you can inspect without access to the development machine.</p><p>Revision <code>3e1b1849413d5168322fcf34c9f74e77d109be72</code>. A source declaration is not a fresh certification. Historical lab records inside this snapshot carry their own revisions and scope. Claude continued work after this snapshot.</p><p><a href="report.md">Full assessment</a> · <a href="evidence.json">Machine-readable manifest</a> · <a href="checks.txt">Local check outcomes</a></p><div class="source-list"><details id="commit"><summary>The obligation behind acceptance<small>specs/storage.md · L33–72</small></summary><p class="hash">File SHA-256 356d4f8cc42bb3574ffc202a9880f54ec474cba3d29d751cbcb96773e34c98e2</p><pre>  33  STO-002: acceptance publishes one transaction containing the source references,
+  34  duplicate-history effects, all local group allocations, and any obligations or
+  35  reservations accepted in that operation. No partially committed cross-post or
+  36  promised-but-unaccounted retention can become visible.
+  37  
+  38  ## Commit protocol
+  39  
+  40  The semantic phases are:
+  41  
+  42  1. Validate against committed state; reserve resources and stage an identified
+  43     transaction. The proposal is not yet visible to readers.
+  44  2. Make all referenced object bytes and their required namespace reachability
+  45     durable according to the platform contract.
+  46  3. Make the transaction&#x27;s complete commit record durable.
+  47  4. Publish the committed state and generate the protocol/application success.
+  48  
+  49  STO-003: successful acceptance is emitted only after the corresponding durable
+  50  commit result. Host completion events name the transaction and generation; stale,
+  51  duplicate, or unrelated completions cannot publish another transaction.
+  52  
+  53  Only one shared-state commit is in flight initially. Network input may continue
+  54  within quotas. A disconnected requester does not cancel an already durable
+  55  transaction. If it retries, history prevents repeated allocation/effects.
+  56  
+  57  STO-004: a known abort and an indeterminate I/O result are distinct. After an
+  58  indeterminate result, fence shared-state mutations and recover before continuing.
+  59  Do not assume an error means nothing reached disk. It is valid for an unacknowledged
+  60  transaction to appear after recovery; it is not valid for a modeled acknowledged
+  61  commit to vanish. Transport/application retries must accommodate that uncertainty.
+  62  
+  63  ## Recovery
+  64  
+  65  STO-005: under the [crash model](failures.md), recovery produces an invariant-
+  66  preserving committed history containing every acknowledged transaction, with no
+  67  partial transaction. Unacknowledged complete commits may also survive. Recovery
+  68  checks framing, integrity, dependencies, journal order, and checkpoint linkage.
+  69  
+  70  The exact rule for choosing a journal/checkpoint generation is still open. Do
+  71  not implement “pick the newest timestamp.” Incomplete uncommitted tails and
+  72  detected damage to committed data have different handling. Quarantine/report</pre></details><details id="completion"><summary>Completion is tied to the exact record<small>books/store-node-invariants.lisp · L107–214</small></summary><p class="hash">File SHA-256 70f391a9ca9132c0f1488c612a4bd3c45809a5e701869354368aaa1654fc3074</p><pre> 107  
+ 108  ; Every portable record value is equal to its counterpart in the actual staged
+ 109  ; acceptance/retention transaction, not merely to a sequence/txid reply string.
+ 110  (defthm fn-sn-record-binds-pending-fields
+ 111    (implies (fn-sn-record-bindsp node record)
+ 112             (let ((p (fn-state-pending (fn-node-acceptance node)))
+ 113                   (stage (fn-node-stage node)))
+ 114               (and (equal (fn-record-txid record) (fn-pending-txid p))
+ 115                    (equal (fn-record-generation record) (fn-pending-generation p))
+ 116                    (equal (fn-record-msgid record) (fn-pending-msgid p))
+ 117                    (equal (fn-record-payload record) (fn-pending-payload p))
+ 118                    (equal (fn-record-groups record) (fn-pending-groups p))
+ 119                    (equal (fn-record-obligation-id record) (fn-node-stage-id stage))
+ 120                    (equal (fn-record-content-subject record) (fn-node-stage-subject stage))
+ 121                    (equal (fn-record-release-evidence record) (fn-node-stage-evidence stage))
+ 122                    (equal (fn-record-charge record) (fn-node-stage-charge stage)))))
+ 123    :rule-classes nil)
+ 124  
+ 125  (defun fn-sn-committed-recordp (node record)
+ 126    (let* ((article (fn-find-article (fn-record-msgid record)
+ 127                                    (fn-state-articles (fn-node-acceptance node))))
+ 128           (binding (fn-node-find-binding (fn-record-msgid record)
+ 129                                           (fn-node-bindings node)))
+ 130           (pin (fn-retain-find-id (fn-record-obligation-id record)
+ 131                                   (fn-retain-pins (fn-node-retention node)))))
+ 132      (and (consp article)
+ 133           (equal (fn-article-msgid article) (fn-record-msgid record))
+ 134           (equal (fn-article-payload article) (fn-record-payload record))
+ 135           (equal (fn-article-groups article) (fn-record-groups record))
+ 136           (equal (fn-article-pin article) t)
+ 137           (equal binding (fn-node-make-binding
+ 138                           (fn-record-msgid record) (fn-record-content-subject record)
+ 139                           (fn-record-obligation-id record)))
+ 140           (equal pin (fn-retain-make-obligation
+ 141                       (fn-record-obligation-id record)
+ 142                       (fn-record-content-subject record) :archive
+ 143                       (fn-record-release-evidence record) (fn-record-charge record))))))
+ 144  
+ 145  (defthm fn-sn-actual-durable-completion-installs-record
+ 146    (implies (fn-sn-record-bindsp node record)
+ 147             (fn-sn-committed-recordp
+ 148              (fn-node-complete node (fn-record-txid record)
+ 149                                (fn-record-generation record) :durable)
+ 150              record))
+ 151    :hints ((&quot;Goal&quot; :use fn-sn-record-binds-pending-fields
+ 152             :in-theory (enable fn-node-complete fn-node-statep fn-statep fn-snx-core-definitions))))
+ 153  
+ 154  ; -by-definition: the else branch of fn-sn-finish with its test negated.
+ 155  (defthm fn-sn-finish-disabled-is-no-op
+ 156    (implies (not (fn-sn-completion-enabledp s))
+ 157             (equal (fn-sn-finish s) s))
+ 158    :rule-classes nil
+ 159    :hints ((&quot;Goal&quot; :in-theory (disable fn-sn-completion-enabledp))))
+ 160  
+ 161  (defthm fn-sn-finish-is-actual-durable-completion
+ 162    (implies (fn-sn-completion-enabledp s)
+ 163             (equal (fn-sn-node (fn-sn-finish s))
+ 164                    (fn-node-complete (fn-sn-node s)
+ 165                      (fn-record-txid (fn-sn-completion-record s))
+ 166                      (fn-record-generation (fn-sn-completion-record s))
+ 167                      :durable)))
+ 168    :hints ((&quot;Goal&quot; :in-theory (disable fn-sn-completion-enabledp
+ 169                                        fn-sn-completion-record))))
+ 170  
+ 171  (defthm fn-sn-finish-installs-exact-article-and-archive-pin
+ 172    (implies (fn-sn-completion-enabledp s)
+ 173             (fn-sn-committed-recordp (fn-sn-node (fn-sn-finish s))
+ 174                                      (fn-sn-completion-record s)))
+ 175    :hints ((&quot;Goal&quot; :use (fn-sn-finish-is-actual-durable-completion
+ 176                           (:instance fn-sn-actual-durable-completion-installs-record
+ 177                            (node (fn-sn-node s))
+ 178                            (record (fn-sn-completion-record s))))
+ 179             :in-theory (disable fn-sn-finish fn-sn-committed-recordp
+ 180                                 fn-sn-record-bindsp fn-sn-completion-record))))
+ 181  
+ 182  (defthm fn-sn-finish-acknowledges-exact-pair
+ 183    (implies (fn-sn-completion-enabledp s)
+ 184             (equal (fn-sf-successes (fn-sn-files (fn-sn-finish s)))
+ 185                    (append (fn-sf-successes (fn-sn-files s))
+ 186                            (list (fn-sf-completion (fn-sn-files s))))))
+ 187    :hints ((&quot;Goal&quot;
+ 188             :use ((:instance fn-sf-core-completion-preserves-state
+ 189                      (s (fn-sn-files s))
+ 190                      (sequence (fn-record-sequence (fn-sn-completion-record s)))
+ 191                      (txid (fn-record-txid (fn-sn-completion-record s)))))
+ 192             :in-theory (e/d (fn-sf-core-completion fn-sf-emit-success)
+ 193                              (fn-sn-record-bindsp fn-sn-completion-record)))))
+ 194  
+ 195  (defthm fn-sn-new-success-requires-actual-matching-durable-node-completion
+ 196    (implies (not (equal (fn-sf-successes (fn-sn-files (fn-sn-finish s)))
+ 197                         (fn-sf-successes (fn-sn-files s))))
+ 198             (and (fn-sn-completion-enabledp s)
+ 199                  (fn-sn-record-bindsp (fn-sn-node s) (fn-sn-completion-record s))
+ 200                  (equal (fn-sn-node (fn-sn-finish s))
+ 201                         (fn-node-complete (fn-sn-node s)
+ 202                           (fn-record-txid (fn-sn-completion-record s))
+ 203                           (fn-record-generation (fn-sn-completion-record s))
+ 204                           :durable))
+ 205                  (fn-sn-committed-recordp (fn-sn-node (fn-sn-finish s))
+ 206                                           (fn-sn-completion-record s))))
+ 207    :hints ((&quot;Goal&quot; :use (fn-sn-finish-is-actual-durable-completion
+ 208                           fn-sn-finish-installs-exact-article-and-archive-pin
+ 209                           fn-sn-finish-disabled-is-no-op)
+ 210             :cases ((fn-sn-completion-enabledp s))
+ 211             :in-theory (disable fn-sn-finish fn-sn-completion-record
+ 212                                 fn-sn-record-bindsp fn-sn-committed-recordp))))
+ 213  
+ 214  ; A matching live proposal has exactly the same durable meaning as a record</pre></details><details id="store-host"><summary>The storage host calls the completion and loader<small>host/store-node-host.lisp · L389–421</small></summary><p class="hash">File SHA-256 8628eb566308f4487a09ebb852c1f0d466cac54b69f378c794218b4fa6f9fda9</p><pre> 389               (not (equal next s))
+ 390               (equal (fn-sf-phase (fn-sn-files next)) :ready))
+ 391          (let ((state (f-put-global &#x27;fn-store-sn next state)))
+ 392            (value :aborted))
+ 393        (value :fault))))
+ 394  
+ 395  (defun fn-store-sn-pending-octets (state)
+ 396    (declare (xargs :stobjs state :mode :program))
+ 397    (let ((record (fn-sf-record-candidate
+ 398                   (fn-sn-files (f-get-global &#x27;fn-store-sn state)))))
+ 399      (value (if record (fn-record-encode record) nil))))
+ 400  
+ 401  (defun fn-store-sn-finish (state)
+ 402    (declare (xargs :stobjs state :mode :program))
+ 403    (let* ((before (f-get-global &#x27;fn-store-sn state))
+ 404           (before-files (fn-sn-files before))
+ 405           (next (fn-sn-finish before))
+ 406           (after-files (fn-sn-files next)))
+ 407      ; fn-sn-finish is deliberately a no-op away from :completing.  The host
+ 408      ; reports success only for the transition that consumes this exact pending
+ 409      ; completion and appends one acknowledgement, never for a stale ready
+ 410      ; state or repeated call.
+ 411      (if (and (equal (fn-sf-phase before-files) :completing)
+ 412               (equal (fn-sf-phase after-files) :ready)
+ 413               (equal (len (fn-sf-successes after-files))
+ 414                      (1+ (len (fn-sf-successes before-files)))))
+ 415          (let ((state (f-put-global &#x27;fn-store-sn next state))) (value :durable))
+ 416        (value :fault))))
+ 417  
+ 418  (defun fn-store-sn-article-count (state)
+ 419    (declare (xargs :stobjs state :mode :program))
+ 420    (value (len (fn-state-articles
+ 421                 (fn-node-acceptance</pre></details><details id="reopen"><summary>Survival under the admissible crash-image hypothesis<small>books/store-observed.lisp · L608–644</small></summary><p class="hash">File SHA-256 7e645aeaf98ea6c8694af34d6b33f497697c975109679666cf1a81a46ae2bde4</p><pre> 608  ; from a related live state (fn-sf-crash-imagep, store-files.lisp), the host&#x27;s
+ 609  ; reopen entry succeeds and every pair acknowledged before the crash names a
+ 610  ; record of the reopened state.  The acknowledgement list itself is nil after
+ 611  ; reopen (fn-sn-open-observed-success-exact-history); the guarantee is carried
+ 612  ; by the records the adapter persists, not by a reconstructed ghost.
+ 613  ; The live-history relation carries the observed configuration predicate
+ 614  ; through fn-sn-statep (fn-snt-relation-implies-structural-state).
+ 615  (defthm fn-snt-relation-implies-observed-configuration
+ 616    (implies (fn-snt-relation s)
+ 617             (fn-sn-observed-configurationp (fn-sn-groups s) (fn-sn-capacity s)))
+ 618    :hints ((&quot;Goal&quot;
+ 619             :use fn-snt-relation-implies-structural-state
+ 620             :in-theory (e/d (fn-sn-statep fn-sn-observed-configurationp)
+ 621                              (fn-snt-relation fn-sf-statep fn-node-statep
+ 622                               fn-snt-relation-implies-structural-state
+ 623                               fn-snt-typed-store-components)))))
+ 624  
+ 625  (defthm fn-sn-acknowledged-record-survives-observed-reopen
+ 626    (implies (and (fn-snt-relation s)
+ 627                  (fn-sf-crash-imagep (fn-sn-files s) frontier records)
+ 628                  (member-equal pair (fn-sf-successes (fn-sn-files s))))
+ 629             (and (fn-sn-open-okp
+ 630                   (fn-sn-open-observed (fn-sn-groups s) (fn-sn-capacity s)
+ 631                                        frontier records))
+ 632                  (fn-sf-record-has-pairp
+ 633                   pair
+ 634                   (fn-sf-records
+ 635                    (fn-sn-files
+ 636                     (fn-sn-open-state
+ 637                      (fn-sn-open-observed (fn-sn-groups s) (fn-sn-capacity s)
+ 638                                           frontier records)))))))
+ 639    :hints ((&quot;Goal&quot;
+ 640             :use (fn-snt-relation-implies-observed-configuration
+ 641                   fn-snt-admissible-crash-image-is-recoverable
+ 642                   (:instance fn-sf-admissible-image-facts (s (fn-sn-files s)))
+ 643                   (:instance fn-sn-open-observed-succeeds-on-recoverable-image
+ 644                              (groups (fn-sn-groups s)) (capacity (fn-sn-capacity s)))</pre></details><details id="image"><summary>What the crash-image hypothesis permits<small>books/store-files.lisp · L584–608</small></summary><p class="hash">File SHA-256 c4a5cb1d26871acd9adc2ff96bab33ecdaf0ef4ee47ce9cd1117ff72bcc8111b</p><pre> 584  ; A-DURABILITY and A-WRITE-ISOLATION as a hypothesis, not a constructor.  An
+ 585  ; observed post-crash image (frontier, records) is admissible for kernel state
+ 586  ; s when the frontier is the stable value or, only while a replacement may
+ 587  ; have been issued, the candidate; and the records are the stable list or,
+ 588  ; only while a link may have been issued, that list extended by the exact
+ 589  ; data-durable candidate.  Theorems about the host&#x27;s reopen path
+ 590  ; (store-observed.lisp) take this predicate as their premise.  fn-sf-crash
+ 591  ; below is one constructor that satisfies it and shows the premise is
+ 592  ; inhabited; the guarantee comes from the predicate, not from the constructor.
+ 593  (defun fn-sf-crash-imagep (s frontier records)
+ 594    (declare (xargs :guard t :verify-guards nil))
+ 595    (and (fn-sf-statep s)
+ 596         (or (equal frontier (fn-sf-frontier s))
+ 597             (and (fn-sf-frontier-new-visiblep s)
+ 598                  (equal frontier (fn-sf-frontier-candidate s))))
+ 599         (or (equal records (fn-sf-records s))
+ 600             (and (fn-sf-record-present-visiblep s)
+ 601                  (equal records (append (fn-sf-records s)
+ 602                                         (list (fn-sf-record-candidate s))))))))
+ 603  
+ 604  (defun fn-sf-crash (s frontier-choice record-choice)
+ 605    (declare (xargs :guard t :verify-guards nil))
+ 606    (if (and (fn-sf-statep s)
+ 607             (fn-sf-crash-choicep frontier-choice record-choice))
+ 608        (let* ((frontier</pre></details><details id="teeth"><summary>A reachable transaction and a changed-payload counterexample<small>tests/acl2/store-node-teeth-tests.lisp · L20–98</small></summary><p class="hash">File SHA-256 0837fbd034ce070d67d2502be57fde849c2938e36099f0c59c6f5ebc08718049</p><pre>  20  
+  21  ; -----------------------------------------------------------------------------
+  22  ; A reachable, non-degenerate witness: the composed store driven from its
+  23  ; initial state through allocation, staging, publication and finish, with a
+  24  ; record whose Message-ID, archive identity, content subject and release
+  25  ; evidence are four different strings across two groups.
+  26  
+  27  (defconst *snt-groups* &#x27;(&quot;fn.letters&quot; &quot;fn.test&quot;))
+  28  (defconst *snt-record*
+  29    (fn-record-make 0 0 0 &quot;&lt;sn@example&gt;&quot; &#x27;(65 66) *snt-groups*
+  30                    &quot;sn-pin&quot; &quot;sn-content&quot; &quot;sn-release&quot; 2))
+  31  
+  32  (defconst *snt-reserved*
+  33    (fn-sn-io (fn-sn-io (fn-sn-io (fn-sn-io (fn-sn-initial *snt-groups* 10)
+  34                                            :start-frontier nil)
+  35                                  :frontier-file :ok)
+  36                        :frontier-replace :ok)
+  37              :frontier-directory :ok))
+  38  (defconst *snt-prepared* (fn-sn-prepare *snt-reserved* *snt-record*))
+  39  (defconst *snt-record-durable* (fn-sn-io *snt-prepared* :record-file :ok))
+  40  (defconst *snt-record-attempted* (fn-sn-io *snt-record-durable* :record-link :ok))
+  41  (defconst *snt-completing* (fn-sn-io *snt-record-attempted* :record-directory :ok))
+  42  (defconst *snt-finished* (fn-sn-finish *snt-completing*))
+  43  
+  44  (assert-event (fn-sn-statep *snt-prepared*))
+  45  (assert-event (fn-sn-statep *snt-record-durable*))
+  46  (assert-event (fn-sn-statep *snt-completing*))
+  47  (assert-event (fn-sn-statep *snt-finished*))
+  48  (assert-event (fn-sn-record-bindsp (fn-sn-node *snt-prepared*) *snt-record*))
+  49  (assert-event (equal (fn-sf-phase (fn-sn-files *snt-record-durable*))
+  50                       :record-data-durable))
+  51  (assert-event (equal (fn-sf-phase (fn-sn-files *snt-completing*)) :completing))
+  52  (assert-event (equal (fn-sf-phase (fn-sn-files *snt-finished*)) :ready))
+  53  
+  54  ; Non-degenerate: the record binds on every field, and the four identities in
+  55  ; it are distinct, so a relation that compared only one of them would not do.
+  56  (assert-event (not (equal (fn-record-msgid *snt-record*)
+  57                            (fn-record-content-subject *snt-record*))))
+  58  (assert-event (not (equal (fn-record-obligation-id *snt-record*)
+  59                            (fn-record-release-evidence *snt-record*))))
+  60  
+  61  ; The success appears only at finish, and the record is committed by it.
+  62  (assert-event (null (fn-sf-successes (fn-sn-files *snt-completing*))))
+  63  (assert-event (equal (fn-sf-successes (fn-sn-files *snt-finished*)) &#x27;((0 . 0))))
+  64  (assert-event (fn-sn-committed-recordp (fn-sn-node *snt-finished*) *snt-record*))
+  65  (assert-event (equal (fn-sn-finish *snt-finished*) *snt-finished*))
+  66  
+  67  ; -----------------------------------------------------------------------------
+  68  ; Teeth for `fn-sn-actual-durable-completion-installs-record&#x27;
+  69  ;   (implies (fn-sn-record-bindsp node record)
+  70  ;            (fn-sn-committed-recordp
+  71  ;             (fn-node-complete node (fn-record-txid record)
+  72  ;                               (fn-record-generation record) :durable)
+  73  ;             record))
+  74  
+  75  ; The sole hypothesis dropped.  A record that differs from the staged one in a
+  76  ; single field -- the payload -- shares its sequence, transaction and
+  77  ; generation, so the completion it names still fires; what it does not do is
+  78  ; commit the record it claims.
+  79  (defconst *snt-other-record*
+  80    (fn-record-make 0 0 0 &quot;&lt;sn@example&gt;&quot; &#x27;(99) *snt-groups*
+  81                    &quot;sn-pin&quot; &quot;sn-content&quot; &quot;sn-release&quot; 2))
+  82  (assert-event
+  83   (equal (fn-record-txid *snt-other-record*) (fn-record-txid *snt-record*)))
+  84  (assert-event
+  85   (equal (fn-record-generation *snt-other-record*)
+  86          (fn-record-generation *snt-record*)))
+  87  (assert-event
+  88   (not (fn-sn-record-bindsp (fn-sn-node *snt-prepared*) *snt-other-record*)))
+  89  
+  90  (assert-event (with-guard-checking :none (not (fn-sn-committed-recordp
+  91       (fn-node-complete (fn-sn-node *snt-prepared*)
+  92                         (fn-record-txid *snt-other-record*)
+  93                         (fn-record-generation *snt-other-record*)
+  94                         :durable)
+  95       *snt-other-record*))))
+  96  
+  97  ; -----------------------------------------------------------------------------
+  98  ; Teeth for `fn-sn-new-success-requires-actual-matching-durable-node-completion&#x27;</pre></details><details id="fold"><summary>The inductive append law and its served bridge<small>books/served.lisp · L894–939</small></summary><p class="hash">File SHA-256 b6e8930785d476ac4bc4e8cc6b5de58540f7375c1fd936b07fdc5bad843fd885</p><pre> 894           (fn-served-make-result
+ 895            (fn-served-result-conn
+ 896             (fn-served-feed (fn-served-result-conn (fn-served-feed conn left))
+ 897                             right))
+ 898            (append
+ 899             (fn-served-result-effects (fn-served-feed conn left))
+ 900             (fn-served-result-effects
+ 901              (fn-served-feed (fn-served-result-conn (fn-served-feed conn left))
+ 902                              right)))))
+ 903    :hints ((&quot;Goal&quot; :induct (fn-served-feed conn left)
+ 904             :in-theory (disable fn-served-dispatch-events fn-wire-feed-byte
+ 905                                 fn-wire-statep))))
+ 906  
+ 907  (local
+ 908   (defthm fn-served-feed-of-closed-wire
+ 909     (implies (fn-served-closed-wirep (fn-served-conn-wire conn))
+ 910              (equal (fn-served-feed conn octets)
+ 911                     (fn-served-make-result conn nil)))
+ 912     :hints ((&quot;Goal&quot; :expand ((fn-served-feed conn octets))))))
+ 913  
+ 914  (defthm fn-served-step-partition-independence
+ 915    (implies (and (fn-served-connp conn)
+ 916                  (fn-wire-octet-listp left)
+ 917                  (fn-wire-octet-listp right))
+ 918             (equal (fn-served-step conn (append left right))
+ 919                    (fn-served-make-result
+ 920                     (fn-served-result-conn
+ 921                      (fn-served-step
+ 922                       (fn-served-result-conn (fn-served-step conn left)) right))
+ 923                     (append
+ 924                      (fn-served-result-effects (fn-served-step conn left))
+ 925                      (fn-served-result-effects
+ 926                       (fn-served-step
+ 927                        (fn-served-result-conn (fn-served-step conn left))
+ 928                        right))))))
+ 929    :hints ((&quot;Goal&quot;
+ 930             :do-not-induct t
+ 931             :cases ((fn-served-closed-wirep
+ 932                      (fn-served-conn-wire
+ 933                       (fn-served-result-conn (fn-served-feed conn left)))))
+ 934             :in-theory (disable fn-served-feed fn-wire-statep fn-served-connp
+ 935                                 fn-served-feed-preserves-wire-statep
+ 936                                 fn-served-feed-preserves-connp)
+ 937             :use ((:instance fn-served-feed-preserves-wire-statep
+ 938                              (octets left))
+ 939                   (:instance fn-served-connp-is-wire-state (c conn))))))</pre></details><details id="owner-call"><summary>The actual host calls the composed read<small>host/owner-host.lisp · L455–467</small></summary><p class="hash">File SHA-256 62e5cb2003ae5d060a254b48c1dde2e087309a719303038a61aa0659ca987d00</p><pre> 455  ; One socket read of one connection is one fn-own-read: fn-served-step over
+ 456  ; the connection&#x27;s wire, session and pinned archive
+ 457  ; (fn-own-read-is-served-step-on-pinned-prefix).  The whole chunk is
+ 458  ; consumed; there is no suffix and no loop in Python.
+ 459  (defun fn-owner-chunk (id octets state)
+ 460    (declare (xargs :stobjs state :mode :program))
+ 461    (let ((owner (f-get-global &#x27;fn-owner state)))
+ 462      (if (not (fn-own-find-conn id (fn-own-conns owner)))
+ 463          (value :unknown)
+ 464        (let* ((result (fn-own-read owner id octets))
+ 465               (state (f-put-global &#x27;fn-owner (cdr result) state))
+ 466               (state (fn-owner-install-effects (car result) state)))
+ 467          (value :ok)))))</pre></details><details id="owner"><summary>The repaired owner entry point<small>books/owner.lisp · L589–609</small></summary><p class="hash">File SHA-256 aa682a1f5833c7a27b8ca1ff49fa9df52cee2cafcc00e00726ce1c186fa7e6ea</p><pre> 589  (defun fn-own-open (o)
+ 590    (declare (xargs :guard t))
+ 591    (if (&lt; (len (fn-own-conns o)) (nfix (fn-own-max-conns o)))
+ 592        (let* ((view (fn-own-view o))
+ 593               (archive (fn-own-view-archive view))
+ 594               (id (fn-own-next-id o))
+ 595               (opened (fn-served-open archive *fn-nntp-max-initial-line-octets*
+ 596                                       *fn-own-body-limit* (fn-own-config o)
+ 597                                       (fn-own-clock o) (fn-own-clock o)))
+ 598               (sconn (fn-served-result-conn opened))
+ 599               (conn (fn-own-conn-make id (fn-own-view-version view)
+ 600                                       (fn-own-view-frontier view)
+ 601                                       (fn-served-conn-wire sconn)
+ 602                                       (fn-served-conn-session sconn)
+ 603                                       archive (fn-own-config o) (fn-own-clock o))))
+ 604          (cons (fn-served-result-effects opened)
+ 605                (fn-own-make (fn-own-store o) view (cons conn (fn-own-conns o))
+ 606                             (1+ (nfix id)) (fn-own-max-conns o) (fn-own-pending o)
+ 607                             (fn-own-ledger o) (fn-own-clock o) (fn-own-facts o) (fn-own-config o) (fn-own-queue o) (fn-own-inflight o))))
+ 608      (cons nil o)))
+ 609  </pre></details><details id="owner-read"><summary>The owner reaches the served byte fold<small>books/owner.lisp · L674–707</small></summary><p class="hash">File SHA-256 aa682a1f5833c7a27b8ca1ff49fa9df52cee2cafcc00e00726ce1c186fa7e6ea</p><pre> 674  (defun fn-own-read (o id octets)
+ 675    (declare (xargs :guard t))
+ 676    (let ((conn (fn-own-find-conn id (fn-own-conns o))))
+ 677      (if conn
+ 678          (let* ((result (fn-served-step (fn-served-make-conn (fn-own-conn-wire conn)
+ 679                                                              (fn-own-conn-session conn)
+ 680                                                              (fn-own-conn-archive conn)
+ 681                                                              (fn-own-conn-config conn)
+ 682                                                              (fn-own-conn-observation conn)
+ 683                                                              (fn-own-clock o))
+ 684                                         octets))
+ 685                 (effects (fn-served-result-effects result))
+ 686                 (sconn (fn-served-result-conn result))
+ 687                 (next (fn-own-conn-make (fn-own-conn-id conn)
+ 688                                         (fn-own-conn-version conn)
+ 689                                         (fn-own-conn-frontier conn)
+ 690                                         (fn-served-conn-wire sconn)
+ 691                                         (fn-served-conn-session sconn)
+ 692                                         (fn-own-conn-archive conn)
+ 693                                         (fn-own-conn-config conn)
+ 694                                         (fn-own-conn-observation conn)))
+ 695                 (decision (fn-served-submission effects)))
+ 696            (cons effects
+ 697                  (if (fn-own-conn-boundedp next (fn-sn-groups (fn-own-store o)))
+ 698                      (let ((o2 (fn-own-set-conns o (fn-own-replace-conn next (fn-own-conns o)))))
+ 699                        (if decision
+ 700                            (fn-own-enqueue o2 (fn-own-sub-make id (fn-own-conn-version conn)
+ 701                                                                nil decision))
+ 702                          o2))
+ 703                    (fn-own-set-conns o (fn-own-remove-conn id (fn-own-conns o))))))
+ 704        (cons nil o))))
+ 705  
+ 706  ; The per-event law under the served port: one framed wire event is one
+ 707  ; fn-served-dispatch (fn-nntp-post-step with the article-mode switch,</pre></details><details id="reader"><summary>Whole-archive validation removed from individual commands<small>specs/nntp-audit.md · L53–89</small></summary><p class="hash">File SHA-256 f3e0956dfcc38a70d014e2936b349b5c6baf52c25a708726a2828e6e019211eb</p><pre>  53  The reader now separates three things.
+  54  
+  55  **Configuration, decided once.** `fn-nntp-projectionp` is now a configuration
+  56  recognizer: the acceptance state recognizer, group names that a response can
+  57  render (nonempty printable US-ASCII, at most 460 octets), watermarks inside RFC
+  58  3977 §6&#x27;s range, and an article capacity of at most 2,147,483,647.
+  59  `fn-nntp-open-session` evaluates it once, when the reader opens a connection
+  60  (`host/reader-host.lisp` `fn-reader-reset`), and stores the verdict as the
+  61  session&#x27;s fourth field. `fn-nntp-step-preserves-carried-projection` states that
+  62  every step returns a session with the same verdict, and
+  63  `fn-nntp-finite-trace-preserves-carried-projection` lifts that to finite traces.
+  64  No command re-runs `fn-nntp-projectionp`.
+  65  
+  66  **Commands that do not read the archive.** `fn-nntp-command` dispatches
+  67  CAPABILITIES, HELP, QUIT, an unrecognized keyword, and a syntax error through
+  68  `fn-nntp-session-command`, which takes no archive argument.
+  69  `fn-nntp-archive-free-step-ignores-the-archive` states that for any command line
+  70  whose keyword is not one of the nine archive commands, the step&#x27;s result is the
+  71  same for every archive. No committed article and no configuration can deny those
+  72  commands. When the carried verdict is false, only the nine archive commands
+  73  answer `503 archive projection unavailable`, which is RFC 3977 §3.2.1&#x27;s code for
+  74  a recognized command whose required information the server does not hold.
+  75  
+  76  **Articles that degrade only themselves.** Per-article checks are split by what
+  77  a response actually needs. `fn-nntp-article-idp` is the bounded identifier check
+  78  (a string of at most 250 octets forming a valid `message-id`); STAT, NEXT and
+  79  LAST need only this. `fn-nntp-article-framedp` is the payload check (CRLF-framed
+  80  throughout, carrying no NUL, and containing a header/body separator); only
+  81  ARTICLE, HEAD and BODY need it.
+  82  
+  83  | Situation | Response | Effect on the group |
+  84  | --- | --- | --- |
+  85  | Identifier not renderable | `503 stored article identifier unavailable` to ARTICLE/HEAD/BODY/STAT naming its number | Excluded from the count, the water marks, LISTGROUP, and NEXT/LAST |
+  86  | Identifier fine, payload not framed | `503 stored article framing unavailable` to ARTICLE/HEAD/BODY; STAT, NEXT and LAST succeed | Included; the number is real and STAT answers for it |
+  87  | Number outside RFC 3977 §6&#x27;s range | as &quot;identifier not renderable&quot; | Excluded |
+  88  
+  89  `fn-nntp-effects-article-response` is now unconditional in the article: the</pre></details><details id="sha"><summary>What the digest attachment proves<small>books/crypto-attach.lisp · L48–99</small></summary><p class="hash">File SHA-256 54a655456b13ce20957d519608c284d3f1ec81c3a364d274373dd632547e945e</p><pre>  48  ; the same predicate, and that is proved here rather than assumed.
+  49  
+  50  (local
+  51   (defthm fn-sha256-cbor-octet-listp-is-sha256-octet-listp
+  52     (equal (fn-cbor-octet-listp xs)
+  53            (fn-sha256-octet-listp xs))))
+  54  
+  55  ; -----------------------------------------------------------------------------
+  56  ; The constraints, discharged for the attachment.
+  57  ;
+  58  ; These are exactly the `defthm&#x27;s inside the two `encapsulate&#x27;s, with
+  59  ; `fn-sha256&#x27; in place of the constrained function.  `defattach&#x27; re-generates
+  60  ; them as proof obligations; proving them here as named events is what makes
+  61  ; the discharge citable rather than something that happened inside an event.
+  62  
+  63  (defthm fn-sha256-satisfies-fn-digest-shape
+  64    ; crypto-seam&#x27;s `fn-digest-shape&#x27;.
+  65    (fn-digest-octetsp (fn-sha256 m))
+  66    :hints ((&quot;Goal&quot; :in-theory (enable fn-digest-octetsp))))
+  67  
+  68  (defthm fn-sha256-satisfies-fn-frame-digest-octet-listp
+  69    ; frame-octets&#x27; `fn-frame-digest-octet-listp&#x27;.
+  70    (fn-cbor-octet-listp (fn-sha256 octets)))
+  71  
+  72  (defthm fn-sha256-satisfies-fn-frame-digest-length
+  73    ; frame-octets&#x27; `fn-frame-digest-length&#x27;.  *fn-frame-trailer-octets* is 32.
+  74    (equal (len (fn-sha256 octets)) *fn-frame-trailer-octets*))
+  75  
+  76  ; No constraint of either `encapsulate&#x27; is stronger than 32 octets: the seams
+  77  ; ask for shape and for nothing else, which is why the discharge is three
+  78  ; lines and not a research programme.  If a later constraint is added that
+  79  ; SHA-256 does not provide, that is a finding about the seam to be recorded,
+  80  ; never a constraint to weaken.
+  81  
+  82  ; -----------------------------------------------------------------------------
+  83  ; The attachments.
+  84  
+  85  (defattach fn-digest fn-sha256)
+  86  (defattach fn-frame-digest fn-sha256)
+  87  
+  88  ; -----------------------------------------------------------------------------
+  89  ; The coercion is the identity on the domain fn actually digests.
+  90  ;
+  91  ; `fn-sha256&#x27; is total because `fn-digest&#x27; is constrained over ANY object, so
+  92  ; it fixes its argument to octets first.  Every preimage fn digests is an
+  93  ; octet list -- the tagged preimages of crypto-seam, the protected prefix of a
+  94  ; frame, the subject and obligation preimages of books/identity.lisp -- and on
+  95  ; those the fixer does nothing.  Without this theorem, &quot;fn-digest is SHA-256&quot;
+  96  ; would be a claim about a coerced argument rather than about the octets the
+  97  ; caller passed.
+  98  
+  99  (defthm fn-sha256-fix-octets-is-identity</pre></details><details id="architecture"><summary>The broader architecture claim<small>docs/architecture.md · L1–95</small></summary><p class="hash">File SHA-256 05cea9fe56517a623b51afe2ec433c4fa77ed02475abc55fe7fc48b84b68f0fa</p><pre>   1  # Architecture
+   2  
+   3  Status: agreed architectural direction with explicitly provisional realization
+   4  choices. See [decisions](../planning/decisions.md) for their individual status.
+   5  
+   6  ## Purpose
+   7  
+   8  Provide a communications nexus for humans and AIs that remains useful when peers
+   9  are asleep, disconnected, far away, or reachable only by carried media. Articles
+  10  are ordinary news content. A site can accept local work without consulting a
+  11  remote quorum. Future extraterrestrial use motivates long-delay operation and
+  12  explicit resource accounting; it is not a current qualification claim.
+  13  
+  14  The central questions are: what does this node have, why does it keep it, what
+  15  has it undertaken to do, and what evidence permits it to release that obligation?
+  16  
+  17  ## Composition
+  18  
+  19  ```mermaid
+  20  flowchart TB
+  21      U[Humans and agents] --&gt; N[Local NNTP interface]
+  22      N --&gt; C[Executable ACL2 core]
+  23      C --&gt; S[Objects, journal, checkpoints]
+  24      C --&gt; R[Replication batches and receipts]
+  25      R --&gt; P[Connected peers]
+  26      R --&gt; M[Carried media]
+  27      R --&gt; B[Bundle Protocol adapter]
+  28      B --&gt; L[LTP or another convergence layer]
+  29  ```
+  30  
+  31  The core makes semantic decisions. A Common Lisp host performs socket and disk
+  32  operations, reports their outcomes, and supplies environmental observations.
+  33  The core does not receive arbitrary Lisp forms from a client. Its conceptual
+  34  interface is `step(state, event) -&gt; (state&#x27;, effects)`; the exact event schema is
+  35  an M1 deliverable, not an already frozen API.
+  36  
+  37  The domain state is fn&#x27;s state, not a requirement to thread ACL2&#x27;s global `state`
+  38  through every definition. Clock readings, connection arrivals, and disk results
+  39  are explicit inputs. The core can therefore be executed against a simulator.
+  40  
+  41  ## Components and ownership
+  42  
+  43  | Component | Owns |
+  44  | --- | --- |
+  45  | Article model | Source bytes, identity bindings, provenance, membership policy |
+  46  | News/session machine | Framing, commands, cursor transitions, response decisions |
+  47  | Storage machine | Transactions, committed state, recovery, checkpoint/compaction rules |
+  48  | Retention machine | Reservations, obligations, evidence, release eligibility |
+  49  | Replication machine | Inventories, batches, duplicate suppression, transfer progress |
+  50  | Host adapter | I/O, platform barriers, scheduling, primitive integration |
+  51  | Presentation clients | Thread rendering, MIME display, search UI, local drafts |
+  52  
+  53  These are logical boundaries, not an initial requirement for separate processes.
+  54  The initial shared-state owner serializes mutations. Connections may receive
+  55  data concurrently and stage bounded inputs; they do not independently allocate
+  56  numbers or install snapshots. Only one shared-state transaction commits at a time.
+  57  Read responses observe a committed version; their referenced objects stay pinned
+  58  until the host finishes or cancels the response.
+  59  
+  60  BPv7 is an active inter-node communication path, developed alongside the local
+  61  NNTP service. Its adapter separates protocol implementation and trust boundaries;
+  62  it does not postpone disconnected operation. Durable fn jobs, attempt identities,
+  63  inbound staging and application receipts are part of this path. See the
+  64  [BP integration contract](../specs/bp-path.md).
+  65  
+  66  ## Three representations
+  67  
+  68  The logical model uses finite maps, records, sets, natural numbers, and octets.
+  69  The executable representation may use indexed arrays and abstract stobjs with
+  70  correspondence proofs. Persistent bytes follow a separately versioned format.
+  71  These layers must not accidentally define one another&#x27;s identity or ordering.
+  72  
+  73  Articles and statements are portable. Journal sequence numbers, disk offsets,
+  74  NNTP article numbers, cache contents, and filesystem paths are local.
+  75  Replication exchanges portable objects and statements, never raw database pages.
+  76  
+  77  ## Trust boundary
+  78  
+  79  The intended proof subject is the executable core plus its specified codecs,
+  80  recovery, and storage algorithms. The initial trusted boundary includes ACL2,
+  81  its host Lisp/runtime, cryptographic primitive implementations, the I/O adapter,
+  82  and stated platform assumptions. Claims grow only as refinement and integration
+  83  evidence appear. See [failures](../specs/failures.md) and [proofs](proofs.md).
+  84  
+  85  **The digest left that boundary on 2026-09-20.** `books/sha256.lisp` defines
+  86  FIPS 180-4 SHA-256 over octet lists as a total, guard-verified ACL2 function,
+  87  and `books/crypto-attach.lisp` attaches it to both digest seams — `fn-digest`
+  88  (`books/crypto-seam.lisp`) and `fn-frame-digest` (`books/frame-octets.lisp`) —
+  89  after discharging every constraint each `encapsulate` states. So the digest is
+  90  now **computed in logic by a proved-executable definition**: no host SHA-256
+  91  stands behind a content identity, an AUTHINFO verifier or a frame the core
+  92  reasons about, and the identity derivation has one owner. Agreement with the
+  93  standard is by evaluation against the published vectors
+  94  (`tests/acl2/sha256-tests.lisp`), which is evidence, not a proof that the
+  95  definition and the document agree on every input.</pre></details><details id="frame-python"><summary>The remaining Python framing digest<small>tools/frame_bridge.py · L149–160</small></summary><p class="hash">File SHA-256 7345aa0ceca463e9c73b6a0e74fff1271a2792061e16d59533fbb99f14b1792c</p><pre> 149      # -- framing ------------------------------------------------------------
+ 150  
+ 151      def seal(self, prefix: bytes) -&gt; bytes:
+ 152          &quot;&quot;&quot;Append the integrity trailer over the prefix ACL2 produced.&quot;&quot;&quot;
+ 153          return prefix + hashlib.sha256(prefix).digest()
+ 154  
+ 155      def digest_of(self, framed: bytes) -&gt; bytes:
+ 156          &quot;&quot;&quot;The digest a decoder must be given for these stored octets.&quot;&quot;&quot;
+ 157          trailer = self.constants[&quot;trailer&quot;]
+ 158          if len(framed) &lt; trailer:
+ 159              return b&quot;&quot;
+ 160          return hashlib.sha256(framed[:-trailer]).digest()</pre></details><details id="frame-lisp"><summary>The remaining native framing digest<small>host/native/io.lisp · L754–767</small></summary><p class="hash">File SHA-256 7a3c6d8882f5681c553be378cc9b59ad1f2f7e723369f7f07b5a2ab5c7f34a64</p><pre> 754  (defun fnn-constant (name) (cdr (assoc name (fnn-constants))))
+ 755  
+ 756  (defun fnn-seal (prefix)
+ 757    (concatenate &#x27;fnn-octets (fnn-octets prefix) (fnn-sha256 prefix)))
+ 758  
+ 759  (defun fnn-digest-of (framed)
+ 760    (if (&lt; (length framed) (fnn-constant :trailer))
+ 761        nil
+ 762        (fnn-octet-list (fnn-sha256 (subseq framed 0 (- (length framed) (fnn-constant :trailer)))))))
+ 763  
+ 764  (defun fnn-frame (record)
+ 765    &quot;ACL2 builds the protected prefix; the host appends the integrity trailer.&quot;
+ 766    (let ((value (fnn-core &#x27;fn-store-frame-store-protected (fnn-octet-list record))))
+ 767      (when (or (keywordp value) (not (fnn-octet-list-p value)))</pre></details><details id="auth-secret"><summary>The proposed verifier and its claimed scope<small>books/auth-secret.lisp · L1–45</small></summary><p class="hash">File SHA-256 09599f128c05ec547c9bffcfd83d0838f157a775c973d8009e67456664f77e85</p><pre>   1  ; fn: the AUTHINFO stored-credential scheme (RFC 4643 section 2.3).
+   2  ;
+   3  ; Before this book the AUTHINFO credential held its secret IN THE CLEAR and
+   4  ; the comparison was `equal&#x27; on the octets, for a reason recorded in
+   5  ; books/nntp-auth.lisp and on the deputy board as OB-AUTH-DIGEST: fn&#x27;s only
+   6  ; digest was a constrained function with no attachment, so a digest on the
+   7  ; served path would have made `fn-served-step&#x27; non-executable, and deriving
+   8  ; it in Python is refused by the one-owner rule.  `books/crypto-attach.lisp&#x27;
+   9  ; removed that wall.  This book is the scheme; `books/nntp-auth.lisp&#x27; calls
+  10  ; `fn-authsec-checkp&#x27; where it used to call `equal&#x27;.
+  11  ;
+  12  ; THE SCHEME, exactly (specs/nntp.md, &quot;The stored AUTHINFO credential&quot;):
+  13  ;
+  14  ;   salt      : exactly 16 octets, per credential, chosen at enrolment
+  15  ;   preimage  : salt || secret                (the salt&#x27;s length is fixed, so
+  16  ;                                              the boundary is unambiguous;
+  17  ;                                              see -preimage-injective below)
+  18  ;   stored    : (:fn-authsec-v1 salt (fn-digest-tagged &quot;fn-authinfo-v1&quot;
+  19  ;                                                      preimage))
+  20  ;   check     : the supplied octets pass iff re-deriving the digest under the
+  21  ;               stored salt yields the stored digest
+  22  ;
+  23  ; The tag is the crypto seam&#x27;s domain separation: an AUTHINFO digest and a
+  24  ; content identity digest never share a preimage, whatever their messages
+  25  ; (books/crypto-seam.lisp, `fn-digest-tagged-preimage-injective&#x27;).
+  26  ;
+  27  ; WHAT IS PROVED AND WHAT IS NOT.  Proved here: the enrolled secret always
+  28  ; checks; the stored verifier is not an octet list at all, so the slot that
+  29  ; used to carry the secret cannot carry one; the stored digest is 32 octets
+  30  ; whatever the secret, so it does not even reveal the secret&#x27;s length; and
+  31  ; the preimage recovers (salt, secret).  NOT proved, and not provable in this
+  32  ; logic: that a WRONG secret is rejected.  That is second-preimage resistance
+  33  ; of the attached digest -- A-CRYPTO (specs/failures.md) -- and the seam&#x27;s
+  34  ; own local witness is a constant digest under which every secret passes.
+  35  ; The test book exhibits rejection as a witness on concrete octets, which is
+  36  ; evidence about those octets and nothing more.
+  37  ;
+  38  ; This book also does not make AUTHINFO USER/PASS safe on an unprotected
+  39  ; connection: the secret still crosses the wire in the clear, which is why
+  40  ; RFC 4643 section 2.3.2 asks for a protected channel and why
+  41  ; `fn-auth-config-protected-onlyp&#x27; answers 483 until STARTTLS has run.  What
+  42  ; changes is what an operator&#x27;s configuration file, and a stolen copy of it,
+  43  ; contains.
+  44  
+  45  (in-package &quot;ACL2&quot;)</pre></details><details id="auth-call"><summary>The actual AUTHINFO comparison<small>books/nntp-auth.lisp · L377–383</small></summary><p class="hash">File SHA-256 4370ef936827dcba4fcb9d71b02670a4dd28a2f9cce9627ba176505ac3cb2cad</p><pre> 377  (defun fn-auth-checkp (cred secret)
+ 378    ; The whole of the password comparison, in ACL2.  See the header: the
+ 379    ; configuration holds the secret, not a digest, because fn&#x27;s only digest
+ 380    ; cannot be evaluated.
+ 381    (declare (xargs :guard t))
+ 382    (and (consp cred) (equal (fn-auth-cred-secret cred) secret) t))
+ 383  </pre></details><details id="auth-wire"><summary>Authentication is not yet in the served path<small>planning/lanes/HANDOFF-w9-server-polish.md · L57–100</small></summary><p class="hash">File SHA-256 9d2cc7f21ba3213f95790eae1b14aba4c588eec8c9dbfc52f36695c82a1c7825</p><pre>  57  stop serving. Deriving the digest in Python is refused by the one-owner rule.
+  58  Next step: a `defattach` for `fn-digest`, or an ACL2 definition of a real hash.
+  59  Owner: the substrate cluster. Nothing in `books/nntp-auth.lisp` changes.
+  60  
+  61  **`books/nntp-auth.lisp` is NOT wired into `books/served.lisp`.** The book is
+  62  a Makefile root of its own and certifies (or fails) standalone; the served fold
+  63  still calls `fn-peer-step`. The wiring is mechanical and was scoped out when
+  64  the lane&#x27;s ACL2 budget went to the XPAT chain. Exactly:
+  65  - `books/served.lisp`: `(include-book &quot;peer-inbound&quot;)` -&gt; `&quot;nntp-auth&quot;`;
+  66    every `fn-peer-step` -&gt; `fn-auth-step`; every
+  67    `fn-peer-session-consistentp` -&gt; `fn-auth-session-consistentp`;
+  68    `fn-peer-open-session-is-consistent` -&gt; `fn-auth-open-session-is-consistent`;
+  69    `(fn-peer-open-session archive nil nil nil)` -&gt;
+  70    `(fn-auth-open-session archive nil nil nil (fn-auth-open-config) nil)`;
+  71    `fn-served-open-peer` gains `acfg` and `tlsp` and passes them through;
+  72    `fn-served-post-outcome`&#x27;s `(fn-peer-session-base (fn-served-conn-session c))`
+  73    gains an `fn-auth-session-base` inside it; and
+  74    `fn-served-typed-effect-enumeration-by-definition` (`:rule-classes nil`)
+  75    gains the `(fn-auth-starttls-effect)` disjunct.
+  76  - A new `fn-served-open-access` taking `acfg` and `tlsp` keeps `fn-served-open`&#x27;s
+  77    seven call sites (owner.lisp:591, owner-invariants.lisp:399, owner-tests
+  78    420/452/492, served-tests 67/373) untouched.
+  79  No served keystone STATEMENT changes; the proofs need `fn-peer-step` renamed in
+  80  their hints, which is what `books/peer-inbound.lisp` already did to
+  81  `books/nntp-post.lisp` when it was inserted.
+  82  
+  83  **The owner bridge does not carry the STARTTLS effect.** `fn-owner-chunk`
+  84  publishes `fn-owner-closep` and `fn-owner-submittedp`; it needs a third,
+  85  `fn-owner-starttlsp`, set from `(fn-served-submission ...)`-style inspection of
+  86  the effect list in `host/owner-host.lisp` (`:program` mode, no proof), and
+  87  `tools/run_owner.py` then calls `sock = context.wrap_socket(sock, server_side=True)`
+  88  after flushing the 382. Until then the only TLS on the wire is the implicit
+  89  listener, which is what `tests/test_owner.py` exercises. **AUTHINFO is
+  90  therefore not reachable over a socket yet**: the credentials also need to reach
+  91  `fn-served-open-access` through the same bridge.
+  92  
+  93  **`fn-served-feed` has one stopping condition.** RFC 4642 §2.2 makes STARTTLS
+  94  un-pipelineable and the handshake begin at the first octet after the 382&#x27;s
+  95  CRLF, so octets after the command line in the same read are TLS bytes. The fold
+  96  would frame them as NNTP. `tools/run_owner.py` discards the remainder, which
+  97  §2.2 permits, but that is a host decision about octets. The fix is a second
+  98  stopping condition carried in the connection exactly as the closed wire is; the
+  99  effect to key on already exists. Recorded in `specs/nntp.md`.
+ 100  </pre></details><details id="statement-toy"><summary>The statement CLI loads toy crypto<small>tools/stx.py · L1–54</small></summary><p class="hash">File SHA-256 c0e15150c6127169c79085ccfecdd5bcc9722569cc4cefac5a2487895612f2b4</p><pre>   1  &quot;&quot;&quot;The host side of the FN-Statement carrier.
+   2  
+   3  Nothing here computes what ACL2 computes.  `books/stx-carrier.lisp` owns the
+   4  detached encoding, the base64 layer, the field value, the payload projection
+   5  and the bounds; `books/stx-verify.lisp` owns the verdict and its rendering.
+   6  This module starts an ACL2 session over those books, marshals octets in and
+   7  out of it, and prints what the session decided.  There is no second encoder
+   8  in Python, and no path here turns an exception into a verdict.
+   9  
+  10  The crypto seam is constrained (`books/crypto-seam.lisp`): a digest and a
+  11  signature scheme with shape constraints and one correctness property, and no
+  12  deployed realiser.  So the session attaches the TOY realisers of
+  13  `tests/acl2/crypto-seam-tests.lisp` -- a polynomial mix digest and a
+  14  sign-by-public-key scheme, neither cryptographic -- and every verdict this
+  15  tool prints is a statement about the codec and the composition, never about
+  16  unforgeability.  `tools/crypto_host.py` is the host&#x27;s one Ed25519 entry point
+  17  and is used by `sign --ed25519` to produce a real signature over the signing
+  18  preimage ACL2 computed, for the deployed profile; wiring that signature back
+  19  into an ACL2 verdict needs a digest realiser ACL2 can execute, which is D09&#x27;s
+  20  open question (specs/substrate-transport.md, &quot;What this design does not
+  21  decide&quot;).  Until it is answered, `verify` under the deployed profile is the
+  22  recipient&#x27;s own business and this tool reports the toy-realiser verdict only,
+  23  saying so on every line.
+  24  
+  25  Exit codes keep the three outcomes distinct (D13):
+  26      0  verified
+  27      3  unverified
+  28      4  absent
+  29      2  the tool could not reach a verdict at all (never an outcome)
+  30  &quot;&quot;&quot;
+  31  
+  32  from __future__ import annotations
+  33  
+  34  import argparse
+  35  import os
+  36  import subprocess
+  37  import sys
+  38  
+  39  ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+  40  sys.path.insert(0, ROOT)
+  41  
+  42  from tools.run_store import (  # noqa: E402
+  43      PROMPT, StoreError, acl2_result, decimal_list, read_prompt,
+  44  )
+  45  
+  46  EXIT_VERIFIED = 0
+  47  EXIT_UNVERIFIED = 3
+  48  EXIT_ABSENT = 4
+  49  EXIT_NO_VERDICT = 2
+  50  
+  51  _BOOKS = (
+  52      &#x27;(include-book &quot;tests/acl2/crypto-seam-tests&quot;)&#x27;,
+  53      &#x27;(include-book &quot;books/stx-invariants&quot;)&#x27;,
+  54  )</pre></details><details id="statement-sign"><summary>The Ed25519 signature is emitted separately<small>tools/stx.py · L131–148</small></summary><p class="hash">File SHA-256 c0e15150c6127169c79085ccfecdd5bcc9722569cc4cefac5a2487895612f2b4</p><pre> 131              &quot;:&quot; + args.kind, octet_form(payload))
+ 132          value = session.octets(&quot;(fn-stx-header-value {})&quot;.format(statement))
+ 133          if not value:
+ 134              raise SystemExit(&quot;ACL2 refused the statement: no field value&quot;)
+ 135          preimage = session.octets(
+ 136              &quot;(fn-stmt-signing-preimage (fn-stmt-header {}))&quot;.format(statement))
+ 137      finally:
+ 138          session.close()
+ 139      sys.stdout.write(&quot;FN-Statement: &quot; + value.decode(&quot;ascii&quot;) + &quot;\r\n&quot;)
+ 140      sys.stderr.write(&quot;creator {}\n&quot;.format(creator.hex()))
+ 141      if args.ed25519:
+ 142          from tools import crypto_host
+ 143          signature = crypto_host.sign(seed, preimage)
+ 144          sys.stderr.write(&quot;ed25519 signature over the ACL2 signing preimage: {}\n&quot;
+ 145                           .format(signature.hex()))
+ 146          sys.stderr.write(&quot;not attached: the deployed digest realiser is open (D09)\n&quot;)
+ 147      return 0
+ 148  </pre></details><details id="peering"><summary>Peering integration and recorded certification boundary<small>planning/lanes/HANDOFF-w9-peering-e2e.md · L32–83</small></summary><p class="hash">File SHA-256 3fde221cf12c38d26646b463e9205d483f86bb151907e9be07c81ba7a2a4bf69</p><pre>  32  `(fn-sched-eligiblep (fn-sched-find w (fn-sched-queue ss)) wf)` in its
+  33  *statement* and `fn-sched-aging-bound` (KEYSTONE) reaches the same test
+  34  through `fn-sched-eligible-runp`. Both are peer-blind. Filter selection by
+  35  the open contact&#x27;s peer and a promoted work for another peer is neither
+  36  selected nor moved closer to the head of the promotion queue: the
+  37  conclusions fail on a reachable state, and the only repair is an extra
+  38  argument to a function named inside a keystone. `books/scheduler-peers.lisp`
+  39  keys one scheduler per peer instead; the aging bound is then per contact,
+  40  which is what it always meant.
+  41  
+  42  ## Certification
+  43  
+  44  | Root | State | Evidence |
+  45  | --- | --- | --- |
+  46  | `books/scheduler-peers` | certified | persvati `run-20260920T180716Z-da35`, `build/acl2/certify-20260920T180719Z-1531308` |
+  47  | `tests/acl2/scheduler-peers-tests` | certified | same run |
+  48  | `books/owner`, `books/owner-invariants` | **uncertified, blocked on two other lanes&#x27; open forms** | persvati `run-20260920T180927Z-a8a4`, evidence `build/acl2/certify-20260920T180931Z-1553858`: 29 books published, and exactly six failed. Two are root causes and neither is this lane&#x27;s: `books/peer-config` fails at `DEFTHM FN-CFG-SET-PEER-DELTA-IS-ADMISSIBLE` (the form w6/peering-inbound-2 has already closed on its own branch, commit `3901d55`, not yet on dev) and `books/nntp-effects` has no certificate on dev: in THIS run it was cut by the runner&#x27;s 1800 s per-invocation cap (its log stops inside the XOVER block), and in w5/owner-followups&#x27; 5400 s run it reached a real verdict and FAILED at `fn-nntp-hdr-labelled-line-is-block-text`. So the owner is not one long run away: `books/nntp-effects` is genuinely open and `books/peer-inbound` includes `nntp-post` which includes it. The other four are cascades: `peer-inbound` and `nntp-post` include them, `served` includes `peer-inbound`, `owner` includes `served`. **Nothing in this lane&#x27;s owner edits has been refuted or confirmed**; the books were never reached. |
+  49  | everything else touched | host and Python only | `make check` green; `tests/test_twonode_gate.py` 19 tests pass |
+  50  
+  51  `tests/test_inn_lab.py` has one error on this branch and the SAME error on
+  52  dev (`inn_start`, the nnrpd pid parse, `IndexError`): pre-existing, verified
+  53  by running it in the dev checkout, not caused by this lane.
+  54  
+  55  ## What is open, with the obligation each needs
+  56  
+  57  1. **Certify the owner, after merging the two open forms.** Merge
+  58     `w6/peering-inbound-2` (its `fn-cfg-set-peer-delta-is-admissible` fix) and
+  59     whatever closes `books/nntp-effects`, then
+  60     `python3 tools/farm.py submit persvati --jobs 6 --remote-root
+  61     /home/ember/fn-lanes/w9-peering-e2e --closure books/owner
+  62     books/owner-invariants tests/acl2/owner-tests`. Until those two land, no
+  63     run of this lane&#x27;s owner books can reach a verdict: they are six levels
+  64     above the failing forms. Use `--timeout-seconds 5400` when you do:
+  65     `books/nntp-effects` needs about 2600 s and is cut silently at the default
+  66     1800 s, which reads as &quot;no certificate&quot; rather than as a failure.
+  67  2. **Teeth for the owner&#x27;s three transit theorems.** `tests/acl2/owner-tests.lisp`
+  68     needs a transit submission witness (a `(:transit peer kind msgid octets)`
+  69     at the head of the queue) and one violating value per hypothesis. Not
+  70     written in this lane.
+  71  3. **Milestone 3, the feed driven by the owner.** `books/peer-feed.lisp` had
+  72     not landed on dev at this HEAD. When it does: `fn-own-tick` runs
+  73     `fn-sched-table-tick` for each configured peer and `fn-feed-tick-step`
+  74     under that peer&#x27;s contact, with the FNFD journal durable before the offer,
+  75     and `tools/run_feed.py` folded into the owner&#x27;s loop (one process, one
+  76     store lock).
+  77  4. **Milestones 4 and 5&#x27;s outbound halves.** K5&#x27;s crash-replay evidence and
+  78     the gate&#x27;s A-feeds-B scenario both need the feed; today the gate&#x27;s
+  79     offering side is its own socket client, which is stated in the evidence
+  80     and in the spec&#x27;s status table.
+  81  5. **K6 and K7.** K6 restates `books/ideal.lisp`&#x27;s robustness theorems over
+  82     the peer event kinds (`(:open id peer)`, `:feed-octets`, `:tick`); K7 is
+  83     `fn-cfg-peer-delta-preserves-the-node-and-changes-only-decisions` at the</pre></details><details id="store-lane"><summary>A counterexample discovered in the crash model<small>planning/lanes/HANDOFF-w9-storage.md · L17–52</small></summary><p class="hash">File SHA-256 5f0e3ba957a7384c8e38ae874f734642f4388ec2c33ed745c407b41c622cd20d</p><pre>  17  ## What landed
+  18  
+  19  ### 1. `fn-bs-splice-composition`, and the model defect it found
+  20  
+  21  The obligation recorded against the open `fn-bs-view-is-an-admissible-image`
+  22  was the splice-composition lemma. It is proved:
+  23  
+  24  ```lisp
+  25  (defthm fn-bs-splice-composition
+  26    (implies (and (natp offset) (true-listp a))
+  27             (equal (fn-bs-splice (fn-bs-splice old offset a) (+ offset (len a)) b)
+  28                    (fn-bs-splice old offset (append a b)))))
+  29  ```
+  30  
+  31  with the nothing-lost choice list `fn-bs-view-choices` and its admissibility
+  32  (`fn-bs-view-choices-are-choices`), which is the witness the view theorem&#x27;s
+  33  `fn-bs-crash-imagep-suff` needs.
+  34  
+  35  **The view theorem was false as stated.** A pending `(:write ino offset NIL)`
+  36  has `fn-bs-unit-count` 0, so a crash tears it into no pieces at all, while
+  37  `fn-bs-apply-op` splices it and zero-extends the inode when the offset is
+  38  past the end. The view of `(:byte-store 4 ((0)) NIL ((:write 0 5 NIL)) 1)`
+  39  is five zero octets and no crash image of that state has them. `write(2)`
+  40  of zero octets changes nothing on POSIX and `fn-bs-write` issues no
+  41  operation for it, so `fn-bs-statep` now carries `fn-bs-writes-nonemptyp`,
+  42  with the eight preservation facts beside the `fn-bs-writes-knownp` ones.
+  43  
+  44  `fn-bs-view-is-an-admissible-image` is **still open**, not weakened, with a
+  45  smaller obligation stated at its place in `byte-store-invariants` and in
+  46  `specs/crash-model-v2.md` §7: two index facts (A1, A2) relating the i-th
+  47  unit piece to the octets pieces 0..i-1 covered. The induction on `i` is
+  48  right and its step is the composition lemma; it exhausts a 2,000,000 step
+  49  limit re-deriving A1 and A2 inside every branch of `fn-bs-tear-write`. State
+  50  them as `:linear` rules over a named `fn-bs-piece-start` and open the tear
+  51  by `:expand`.
+  52  </pre></details><details id="crash-lab"><summary>Model-backed campaign and exact limits<small>planning/evidence/campaign-model-images-2026-09-20.md · L1–69</small></summary><p class="hash">File SHA-256 5383ed44dfd58d1e5d6e16a727ed0f5a75bf67033f0d1e13b4ec83385d8499ce</p><pre>   1  # Campaign against the byte model: first run
+   2  
+   3  The fault campaign has always compared a recovered store with a *reference
+   4  run*. This run is the first in which the **byte-level crash model** says
+   5  what the recovered store is allowed to be, per cut, and the campaign checks
+   6  it. Every number below is a wall time on one host under its load at that
+   7  moment; none of it is a proof.
+   8  
+   9  ## What ran
+  10  
+  11  | fact | value |
+  12  | --- | --- |
+  13  | lane | `w9/storage`, branch `w9/storage` from `dev` at `52eb0db` |
+  14  | host | hbox (the coordinator moved proof and campaign work there: persvati was at load 9 with five queued runners and zero ACL2 processes) |
+  15  | tree | `/tank/fn/lanes/w9-storage` |
+  16  | acl2 | `/tank/fn/acl2-8.7/saved_acl2`, ACL2 8.7 |
+  17  | books | `books/byte-store`, `books/byte-store-invariants`, `books/byte-store-programs` certified: `build/acl2/certify-20260920T182231Z-1039695` |
+  18  | command | `FN_ACL2=... swarm-build python3 tests/campaign/campaign.py --quick --scenario cross-post --model-images --json build/probe/campaign-model.json` |
+  19  | result | `pairs=7 failures=0 seconds=97.4` |
+  20  | output | `/tank/fn/lanes/w9-storage/build/probe/campaign.out` |
+  21  
+  22  ## What the model said, per cut
+  23  
+  24  The model state at a cut is `fn-bs-run` over the program constant of
+  25  `books/byte-store-programs.lisp` applied to the imported template store; the
+  26  admissible set is the record counts over the whole-or-lost choices of that
+  27  state&#x27;s pending list.
+  28  
+  29  | cut | pending at the cut | model admits | host recovered |
+  30  | --- | --- | --- | --- |
+  31  | `store:frontier-staged-durable` | `(:SET-ENTRY :STAGING &quot;.allocation-campaign&quot; 8361628)` | `(1)` | 1 |
+  32  | `store:frontier-replaced` | the staging name, `(:SET-ENTRY :ROOT &quot;allocation-frontier.json&quot; ...)`, `(:DEL-ENTRY :STAGING ...)` | `(1)` | 1 |
+  33  | `store:record-staged-durable` | `(:SET-ENTRY :STAGING &quot;.stage-campaign&quot; 8361628)` | `(1)` | 1 |
+  34  | `store:record-linked` | the staging name and `(:SET-ENTRY :TRANSACTIONS &quot;campaign.txn&quot; ...)` | `(1, 2)` | 2 |
+  35  | `store:record-attempted` | the same two | `(1, 2)` | 2 |
+  36  | `store:recover-barrier` | `NIL` | `(1)` | 1 |
+  37  
+  38  `store:finish-durable` is the seventh pair and is not model-checked:
+  39  `Store.finish` issues no syscall, so `PROGRAM_OF` maps no program to it.
+  40  
+  41  **The check is not vacuous.** Four of the six sets have exactly one element,
+  42  so at those cuts the model pins the recovered record count rather than
+  43  permitting it: had the host published a record at `record-staged-durable`,
+  44  where `os.link` has not run, the run would have failed. The two two-element
+  45  sets are precisely the crash window the cut table describes in prose --
+  46  `final-link` issued and its reply not yet observed -- now computed from the
+  47  pending `:set-entry` on `:transactions` instead of asserted.
+  48  
+  49  ## What this run does NOT establish
+  50  
+  51  * **It is the namespace envelope, not §5.1&#x27;s check.** The recovered record
+  52    *octets* are not compared with what the killed process staged: that needs
+  53    `fn-bs-scan-store`, which is K1 and open. What is compared is the record
+  54    count, which is what `fn-sf-crash-imagep` constrains.
+  55  * **It enumerates rather than decides.** `fn-bs-image-admissiblep` and
+  56    `fn-bs-image-admissiblep-iff-crash-imagep` (§1.5) are open, so the harness
+  57    enumerates the whole-or-lost choices of the pending list. Torn *selections*
+  58    within a write are not enumerated; §5.2&#x27;s variant injector is the packet
+  59    that produces them on disk, and it was not written.
+  60  * **No known-bad host was run.** §5.5&#x27;s `FN_CAMPAIGN_UNSAFE=link-before-fsync`
+  61    demonstration -- the campaign-level tooth for K1 -- is not implemented.
+  62    The singleton sets above are an argument that the check constrains, not a
+  63    demonstration that it fails when the host is wrong.
+  64  * **Seven pairs, one scenario, `--quick`.** `bp-receive`, `bp-retry`,
+  65    `capacity-refusal` and `sender-enqueue` were not run with this flag, and
+  66    their journal and inbox cuts have model programs now but no `PROGRAM_OF`
+  67    entry, because a journal has no `fn-sf` kernel and the count the check
+  68    compares is the store&#x27;s.
+  69  * **Process death only.** No power-loss claim, on this or any run.</pre></details><details id="native-dtn"><summary>Native TCPCL is not yet the native BP node<small>planning/lanes/HANDOFF-w9-dtn-e2e.md · L51–100</small></summary><p class="hash">File SHA-256 d8b1266187d6f322e97e4e41a3075db836195775f82badebeb57a0960c64f423</p><pre>  51  - **Still open, with the exact obligation**: the *outbound* suffix. See
+  52    `specs/tcpcl.md` §6 — `fn-tcl-outboundp` measures `remaining`, so a send is
+  53    still quadratic, and closing it needs guard-total `fn-tcl-take`/`fn-tcl-drop`
+  54    or a carried `(len remaining)`. Named, not attempted.
+  55  
+  56  `tools/tcpcl_lab.py` gains a sixth scenario, `profile`: the same transfer at
+  57  64 KiB and 256 KiB, and the verdict is the *ratio* (a quadratic guard gives
+  58  about 16x for a 4x transfer; the bar is 8x), so a loaded box moves both
+  59  measurements together. `tools/twonode_gate.py`&#x27;s `tcpcl` scenario runs it.
+  60  
+  61  ## 2. What did not land, and what it needs
+  62  
+  63  **The BP node over TCPCL did not land.** Saying why precisely, because the
+  64  gap is not where the brief assumed:
+  65  
+  66  - `books/bp-node.lisp` does not exist. `fn-bpn-receive`, `fn-bpn-step` and the
+  67    FNBS record family are [specs/bp-design.md](../../specs/bp-design.md) §1.3–1.5
+  68    — a design with exact statements, explicitly &quot;not a claim&quot;. So is
+  69    `books/bp-bundle.lisp` (§1.4): **nothing in this tree encodes or decodes a
+  70    BPv7 bundle**, only its primary block (`books/bp-primary-cbor`). The
+  71    convergence layer therefore carries opaque octets, and `:bundle-received`
+  72    is a file in a spool directory, not a bundle record.
+  73  - The receiver entry that does exist is `host/bp-receipt-host.lisp`
+  74    (`fn-bpr-host-accept`, `-prepare-receipt`, `-commit-receipt`,
+  75    `-receipt-adu`) over `books/bp-receipt`, and it is driven today by
+  76    `tools/run_bp_receive.py` with an FNRJ journal — Python, not the image.
+  77    Wiring it into the image means the receiver state and its journal move into
+  78    the native host, which is the packet `host/bp-receive-host.lisp` +
+  79    `tools/receipt_journal.py` currently stand in for.
+  80  - `books/scheduler`, `books/bp-release` and `books/relay` are certified and
+  81    have the keystones the brief wants cited, but none of them is in the image&#x27;s
+  82    build list ([host/native/build.lisp](../../host/native/build.lisp)).
+  83  
+  84  So `bp send` / `bp receive` / `bp status` are not verbs on the image. Adding
+  85  them honestly is three packets, in this order: (a) `books/bp-bundle` per
+  86  bp-design §1.4, so that a transfer&#x27;s octets are a bundle and not a blob;
+  87  (b) the FNBS record family in `books/frame` and the receiver state in the
+  88  image; (c) the scheduler&#x27;s contact window as the gate on `fn-tcl-host-send`.
+  89  Doing (c) alone — a contact check around the existing `tcpcl send` — would
+  90  have been a verb that looks like a BP node and is not one.
+  91  
+  92  ## 3. Evidence: the image builds and the layer runs
+  93  
+  94  [`planning/evidence/tcpcl-dtn-w9-2026-09-20.md`](../evidence/tcpcl-dtn-w9-2026-09-20.md).
+  95  w8&#x27;s record had to say &quot;the image did not build, so none of the five
+  96  scenarios ran&quot;. On hbox, under `swarm-build`:
+  97  
+  98  - `books/tcpcl-session` certifies with this change in **156.17 s**.
+  99  - **`build/fn-host-dtn` builds** — `host/native/build-dtn.lisp`, the DTN-only
+ 100    variant of the build list (no `books/served`, no `books/nntp-effects`, no</pre></details><details id="tcpcl-lab"><summary>Native TCPCL and dtn7 laboratory evidence<small>planning/evidence/tcpcl-dtn-w9-2026-09-20.md · L1–210</small></summary><p class="hash">File SHA-256 5ab3800843321ed847962ba27ab8d8f10efccb722be4be30cbbd32e03d4b6f54</p><pre>   1  # Evidence: TCPCLv4 on the native image, and dtn7-rs interop (w9/dtn-e2e)
+   2  
+   3  Date 2026-09-20. Branch `w9/dtn-e2e` at `6024fe9` (dev merged to `d50c392`).
+   4  Box **hbox**, everything under `swarm-build`. ACL2 8.7
+   5  (`/tank/fn/acl2-8.7/saved_acl2`, &quot;This is SBCL 2.6.8&quot;); the system SBCL that
+   6  built the image is `SBCL 2.2.9.debian`. Remote root
+   7  `/tank/fn/lanes/w9-dtn-e2e`, certificate cache `/tank/fn/certcache`.
+   8  
+   9  **Headline, against w8&#x27;s:** the native image builds and the convergence layer
+  10  runs. `planning/evidence/tcpcl-9cbf301-2026-09-20.md` had to report &quot;the image
+  11  did not build, so none of the five scenarios ran&quot;. Six scenarios now run and
+  12  pass, and fn holds a TCPCLv4 session with dtn7-rs.
+  13  
+  14  ## 1. What certified
+  15  
+  16  | Book | Result | Wall | Evidence |
+  17  | --- | --- | --- | --- |
+  18  | `books/tcpcl-session` (this lane&#x27;s change) | certified | 156.17 s | `build/acl2/certify-20260920T180207Z-1003414/books--tcpcl-session.certify.log` |
+  19  | `books/anchor`, `-record`, `-invariants` + closure | certified | one run | `build/acl2/certify-20260920T181319Z-1024059` |
+  20  | `books/tcpcl-invariants`, `tests/acl2/tcpcl-tests` | see §6 | | `build/farm/w9inv.log` |
+  21  
+  22  Command: `FN_ACL2=/tank/fn/acl2-8.7/saved_acl2 FN_ACL2_TIMEOUT_SECONDS=3600
+  23  FN_CERT_CACHE=/tank/fn/certcache swarm-build python3 tools/certify_books.py
+  24  --jobs N &lt;roots&gt;`; the farm submit that installed the cache was
+  25  `run-20260920T180202Z-01c4` (`installed 180, kept 0, uncached 57`).
+  26  
+  27  ## 2. The image
+  28  
+  29  `build/fn-host-dtn`, 261,809,336-octet core, built by
+  30  
+  31  ```sh
+  32  FN_ACL2=/tank/fn/acl2-8.7/saved_acl2 \
+  33  FN_NATIVE_BUILD=host/native/build-dtn.lisp \
+  34  FN_NATIVE_IMAGE=build/fn-host-dtn \
+  35  FN_NATIVE_LOG=build/native-host-build-dtn.log \
+  36  swarm-build sh tools/build_native_host.sh
+  37  ```
+  38  
+  39  **This is the DTN-only image, not the deployment image**, and the difference
+  40  is stated because it bounds every claim below. `host/native/build-dtn.lisp`
+  41  omits `books/served`, `books/nntp-effects`, `host/reader-host.lisp` and
+  42  `host/native/reader-model-host.lisp`; the `reader` and `model` verbs are
+  43  therefore absent and fault at `fnn-call` with &quot;ACL2 executable counterpart
+  44  missing&quot;. Every book the convergence layer needs is present and certified.
+  45  The two reader books were not red on this tree -- the `w6/nntp-effects` fix
+  46  is in -- they were queued behind a saturated slot pool on a box carrying five
+  47  other lanes&#x27; runs, and the DTN path does not read news.
+  48  
+  49  Its first attempt failed honestly: `books/anchor-invariants` and
+  50  `books/anchor-record` were uncertified in this directory (`host/anchor-host.lisp`
+  51  includes them and they were in no submit list), and
+  52  `tools/build_native_host.sh` refused the image on the `Uncertified` marker
+  53  rather than building one.
+  54  
+  55  ## 3. The lab: six scenarios, all passing
+  56  
+  57  `swarm-build python3 tools/tcpcl_lab.py --image build/fn-host-dtn --work
+  58  /tank/fn/lanes/w9-dtn-e2e/build/tcpcl-lab3`, one JSON row per scenario:
+  59  
+  60  ```json
+  61  {&quot;a_holds_b_bundle&quot;: true, &quot;acks_from_a&quot;: 2, &quot;acks_from_b&quot;: 2, &quot;active_events&quot;: 8, &quot;active_outcomes&quot;: [[&quot;accepted&quot;, &quot;xfer=0 path=/tank/fn/lanes/w9-dtn-e2e/build/tcpcl-lab3/exchange/active-spool/active-0.bundle&quot;], [&quot;accepted&quot;, &quot;outbound xfer=0&quot;]], &quot;b_holds_a_bundle&quot;: true, &quot;contact&quot;: 1, &quot;listener_rc&quot;: 0, &quot;ok&quot;: true, &quot;passive_events&quot;: 10, &quot;passive_outcomes&quot;: [[&quot;accepted&quot;, &quot;xfer=0 path=/tank/fn/lanes/w9-dtn-e2e/build/tcpcl-lab3/exchange/passive-spool/passive-0.bundle&quot;], [&quot;accepted&quot;, &quot;outbound xfer=0&quot;]], &quot;scenario&quot;: &quot;exchange&quot;, &quot;segments_to_a&quot;: 2, &quot;segments_to_b&quot;: 2, &quot;sender_rc&quot;: 0, &quot;sess_init&quot;: 1, &quot;sess_term&quot;: 1, &quot;trace_bytes&quot;: 1691}
+  62  {&quot;ok&quot;: true, &quot;outcomes&quot;: [[&quot;refused&quot;, &quot;outbound reason=exceeds-transfer-mtu&quot;]], &quot;scenario&quot;: &quot;refused&quot;, &quot;segments&quot;: 0, &quot;sender_rc&quot;: 1, &quot;staged&quot;: []}
+  63  {&quot;active_keepalives&quot;: 3, &quot;active_terms&quot;: 0, &quot;ok&quot;: true, &quot;passive_keepalives&quot;: 3, &quot;passive_terms&quot;: 0, &quot;scenario&quot;: &quot;keepalive&quot;, &quot;still_up&quot;: true}
+  64  {&quot;acks_before_kill&quot;: 24, &quot;durable_after&quot;: true, &quot;durable_before&quot;: true, &quot;first_rc&quot;: 0, &quot;interrupted_absent&quot;: true, &quot;no_partials&quot;: true, &quot;ok&quot;: true, &quot;reconnect_rc&quot;: 0, &quot;scenario&quot;: &quot;crash&quot;, &quot;staged&quot;: [&quot;passive-0.bundle&quot;]}
+  65  {&quot;large&quot;: {&quot;intact&quot;: true, &quot;rc&quot;: 0}, &quot;large_octets&quot;: 262144, &quot;large_seconds&quot;: 0.146, &quot;ok&quot;: true, &quot;ratio&quot;: 1.38, &quot;scenario&quot;: &quot;profile&quot;, &quot;size_ratio&quot;: 4, &quot;small&quot;: {&quot;intact&quot;: true, &quot;rc&quot;: 0}, &quot;small_octets&quot;: 65536, &quot;small_seconds&quot;: 0.106}
+  66  {&quot;equal&quot;: true, &quot;loop_events&quot;: 9, &quot;model_events&quot;: 9, &quot;ok&quot;: true, &quot;rc&quot;: 0, &quot;received&quot;: [&quot;passive-0.bundle&quot;], &quot;scenario&quot;: &quot;replay&quot;, &quot;sender_rc&quot;: 0}
+  67  {&quot;failed&quot;: [], &quot;ok&quot;: true, &quot;passed&quot;: [&quot;exchange&quot;, &quot;refused&quot;, &quot;keepalive&quot;, &quot;crash&quot;, &quot;profile&quot;, &quot;replay&quot;], &quot;scenario&quot;: &quot;summary&quot;}
+  68  ```
+  69  
+  70  Read against the brief&#x27;s list: **a bundle each way over loopback** with
+  71  contact, SESS_INIT, a two-segment transfer and two acks in each direction and
+  72  a clean SESS_TERM (`exchange`, and both spools hold the peer&#x27;s octets byte for
+  73  byte); **a refused transfer** at the peer&#x27;s Transfer MRU, with zero segments
+  74  sent, nothing staged and exit 1, distinct from accepted and from uncertain
+  75  (`refused`); **`kill -9` of the receiver mid-transfer, then reconnect**, with
+  76  the interrupted transfer absent, no partial staging name left behind, the
+  77  earlier acknowledged transfer still durable and a new transfer landing after
+  78  the restart (`crash`, the kill after 24 acknowledged segments); keepalives on
+  79  the negotiated interval with no spurious termination (`keepalive`); and the
+  80  model differential (`replay`, §5).
+  81  
+  82  **A receipt round trip is NOT in this list.** `exchange`&#x27;s reverse transfer is
+  83  a second bundle, not a receipt: no receipt is generated, because
+  84  `books/bp-receipt` is not in this image and `:bundle-received` is a file in a
+  85  spool, not an ADU handed to `fn-bpr-host-accept`. Saying &quot;a bundle each way&quot;
+  86  is what the evidence supports; see HANDOFF-w9-dtn-e2e §2 for what a receipt
+  87  round trip needs.
+  88  
+  89  ## 4. The profile: the served-path guard is no longer quadratic
+  90  
+  91  `profile` sends the same shape of transfer at 64 KiB and at 256 KiB and
+  92  reports the ratio, because a loaded box moves both measurements together:
+  93  
+  94  - 65,536 octets: **0.106 s**
+  95  - 262,144 octets: **0.146 s**
+  96  - ratio **1.38** for a 4x transfer (bar: below 8x)
+  97  
+  98  The guard `fn-tcl-drive` names is checked once per socket chunk by its ACL2
+  99  executable counterpart. While it was `fn-tcl-sessionp`, that check walked
+ 100  every octet staged so far, so a 4x transfer meant 4x the chunks *and* 4x the
+ 101  walk -- about 16x the guard work. 1.38x is that cost gone; the residue below
+ 102  4x is the per-run process startup, which both measurements pay once. The
+ 103  `crash` scenario&#x27;s 120,000-octet transfer, which w8 had to keep small for this
+ 104  reason, now takes 24 acknowledged segments without difficulty.
+ 105  
+ 106  The covered scope: this is one box, one loopback, one segment MRU (4096) and
+ 107  one pair of sizes. It is a refutation of a quadratic guard, not a throughput
+ 108  number, and the send direction is still quadratic (`specs/tcpcl.md` §6).
+ 109  
+ 110  ## 5. A finding: the model differential is only sound for a receive-only session
+ 111  
+ 112  The first run of the lab -- the first run there has ever been -- failed
+ 113  `replay` at
+ 114  
+ 115  ```
+ 116  &#x27;(:OUTBOUND-SENT 0 &quot;passive&quot;)&#x27; != &#x27;(:SEND :MSG-REJECT 3)&#x27;
+ 117  ```
+ 118  
+ 119  `tcpcl replay` folds `fn-tcl-drive` over the trace and calls nothing else, so
+ 120  it models a node that consumes octets and never originates a transfer. A node
+ 121  that also sends reaches `fn-tcl-send` and `fn-tcl-pump` from the *host*, not
+ 122  from the wire; the replay&#x27;s state has no outbound transfer when the peer&#x27;s
+ 123  XFER_ACK arrives, and the machine is right to answer MSG_REJECT Unexpected
+ 124  where the loop said `:outbound-sent`. `exchange`&#x27;s listener carries a reply
+ 125  bundle, so its trace was never a valid subject for this differential.
+ 126  
+ 127  The trace was wrong, not the machine. `scenario_replay` now drives its own
+ 128  receive-only listener and the differential holds exactly (9 loop events, 9
+ 129  model events, equal). Extending it to a sending node means putting the host&#x27;s
+ 130  aux calls into the trace; that is not done and is recorded open.
+ 131  
+ 132  ## 6. dtn7-rs interop: one bundle each way
+ 133  
+ 134  dtn7-rs **0.21.0** at revision `4daf02d7ea927e9293753b2a5c4497457f6e5a40` --
+ 135  the revision `tests/bp-dtn7/pin.json` names -- cloned to `/tank/fn/dtn7/repo`
+ 136  on hbox and built with `cargo build --release --locked` under `swarm-build`
+ 137  (cargo 1.98.0-nightly). Its `tcp` convergence layer is RFC 9174:
+ 138  `core/dtn7/src/cla/tcp/proto.rs` carries the Table 2 message types and the
+ 139  CAN_TLS contact-header flag.
+ 140  
+ 141  `python3 tests/bp-dtn7/run_fn_tcpcl_interop.py --image build/fn-host-dtn
+ 142  --dtn7-repo /tank/fn/dtn7/repo`, `ok: True`.
+ 143  
+ 144  **Leg 1, dtn7 to fn.** `dtnsend -r dtn://fn-b/incoming` gave
+ 145  `Bundle-Id: dtn://dtn7x/-843243606819-0`, `Result: Sent 109 bytes`.
+ 146  dtn7 dialled fn&#x27;s listener; fn&#x27;s own event digests, computed in ACL2 by
+ 147  `fn-tcl-host-event-digests`:
+ 148  
+ 149  ```
+ 150  passive event (:SEND :CONTACT 6)
+ 151  passive event (:SEND :SESS-INIT 36)
+ 152  passive event (:SESSION-UP 10 64000 64000 NIL)
+ 153  passive event (:SEND :XFER-ACK 18)
+ 154  passive event (:BUNDLE-RECEIVED 1 126)
+ 155  passive event (:SEND :SESS-TERM 3)
+ 156  passive event (:PEER-TERMINATING 1)
+ 157  passive event (:CLOSE)
+ 158  ```
+ 159  
+ 160  fn negotiated a 64,000-octet segment and transfer MTU with TLS false,
+ 161  acknowledged the transfer, and staged **126 octets** as `passive-1.bundle`. Exit 0.
+ 162  
+ 163  **Leg 2, fn to dtn7**, returning the same octets:
+ 164  
+ 165  ```
+ 166  active aux (:SEND :CONTACT 6)
+ 167  active event (:SEND :SESS-INIT 36)
+ 168  active event (:SESSION-UP 10 64000 64000 NIL)
+ 169  active aux (:SEND :XFER-SEGMENT 148)
+ 170  active event (:OUTBOUND-SENT 0 &quot;active&quot;)
+ 171  active aux (:SEND :SESS-TERM 3)
+ 172  active event (:PEER-TERMINATING 0)
+ 173  active event (:CLOSE)
+ 174  ```
+ 175  
+ 176  dtn7&#x27;s side of leg 2, verbatim:
+ 177  
+ 178  ```
+ 179  Bundle dtn://dtn7x/-843243606819-0 already in store, updating it!
+ 180  Dispatching bundle: dtn://dtn7x/-843243606819-0
+ 181  Bundle contains an hop count block: dtn://dtn7x/-843243606819-0 32 2
+ 182  Previous Node Block was updated: dtn://dtn7x/ dtn://dtn7x/
+ 183  Transmission time: 29.337us for 1 bundles in 126 bytes to 127.0.0.1:54298
+ 184  Session terminated for dtn://fn-a/ (127.0.0.1:54298)
+ 185  ```
+ 186  
+ 187  So dtn7 completed the contact exchange and SESS_INIT with fn, accepted fn&#x27;s
+ 188  XFER_SEGMENT, decoded the 126 octets as a BPv7 bundle, recognised it as its
+ 189  own, and dispatched it. fn&#x27;s `:INBOUND-REFUSED 1 6` on that last line is
+ 190  correct and not a failure: dtn7&#x27;s epidemic router immediately tried to forward
+ 191  the bundle back, and fn had already sent SESS_TERM, so the machine refused
+ 192  with Table 6 reason 6, Session Terminating.
+ 193  
+ 194  **What this does and does not show.** It shows two independent RFC 9174
+ 195  implementations holding a session and moving a bundle in each direction, with
+ 196  fn&#x27;s every protocol value computed in ACL2. It does **not** show fn
+ 197  originating a bundle: nothing in this tree encodes BPv7
+ 198  (`specs/bp-design.md` §1.4 is a design), so **dtn7 authored the bundle in both
+ 199  directions** and fn carried it back as a convergence-layer peer. A bundle fn
+ 200  composed would fail dtn7&#x27;s parser today. That is the honest boundary of this
+ 201  interop and the reason the harness is written the way it is.
+ 202  
+ 203  ## 7. Limits
+ 204  
+ 205  - The image is the DTN-only variant (§2), so no NNTP claim follows from it.
+ 206  - `books/tcpcl-invariants` and `tests/acl2/tcpcl-tests` were still queued
+ 207    against this text when this record was written; the keystones C1 to C4 are
+ 208    unchanged in statement and `books/tcpcl-session` certifies, but the
+ 209    invariants book has no verdict on this tree until `build/farm/w9inv.log`
+ 210    has one. Recorded as open, not as passed.</pre></details><details id="ltp"><summary>ION carries fn over LTP, with a destructive receive seam<small>tests/evidence/2026-09-19-ltp-feasibility.md · L1–85</small></summary><p class="hash">File SHA-256 4d8421157077b78c8cf90797ebd45d589ae633c071ce9b17e9f9f89494e6c939</p><pre>   1  # LTP feasibility with a real second BPA — 2026-09-19
+   2  
+   3  A pinned [ION-DTN](https://github.com/nasa-jpl/ION-DTN) build carried an actual
+   4  fn request ADU across an LTP convergence layer, and fn&#x27;s own receiver accepted
+   5  it. The [machine-readable record](2026-09-19-ltp-feasibility.json) holds the
+   6  revision, commands, parameters and digests; every configuration file is in
+   7  [`tests/ltp/`](../ltp/README.md) with its [pin](../ltp/pin.json).
+   8  
+   9  ION was built from tag `ion-open-source-4.2.1-a.1`, commit
+  10  `4912bf82de7d03a9a11bf5d68614cc002f9ac911`, with `autoreconf -fi`,
+  11  `./configure --prefix=…`, `make -j8`, `make install` on Linux/gcc 14.2.0. Two
+  12  nodes `ipn:1` and `ipn:2` ran in separate working directories with distinct
+  13  shared-memory keys and SDRs, joined by one LTP span each way over UDP on IPv4
+  14  loopback with `ltpclock`, `ltpmeter`, `ltpdeliv`, `ltpcli` and `ltpclo`.
+  15  `bpsource`/`bpsink` confirmed BP-over-LTP before any fn code ran.
+  16  
+  17  ## What ran
+  18  
+  19  The fn sender work is the same ACL2 path as the pinned TCP laboratory: an
+  20  article is published, work is enqueued, attempt intent is persisted, and ACL2
+  21  projects the 449-octet request ADU. That ADU crossed the LTP link, was durably
+  22  staged, and arrived byte-identical
+  23  (`781f7ff3…4016` both sides). `tools/run_bp_receive.py`&#x27;s
+  24  `receive_bpa_request` then accepted it: outcome `accepted`, one record, one
+  25  article, one pin, exact article bytes, receipt `f2cbfa70…ae3e`, and the staged
+  26  copy deleted only after the receipt decision was durable.
+  27  
+  28  Interruption: with a 60,000-octet ADU in flight and a 600-second lifetime, the
+  29  receiving node&#x27;s LTP/UDP datagrams were dropped for 20 seconds with one named
+  30  `iptables` rule. Nothing was staged while the link was cut. After the rule was
+  31  deleted, LTP resumed the session, repaired the lost red-part segments, and the
+  32  ADU arrived byte-identical to its source.
+  33  
+  34  Expiry: a 4,096-octet ADU with a 20-second bundle lifetime was submitted into a
+  35  60-second outage. Forty-five seconds after the link returned, nothing had been
+  36  staged. The bundle&#x27;s lifetime had elapsed and ION deleted it. The fn job and its
+  37  archive obligation are untouched by that transport event.
+  38  
+  39  ## What did not run, and why
+  40  
+  41  No receipt was returned over BP. ION gives the sending application no bundle
+  42  identifier — `bpsendfile` prints none and `bp_send()` returns only an in-process
+  43  `SdrObject` address — so fn&#x27;s durable attempt record has no observed transport
+  44  handle to bind. The return leg is blocked behind that seam rather than faked.
+  45  
+  46  ## The receive seam
+  47  
+  48  **ION has no non-destructive receive.** `bp_receive()` deletes the endpoint&#x27;s
+  49  delivery-queue element, zeroes `bundle.payload.content`, destroys the bundle and
+  50  commits the SDR transaction *before it returns*. Afterwards nothing redelivers
+  51  the ADU, and `bp_release_delivery(&amp;dlv, 0)` only leaks the ZCO without making it
+  52  reachable through any endpoint API. `bprecvfile` compounds this: it writes
+  53  `testfile&lt;N&gt;` with no `fsync`, no rename into place, and a per-process counter
+  54  that restarts at 1, so a restarted receiver silently overwrites earlier files.
+  55  Neither is restart-safe in fn&#x27;s sense.
+  56  
+  57  `tests/ltp/fn_ltp_stage.c` is the app-level staging copy this forces: take
+  58  delivery, write the exact ADU to a temporary file, `fsync`, rename into the
+  59  staging directory under the RFC 9171 bundle id, `fsync` the directory, then
+  60  release. `IonStagingInbox` serves fn&#x27;s `inventory`/`download`/`delete` from that
+  61  copy, so `delete` removes fn&#x27;s own staged file, never an ION-retained bundle.
+  62  The window between `bp_receive()`&#x27;s commit and the staging `fsync` cannot be
+  63  closed with ION&#x27;s public API; it is covered at the fn layer by durable sender
+  64  work, retry and receipt idempotence, not by the BPA.
+  65  
+  66  ## Delegated behavior and its limits
+  67  
+  68  ION owns LTP session establishment, 1,200-octet red-part segmentation,
+  69  checkpoints, reception reports, retransmission, bundle lifetime expiry, and BP
+  70  forwarding over the contact/range plan. Its repair is budgeted: `maxTimeouts 5`
+  71  and `maxRepairRounds 8` per session. An outage longer than that budget cancels
+  72  the session, and BPv7 has no custody transfer to recover it, so recovery falls
+  73  back to fn&#x27;s own durable retry. `sessionInactivityLimit` was 0 and one-way light
+  74  time was 0 in this profile.
+  75  
+  76  ## What this is not
+  77  
+  78  Not interoperability qualification: one implementation, one host, one profile,
+  79  no cross-implementation vectors and no errata audit. Not a mission profile: IPv4
+  80  loopback UDP, zero light time, no contact plan, no asymmetry, no rate limiting.
+  81  No BPSec, no authenticated peer, no author signature; the A_POLICY premise is an
+  82  explicitly trusted local test input. No power-loss or physical-media
+  83  qualification. No relay topology, backpressure campaign or staging-quota
+  84  exhaustion. LTP reliability is not fn application acceptance, and none of these
+  85  results closes `REP-006` or `SCN-010/017`.</pre></details><details id="media"><summary>Restart and receipt evidence over mock BPA transport<small>tests/evidence/2026-09-20-four-node-lab.md · L1–24</small></summary><p class="hash">File SHA-256 ab265ea9e953265fdef8e01a496d668b030a894c1afe2d7e95e62123831a28cd</p><pre>   1  # Four-node carried-media lab, 2026-09-20
+   2  
+   3  A complete run. `tests/evidence/2026-09-20-four-node-lab.json` is the machine
+   4  record the lab wrote; this file says what it means. It replaces the incomplete
+   5  run w3/media-lab recorded on the same date, whose stop is described and closed
+   6  in `planning/lanes/HANDOFF-w6-workflow-restart.md`.
+   7  
+   8  - Command: `python3 tests/bp-dtn7/run_four_node_lab.py`, mock BPA transport,
+   9    Python 3.14.7, ACL2 through `tools/run_store.py` against the certificates
+  10    installed in this worktree. Revision is in the JSON. 40.5 s.
+  11  - Status: **passed**. All twenty-two named assertions were checked and every
+  12    one held, including the eleven the earlier run never reached: the carried
+  13    media hop with no contact window, the lost-and-regenerated receipt, the
+  14    expired attempt and its retry under the next window, the reordered pair with
+  15    a duplicate, and each node&#x27;s local-number frontier.
+  16  - Two defects were fixed to get here, neither in the workflow model. The lab
+  17    submitted an attempt whose `bp-lifetime` was not the configured one, which
+  18    `fn-bp-record-contextp` refuses; and `tests/bp-dtn7/mock_bpa.py` spooled its
+  19    queue under a digest of the BID, so the queue was not first in, first out and
+  20    the reordered-pair assertion read the wrong order. Nothing in the ACL2
+  21    acceptance path was relaxed.
+  22  - `relay_a_onward_obligation_recoverable_after_kill` is back and holds: after
+  23    the mid-forward SIGKILL of relay-a and its recovery, `work:a1:relay-a` reads
+  24    `outstanding`, and `absent` now means only that the image holds no such work.</pre></details><details id="substrate"><summary>Statement authority: certified parts and open joins<small>planning/lanes/HANDOFF-w9-substrate.md · L1–94</small></summary><p class="hash">File SHA-256 c7a2a17f1bd9d26e2cdcab7ba947dc077384fcbf66647900aa32b551a9ba70b7</p><pre>   1  # w9/substrate — the lace projected, the index, policy on transit, epochs
+   2  
+   3  Branch `w9/substrate`, worktree `build/lanes/w9-substrate`, from `dev`
+   4  `52eb0db` with `w7/substrate-s1-2`&#x27;s three stx fixes cherry-picked (that
+   5  lane&#x27;s work is not merged to `dev` yet; this lane builds on its names and
+   6  its certificates, and its registry commit `79cb367` is left to it).
+   7  
+   8  Packets S2 to S5 of [substrate transport](../../specs/substrate-transport.md);
+   9  SUB-002 to SUB-005; PRF-021 to PRF-025. The status table is
+  10  [section 10 of the spec](../../specs/substrate-transport.md#10-status-packets-s2-to-s5-lane-w9substrate)
+  11  and it is where every open obligation is written with its exact shape.
+  12  Certification evidence: `tests/evidence/2026-09-20-substrate-transit.md`.
+  13  
+  14  ## Certification, hbox, ACL2 8.7
+  15  
+  16  `books/stx-lace` and `books/stx-policy` are **certified**
+  17  (`run-20260920T181308Z-0b1b` and `run-20260920T182629Z-333c`); so is the
+  18  whole dependency closure, cached on hbox at `/tank/fn/certcache`.
+  19  `books/stx-index` is **open** at `fn-stx-index-equivocators-agree`,
+  20  `books/stx-epochs` is **open** at `fn-stx-commit-decode-is-a-commit`, and
+  21  `books/stx-authority` and `tests/acl2/stx-transit-tests` are cascades of
+  22  those two. **The teeth have therefore not run**: they are written and
+  23  committed and nothing here may lean on them until the test book certifies.
+  24  PRF-019 to PRF-022 and PRF-024 are `in-progress` citing only certified
+  25  roots; PRF-023, PRF-025 and PRF-026 stay `planned`.
+  26  
+  27  The first submission of this lane went to persvati before the coordinator
+  28  moved the lane to hbox; everything after it is hbox&#x27;s.
+  29  
+  30  ## What landed
+  31  
+  32  - **`books/stx-lace.lisp`** — the lace as the store projected. `fn-stx-parse`
+  33    (the syntax article behind stored octets), `fn-stx-verifiedp` with
+  34    `fn-stx-verifiedp-is-the-verified-verdict` tying it to the verdict the
+  35    evidence slot records, `fn-stx-delta` (a singleton exactly when the
+  36    article&#x27;s own octets verify under this node&#x27;s keyring, nil otherwise),
+  37    `fn-stx-store`, `fn-stx-lace` as the oldest-first projection, and the
+  38    bridge `fn-stx-lace-of-accept-is-merge`. S3-1 and S3-2 follow as labelled
+  39    corollaries, including the two membership conjuncts that say neither fork
+  40    is dropped, and `fn-stx-transit-equivocation-survives-later-merges`.
+  41  - **`books/stx-index.lisp`** — the incremental twin: three alists, at most one
+  42    cons per accepted article, with `fn-stx-index-agrees-with-lace` (lookup and
+  43    the equivocator predicate) and `fn-stx-index-invariant-preserved-by-accept`.
+  44    The `(:equivocation creator incarnation sequence id-held id-new)` records
+  45    are the third list and `fn-stx-recorded-equivocation-agrees-with-lace` is
+  46    what stops them becoming a second authority. The cost shadow is
+  47    `fn-stx-index-lookup-cost-is-index-bounded` and
+  48    `fn-stx-index-grows-by-at-most-one-binding`.
+  49  - **`books/stx-policy.lisp`** — `fn-stx-transit-authority-ok`, the batch
+  50    vocabulary (`fn-stx-accept-batch`, `fn-stx-batch-delta`,
+  51    `fn-stx-lace-of-accept-batch`), the append forms of the three confinement
+  52    lemmas, `fn-stx-peer-batch-cannot-change-policy`,
+  53    `fn-stx-peer-batch-cannot-change-admission`, the constructive
+  54    `fn-stx-batch-policy-change-needs-authority-signature`,
+  55    `fn-stx-transit-admission-is-grounded`, and
+  56    `fn-stx-policy-statement-propagates`. The two typed authority outcomes are
+  57    `*fn-stx-authority-outcomes*`, deliberately not in `*fn-peer-reasons*`.
+  58  - **`books/stx-epochs.lisp`** — the commit codec over the `fn-stmt-` item
+  59    vocabulary (five items, bounded before any is parsed),
+  60    `fn-stx-commits-of-batch`, the carrier obligation
+  61    `fn-stx-commits-of-batch-are-verified-and-well-formed`, and the three
+  62    membership-epoch corollaries, each labelled with the keystone it restates.
+  63  - **`tests/acl2/stx-transit-tests.lisp`** — the witnesses and teeth.
+  64  - **`bin/fn`, `tools/stx.py`** — `fn statement sign|attach|show|verify` and
+  65    `fn principal new|list`; `tools/stx.py` gained `show` and `principal-new`.
+  66    Every value is computed by an ACL2 session; the CLI derives nothing.
+  67  
+  68  ## Three departures, each recorded in the spec&#x27;s status table
+  69  
+  70  1. The two typed reasons do **not** join `*fn-peer-reasons*`: a member of
+  71     that enumeration is a reason to refuse bytes, and an equivocating article
+  72     must be accepted.
+  73  2. The bridge lemma carries a freshness hypothesis, because two Message-IDs
+  74     can carry one statement.
+  75  3. `fn-inj-prefix` is not edited: a node holds no principal&#x27;s signing key.
+  76  
+  77  ## Open, recorded rather than weakened
+  78  
+  79  - **The host-line equations** (`fn-stx-transit-verdict-is-fn-stx-verdict`,
+  80    and the same obligation standing behind S4-1&#x27;s renamed
+  81    `-by-definition` row). `fn-peer-transfer` records provenance as a string,
+  82    not as a structured value, so there is nowhere for `(:statement ...)` to
+  83    go. Owner: this lane with the peering cluster; the interface change is a
+  84    structured evidence value carried beside the node, as the index is.
+  85  - **`fn-stx-acceptedp` is an observation**, not derived from
+  86    `fn-node-complete`.
+  87  - **S6-1 / PRF-026 is not wired**, and deliberately not half-wired: there is
+  88    no slot in which acceptance records a verdict, so `fn-nntp-hdr-content`
+  89    cannot reach one. The three steps to close it are in the status table; the
+  90    nntp chain is independently red at `books/nntp-effects.lisp:971`.
+  91  - **`fn-stx-reissue-detected-after-peering`** needs a two-node system model
+  92    (`fn-sys-run`) that does not exist on this tree.
+  93  - **SCN-019 was not run.** No scenario was added to `tools/twonode_gate.py`.
+  94  - **Independent verification with no fn code** is blocked on D09.</pre></details><details id="older-gate"><summary>Historical gate: owner fallback and unavailable peering<small>planning/evidence/twonode-dfd8758-2026-09-20.md · L1–32</small></summary><p class="hash">File SHA-256 e03c50b9665d439130cf18c7e1e2e4f6e2cfff988370b3636a88bc0b7ab4f3b9</p><pre>   1  # Two-node gate: dfd8758 on persvati
+   2  
+   3  Two fn nodes from one commit, on one host, each with its own store, its own
+   4  served groups and its own listener, running at the same time. This records
+   5  what ran. It establishes nothing about the books, and where the tree has no
+   6  transit surface yet it says so in place of the scenario rather than passing
+   7  a weaker one under the same name.
+   8  
+   9  ## What ran
+  10  
+  11  | fact | value |
+  12  | --- | --- |
+  13  | commit | `dfd8758` (dfd87580d781ce2f3e4e957853e57d77e68232b9) |
+  14  | tree | `dev` |
+  15  | host | `persvati` |
+  16  | started | 2026-09-20T03:51:37Z |
+  17  | wall time | 103.0 s |
+  18  | gate tool | `tools/twonode_gate.py` |
+  19  | os | Ubuntu 25.10 kernel=Linux 6.17.0-40-generic arch=x86_64 cores=24 |
+  20  | python3 | Python 3.13.7 |
+  21  | acl2version | + ACL2 Version 8.7                                                     + |
+  22  | certificates | neighbour /home/ember/fn-gates/dev-bdd59d2 -&gt; matched=213 mismatched=0 absent=0 |
+  23  | node a | reader on port 38573 (main), store $HOME/fn-deploy/dfd8758/a/store |
+  24  | node b | reader on port 38351 (after-recovery), store $HOME/fn-deploy/dfd8758/b/store |
+  25  | peer records | none |
+  26  | three outcomes a | accepted=0 refused=1 uncertain=3 (expected (0, 1, 3)) |
+  27  | three outcomes b | accepted=0 refused=1 uncertain=3 (expected (0, 1, 3)) |
+  28  | transit | IHAVE -&gt; &#x27;500 command not recognized&#x27;; CAPABILITIES lists IHAVE: False |
+  29  | feed | not exercised |
+  30  | kill | mode=post ConnectionResetError: [Errno 104] Connection reset by peer |
+  31  | host clients | expect=ABSENT, inews=ABSENT, nn=ABSENT, script=/usr/bin/script, slrn=ABSENT, tin=ABSENT, trn=ABSENT |
+  32  </pre></details><details id="boundary-caller"><summary>Boundary tests still omit the bundle input<small>tests/test_host_boundary.py · L110–136</small></summary><p class="hash">File SHA-256 b39efd8a303056bcd1879e465ca08182d2a5c749f541442c0ac595f03fbeb0a2</p><pre> 110          &quot;&quot;&quot;A durable acceptance awaiting a delete keeps the accepted code.&quot;&quot;&quot;
+ 111          pending = run_bp_ingress.BpDeletePending(
+ 112              &quot;durably accepted ADU awaits BPA delete&quot;, &quot;accepted&quot;, &quot;bid-1&quot;, Path(&quot;/staged&quot;))
+ 113          output = io.StringIO()
+ 114          arguments = [&quot;--store&quot;, &quot;s&quot;, &quot;--journal&quot;, &quot;j&quot;, &quot;--workflow-journal&quot;, &quot;w&quot;,
+ 115                       &quot;--bid&quot;, &quot;bid-1&quot;, &quot;--inventory&quot;, &quot;i&quot;, &quot;--adu&quot;, &quot;a&quot;,
+ 116                       &quot;--source-eid&quot;, &quot;dtn://sender/&quot;]
+ 117          with mock.patch.object(run_bp_ingress, &quot;ingest_bpa_adu&quot;, side_effect=pending), \
+ 118               contextlib.redirect_stdout(output):
+ 119              self.assertEqual(run_bp_ingress.main(arguments), run_store.EXIT_OK)
+ 120          self.assertIn(&quot;accepted bid=bid-1&quot;, output.getvalue())
+ 121          self.assertIn(&quot;bpa-delete=pending&quot;, output.getvalue())
+ 122  
+ 123      def test_ingress_refusal_and_fault_stay_distinct(self):
+ 124          arguments = [&quot;--store&quot;, &quot;s&quot;, &quot;--journal&quot;, &quot;j&quot;, &quot;--workflow-journal&quot;, &quot;w&quot;,
+ 125                       &quot;--bid&quot;, &quot;bid-1&quot;, &quot;--inventory&quot;, &quot;i&quot;, &quot;--adu&quot;, &quot;a&quot;,
+ 126                       &quot;--source-eid&quot;, &quot;dtn://sender/&quot;]
+ 127          cases = ((run_bp_ingress.BpIngressError(&quot;capacity&quot;), run_store.EXIT_REFUSED),
+ 128                   (run_store.StoreIndeterminate(&quot;uncertain&quot;), run_store.EXIT_UNCERTAIN),
+ 129                   (run_store.StoreFault(&quot;invalid&quot;), run_store.EXIT_FAULT))
+ 130          for error, expected in cases:
+ 131              with self.subTest(error=type(error).__name__):
+ 132                  with mock.patch.object(run_bp_ingress, &quot;ingest_bpa_adu&quot;, side_effect=error), \
+ 133                       contextlib.redirect_stderr(io.StringIO()):
+ 134                      self.assertEqual(run_bp_ingress.main(arguments), expected)
+ 135  
+ 136  </pre></details><details id="boundary-api"><summary>The current ingress API requires a bundle<small>tools/run_bp_ingress.py · L297–315</small></summary><p class="hash">File SHA-256 1d5f80873291bd07f1f252f6b5ebea7b3f0bbd6f63118eab5d8152614895c9e8</p><pre> 297  def main(argv=None):
+ 298      parser = run_store.UsageParser(description=__doc__)
+ 299      parser.add_argument(&quot;--store&quot;, required=True, type=Path)
+ 300      parser.add_argument(&quot;--journal&quot;, required=True, type=Path)
+ 301      parser.add_argument(&quot;--workflow-journal&quot;, required=True, type=Path,
+ 302                          help=&quot;Sol workflow_journal.py; it is not copied into this bridge&quot;)
+ 303      parser.add_argument(&quot;--bid&quot;, required=True)
+ 304      parser.add_argument(&quot;--inventory&quot;, required=True, type=Path,
+ 305                          help=&quot;test/lab newline BID inventory snapshot&quot;)
+ 306      parser.add_argument(&quot;--adu&quot;, required=True, type=Path,
+ 307                          help=&quot;test/lab non-destructive downloaded ADU for --bid&quot;)
+ 308      parser.add_argument(&quot;--bundle&quot;, required=True, type=Path,
+ 309                          help=&quot;the raw BP bundle octets the BPA holds for --bid; &quot;
+ 310                               &quot;ACL2 derives the identity and expiry from these&quot;)
+ 311      parser.add_argument(&quot;--source-eid&quot;, required=True)
+ 312      parser.add_argument(&quot;--destination&quot;, default=DEFAULT_DESTINATION)
+ 313      parser.add_argument(&quot;--lifetime&quot;, type=int, default=DEFAULT_LIFETIME)
+ 314      args = parser.parse_args(argv)
+ 315      try:</pre></details><details id="proof-discipline"><summary>Assurance grows with the implemented surface<small>docs/proofs.md · L1–73</small></summary><p class="hash">File SHA-256 3994fae14a84a64867d8024debe4e6d76896083d1224fabd7caac46d287640e9</p><pre>   1  # Proof strategy and evidence
+   2  
+   3  Status: component theorems are being certified as implementation advances. The
+   4  [proof registry](../planning/proofs.json) is the authoritative ledger for the
+   5  larger targets, which remain open until their complete statements are supported.
+   6  See [implementation status](implementation.md) for executable scope. Partial
+   7  lemmas do not close an entire subsystem proof target.
+   8  
+   9  ## Assurance grows with the implemented surface
+  10  
+  11  Each new reachable command, persistent record, transition, codec or adapter
+  12  operation adds assurance obligations. A proof about an older component does not
+  13  automatically cover a new caller or the composition between components. Keep
+  14  three things distinct in the [closure inventory](../planning/assurance-closure.md):
+  15  evidence for implemented behavior, missing evidence for implemented behavior,
+  16  and requirements for features that have not been implemented.
+  17  
+  18  For each behavior-changing batch, record the affected stable requirement/proof/
+  19  scenario IDs and the following change in scope:
+  20  
+  21  | Changed surface | Evidence to add or explicitly leave open |
+  22  | --- | --- |
+  23  | State or transition | Meaningful initial/reachable invariant, rejection behavior, preservation of prior accepted facts, and finite traces |
+  24  | Caller or composition | Relation to the actual callee&#x27;s state and hypotheses, including pending work; shape validity alone is insufficient |
+  25  | Durable record or side effect | Byte/record correspondence, barriers and uncertainty, live-versus-replay agreement, restart and lost-completion cuts |
+  26  | External bytes or raw execution | Decoder domain/canonicality, limits and work, guard status of the executed call graph |
+  27  | Authority or release | Exact evidence/context binding, durable decision, explicit policy/crypto/peer premises, preservation of independent obligations |
+  28  | Transport or scheduling | Duplicate/reorder/expiry/contact behavior; safety and conditional progress stated separately |
+  29  
+  30  A feature checkpoint may remain experimental with an exact open list. It does
+  31  not count as assurance closure until its applicable claims have evidence.
+  32  Changing a profile or a trust assumption to avoid an obligation changes the
+  33  contract and must be recorded as such. Keep critical missing composition/recovery
+  34  evidence in a bounded closure batch before building dependent behavior on it.
+  35  
+  36  No count appears in this document. Theorem, root, guard and test counts live
+  37  in [the generated ledger](../planning/ledger.md) and nowhere else, because a
+  38  number that is typed is a number that drifts. Prose carries the property, its
+  39  hypotheses and its covered scope in one sentence; it does not carry counts.
+  40  Report the property, supported domain, source digest and assumptions. A growing
+  41  count does not demonstrate that the assurance gap is shrinking. Review the
+  42  frozen batch once, fix concrete defects, and keep independent work moving; this
+  43  discipline adds no approval ceremony.
+  44  
+  45  ## Refinement ladder
+  46  
+  47  1. **Abstract executable state:** finite maps/records and event transitions.
+  48     Prove recognizer preservation, identity/allocation invariants, and phase rules.
+  49  2. **Bounded bytes:** refine external parsing/encoding to the accepted object and
+  50     NNTP domains. Prove decoding, deterministic preimages, and framing properties.
+  51  3. **Crash storage model:** relate logical acceptance to records, writes, barriers,
+  52     recovery, and checkpoint selection under named platform assumptions.
+  53  4. **Concrete execution:** use guard verification and explicit correspondence
+  54     between logical maps and efficient representations, including abstract stobjs
+  55     where useful. Include range-query completeness in index obligations.
+  56  5. **Multiple nodes:** reason about validated fact sets, obligation transitions,
+  57     duplicate/reordered exchange, and explicitly conditional progress properties.
+  58  
+  59  The program used by the host must be these definitions or a justified refinement.
+  60  An abstract model plus an independently written server is insufficient evidence
+  61  for claims about the running server.
+  62  
+  63  ## Shape of the claims
+  64  
+  65  State preservation has the schematic form
+  66  `inv(s) and permitted-event(s,e) =&gt; inv(next(s,e))`. Prefer total, guarded
+  67  interfaces that explicitly reject malformed events rather than assume away
+  68  untrusted wire inputs. An invariant must include meaningful initial states and
+  69  reachable examples, so a theorem is not satisfied by an empty state domain.
+  70  
+  71  Trace induction lifts one-step safety properties to finite executions. Eventual
+  72  delivery additionally needs a scheduling/contact/resource model and A-FAIRNESS.
+  73  Do not describe a safety theorem as proving inevitable delivery.</pre></details><details id="bp-design"><summary>Content obligations outlive individual carriers<small>specs/bp-design.md · L1–52</small></summary><p class="hash">File SHA-256 76043f41d7dd909a46ad863cf5a1a9044be69c2888f7bda98f0a271bdffec9b2</p><pre>   1  # fn as a BPv7 node: design
+   2  
+   3  Status: design with exact statements, wave 4. Nothing here is certified; every
+   4  `defun` and `defthm` below is a commitment for the packets in &quot;Migration&quot;,
+   5  not a claim. The books it builds on are certified today: `bp-primary-cbor`,
+   6  `bp-primary`, `bp-fragment`, `clock`, `bp-adu`, `bp-workflow`, `bp-receipt`,
+   7  `bp-release`, `relay`, and the wave-3 `scheduler` book
+   8  (`build/lanes/w3-scheduler/books/scheduler.lisp`, uncommitted at the time of
+   9  writing; its contact observation is `(fn-sched-contact peer start end)` and its
+  10  events are `admit`, `open`, `close`, `tick`, `expiry`, `transport`, `restart`).
+  11  
+  12  ## Why
+  13  
+  14  What fn calls its BP integration today is an application polling a co-located
+  15  dtn7-rs daemon over HTTP on loopback: three verbs (`/status/bundles`,
+  16  `/download?BID`, `/delete?BID`) in `tools/bpa_dtn7.py`, an opaque BID that
+  17  &quot;is a key into one agent&#x27;s table&quot; ([bp-primary](bp-primary.md)), a Rust
+  18  binary using the *upstream* decoder to extract the ADU, and an insert API
+  19  whose reply &quot;follows an asynchronously spawned store/transmit operation&quot;
+  20  ([bp-workflow](bp-workflow.md)). The certified books that model the primary
+  21  block, fragmentation and expiry have no caller. That is theater: the proofs
+  22  are about functions the host never runs, and the host&#x27;s actual protocol
+  23  surface is an HTTP client to a process fn does not control, cannot reason
+  24  about, and whose retained-copy semantics fn had to discover by experiment
+  25  (&quot;a pinned BPA restart window in which stored inventory does not resume
+  26  forwarding&quot;, [tests/bp-dtn7/README](../tests/bp-dtn7/README.md)).
+  27  
+  28  This design makes fn a BPv7 node in its own right. The bundle protocol agent
+  29  is fn&#x27;s core; the bundle store is fn&#x27;s store; the convergence layer is fn&#x27;s,
+  30  written against RFC 9174 and run by the native host on its own sockets. The
+  31  pinned dtn7-rs build and ION stop being fn&#x27;s agent and become fn&#x27;s *peers*.
+  32  
+  33  ## 1. fn as a BPv7 node
+  34  
+  35  ### 1.1 Vocabulary, and custody
+  36  
+  37  | RFC 9171 term | fn realisation |
+  38  | --- | --- |
+  39  | Bundle Protocol Agent (§3.1) | the `fn-bpn-*` machine in `books/bp-node.lisp` (this design), executed by the native host |
+  40  | Application agent, administrative element | the sender workflow `fn-bp` (bp-workflow) and the receiver `fn-bpr` (bp-receipt) are the application agent; status reports are generated and parsed by `fn-bpn` itself and are the administrative element |
+  41  | Node ID, endpoint | `fn-bpp-eidp` values; fn&#x27;s node ID is a `dtn` node ID; its registration is one singleton endpoint `dtn://&lt;node&gt;/fn` in the Active state |
+  42  | Bundle store | the fn Store journal, with a new record family (§1.3). A bundle is a durable record; its payload is an object the Store already keeps |
+  43  | Retention constraint (§3.1, §5.4, §5.6, §5.7) | `fn-bpn-constraintp`: `:dispatch-pending`, `:forward-pending`, `:reassembly-pending`; a per-bundle set in the bundle record |
+  44  | Custody | not in BPv7. RFC 9171 Appendix A removes RFC 5050 custody transfer and fn imports nothing of it |
+  45  | Convergence layer adapter (§7) | `fn-tcl-*` (§2), sockets in the native host |
+  46  | Contact plan, routing (§5.4 step 2) | the wave-3 scheduler: `fn-sched-contact-holdsp` decides whether a peer is reachable now; `fn-sched-selection` decides which work goes |
+  47  
+  48  **Custody in fn&#x27;s sense.** fn has two obligations that live longer than any
+  49  bundle: the archive pin an accepted article holds (RET-001, `fn-retain`), and
+  50  the `:forward` pin an outstanding work holds (`fn-bprl-undertake`). Both are
+  51  released only by `fn-retain-release` under checked application evidence
+  52  (`fn-bprl-release-decision`, a receipt). These are what &quot;custody&quot; means in</pre></details></div><footer><a href="./">Back to the report</a><span>fn / independent assessment</span></footer></main><script>function reveal(){const e=document.getElementById(location.hash.slice(1));if(e){e.open=true;e.scrollIntoView();}}addEventListener('hashchange',reveal);reveal();</script></body></html>

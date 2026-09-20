@@ -2,6 +2,14 @@
 
 Small, self-contained visual essays from the DREGG research process.
 
+## New local report
+
+- [A promise that survives](a-promise-that-survives/) — independent assessment of
+  fn at `3e1b184`: executable ACL2, NNTP, storage, DTN and assurance. Includes an
+  interactive failure-boundary illustration, a full written assessment, frozen
+  source excerpts and a machine-readable evidence manifest. Publication is a
+  separate step.
+
 ## Published
 
 - [field guide](https://emberian.github.io/dregg-microsites/field-guide/)

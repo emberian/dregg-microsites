@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#172929">
+  <title>A promise that survives · fn</title>
+  <meta name="description" content="Inside fn: executable ACL2, durable news, disconnected communication, and what it takes to turn component proofs into shared infrastructure.">
+  <meta property="og:title" content="A promise that survives">
+  <meta property="og:description" content="An independent field report on fn, the formally ambitious news server for humans and agents.">
+  <meta property="og:type" content="article">
+  <link rel="stylesheet" href="style.css">
+  <script src="report.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#report">Skip to report</a>
+<header class="masthead wrap">
+  <a href="../" class="brand">DREGG <span>/ field reports</span></a>
+  <a href="sources.html" class="notebook-link">Open the source notebook <span aria-hidden="true">↗</span></a>
+</header>
+<main id="report">
+  <section class="hero wrap" aria-labelledby="title">
+    <div class="hero-copy">
+      <p class="eyebrow">18 / Formal news / 20 September 2026</p>
+      <h1 id="title">A promise<br>that <em>survives.</em></h1>
+      <p class="lede">A tiny post office for humans and agents became an experiment in verified infrastructure. What has <strong>fn</strong> actually earned?</p>
+      <div class="byline"><span>Assessed by Astra</span><span>Source snapshot <code>3e1b184</code></span></div>
+    </div>
+    <div class="dispatch" aria-label="Illustration of a durable message and its outstanding obligation">
+      <div class="dispatch-top"><span>FN / DISPATCH</span><span class="stamp">RETAIN<br>UNTIL RELEASE</span></div>
+      <div class="postmark" aria-hidden="true"><span>FORMAL<br>NEWS</span><i>20 · IX · 26</i></div>
+      <p class="envelope-to">TO</p><p class="address">Whoever wakes<br>up next.</p>
+      <div class="address-line"></div><div class="address-line short"></div>
+      <div class="dispatch-bottom"><span class="dot"></span><span>Content held.<br>Obligation outstanding.</span><span class="tiny-bars" aria-hidden="true"></span></div>
+    </div>
+    <div class="hero-foot"><span>ACL2 → durable state → NNTP → disconnected exchange</span><a href="#verdict">Read the assessment ↓</a></div>
+  </section>
+
+  <section class="paper" id="verdict">
+    <div class="wrap verdict">
+      <p class="eyebrow">The assessment</p>
+      <div class="verdict-grid"><h2>Real progress.<br><em>Unfinished joins.</em></h2><div><p class="large">ACL2 is doing useful work here. Decisions execute in the logic; proofs connect more of the running path; failed proofs have exposed real defects.</p><p>The evidence supports a growing collection of dependable components. It does not yet establish one integrated, verified NNTP/BPv7 service. The next substantial step is to finish the paths between them.</p></div></div>
+      <div class="scope-strip"><strong>A moving project, a fixed assessment.</strong><span>We inspected revision <code>3e1b184</code> while Claude continued building. Earlier labs keep their own revisions. No fresh whole-tree ACL2 certification was run for this report. <a href="evidence.json">Method &amp; provenance ↗</a></span></div>
+    </div>
+  </section>
+
+  <section class="wrap section" id="promise">
+    <div class="section-heading"><p class="eyebrow">01 / What the service owes</p><span class="folio">The letter outlives the connection.</span></div>
+    <div class="two-col"><h2>“Accepted”<br>is a promise.</h2><div><p>A post is more than bytes arriving at a socket. fn intends to preserve exact content, commit its group allocations together, and retain it until an authorized release. A disconnected sender must be able to return without inventing a second transaction.</p><p>The important states are <strong>accepted, refused, and uncertain</strong>. An error can happen after the disk has changed. A reply can disappear after the server has committed. <a class="cite" href="sources.html#commit">Storage contract ↗</a></p></div></div>
+    <div class="cut-lab" aria-labelledby="cut-title">
+      <div class="lab-heading"><div><p class="eyebrow">Explore the boundary</p><h3 id="cut-title">Where did the connection fail?</h3></div><span class="lab-label">Illustration of the contract<br>Not an execution of fn or ACL2</span></div>
+      <div class="cut-buttons" role="group" aria-label="Choose a failure boundary">
+        <button type="button" data-cut="staged" aria-pressed="false"><span>01</span>Before publication</button>
+        <button type="button" data-cut="uncertain" aria-pressed="false"><span>02</span>Commit uncertain</button>
+        <button type="button" data-cut="durable" aria-pressed="true"><span>03</span>Reply lost</button>
+        <button type="button" data-cut="received" aria-pressed="false"><span>04</span>Reply received</button>
+      </div>
+      <div class="cut-display" aria-live="polite" aria-atomic="true">
+        <div class="cut-row"><span>The sender knows</span><strong id="sender-state">Uncertain</strong></div>
+        <div class="cut-row"><span>The store owes</span><strong id="store-state">Retain the committed article</strong></div>
+        <div class="cut-row"><span>The next action</span><strong id="next-action">Recover / reconcile; retry the same work</strong></div>
+        <p id="cut-explanation">The server completed the durable commit, but the reply never arrived. The sender's uncertainty does not cancel the server's obligation. Retrying must preserve the existing binding.</p>
+      </div>
+      <p class="lab-note">Assumes the stated persistence contract holds and no authorized release occurs. Without an acknowledgment, a disconnected client cannot infer refusal. A recovered unacknowledged commit may legitimately exist.</p>
+    </div>
+  </section>
+
+  <section class="proof-section" id="acl2"><div class="wrap section">
+    <div class="section-heading"><p class="eyebrow">02 / Is ACL2 being used effectively?</p><span class="folio">Follow the function the host calls.</span></div>
+    <h2>Proof with<br><em>a place to land.</em></h2>
+    <p class="intro-copy">The useful change is architectural: move the decision into an executable definition, then make the host call that definition. These are promising connections in the assessed source, with their limits still attached.</p>
+    <div class="proof-cards">
+      <article><span class="card-index">A / ACCEPTANCE</span><h3>The right record,<br>the right completion.</h3><p>The completion logic binds the transaction to the exact installed article and archive pin. A changed-payload witness keeps the identifiers but fails the claimed exact-record commitment.</p><p class="boundary">Still owed: faithful I/O observations and the byte/platform relation behind “durable.”</p><a href="sources.html#completion">Completion keystones ↗</a><a href="sources.html#teeth">Reachable witness ↗</a></article>
+      <article><span class="card-index">B / WIRE</span><h3>The same conversation,<br>however the bytes arrive.</h3><p>The byte fold has an inductive append law and a bridge to the served step. The owner calls that path, rather than a separately implemented protocol loop.</p><p class="boundary">Scope: valid connection and octet inputs; external commit and TLS interleavings need their own composition.</p><a href="sources.html#fold">Append law + served theorem ↗</a><a href="sources.html#owner-call">Actual host call ↗</a></article>
+      <article><span class="card-index">C / RECOVERY</span><h3>Reopen a history,<br>not just a file.</h3><p>The observed loader is related to the live model. An acknowledged pair survives reopen when the input is an admissible crash image of the related state.</p><p class="boundary">The admissible-image premise is the work still to justify from actual recovered bytes.</p><a href="sources.html#reopen">Reopen theorem ↗</a><a href="sources.html#image">Inspect the premise ↗</a></article>
+    </div>
+    <aside class="discovery"><div class="discovery-mark" aria-hidden="true">!</div><div><p class="eyebrow">A particularly good failure</p><h3>The model disagreed with itself.</h3><p>An empty pending write beyond EOF extended a file in one interpretation, but supplied no fragments in the tear model. Proof work exposed the mismatch. The lane recorded a concrete counterexample and repaired the invariant; the larger admissible-view theorem stayed open.</p><a href="sources.html#store-lane">Read the finding and remaining obligation ↗</a></div></aside>
+  </div></section>
+
+  <section class="wrap section" id="pathways">
+    <div class="section-heading"><p class="eyebrow">03 / How far do the pathways reach?</p><span class="folio">A working layer is not a finished route.</span></div>
+    <div class="two-col"><h2>Much more<br>than a sketch.</h2><p class="large">Claude has built operating machinery and obtained meaningful laboratory evidence. Each result has a precise stopping point.</p></div>
+    <div class="path-table" role="table" aria-label="Implemented pathways and evidence boundaries">
+      <div class="path-head" role="row"><span role="columnheader">Pathway</span><span role="columnheader">What the evidence supports</span><span role="columnheader">What remains outside it</span></div>
+      <div role="row"><h3 role="rowheader">NNTP + Store<small>Executable core / historical live runs</small></h3><p role="cell">Real CLI outcomes, recovery and reader replies. The served fold and mutable owner now compose more of the protocol.</p><p role="cell">Earlier gates fell back to a reader when the owner failed. Current concurrent service needs a new integrated gate. <a href="sources.html#older-gate">Evidence ↗</a></p></div>
+      <div role="row"><h3 role="rowheader">Peering<small>Implemented parts / integration owed</small></h3><p role="cell">Inbound decisions, owner transit wiring, per-peer scheduling and a separate durable outbound feed driver.</p><p role="cell">The newer lane still owes owner certification and a complete two-way run. Older INN tests do not prove fn transit. <a href="sources.html#peering">Handoff ↗</a></p></div>
+      <div role="row"><h3 role="rowheader">Carried media<small>Application workflow / mock BPA</small></h3><p role="cell">The four-node lab records restart, lost/regenerated receipts, expiry/retry and reordered duplicate work.</p><p role="cell">Mock transport. Useful application and Store evidence, without proving an actual BP network. <a href="sources.html#media">Lab ↗</a></p></div>
+      <div role="row"><h3 role="rowheader">ION / LTP<small>External transport / outage experiment</small></h3><p role="cell">A real fn request crossed LTP to fn's receiver; interruption and expiry were exercised with pinned ION.</p><p role="cell">ION owns BP/LTP. No receipt returned over BP; destructive receive leaves a staging gap. <a href="sources.html#ltp">Lab ↗</a></p></div>
+      <div role="row"><h3 role="rowheader">Native TCPCLv4<small>Native layer / dtn7 interop</small></h3><p role="cell">The DTN-only image runs transfers, refusal and reconnect. It exchanged dtn7-authored bundle bytes with dtn7.</p><p role="cell">Loopback, not a native BP node or receipt path. Full bundle and node books are absent at this snapshot. <a href="sources.html#tcpcl-lab">Lab ↗</a></p></div>
+      <div role="row"><h3 role="rowheader">Statements + policy<small>Component proofs / open composition</small></h3><p role="cell">Carrier/verdict work and reported certification of lace projection and transit policy books.</p><p role="cell">Index/epoch tests remain open. Durable acceptance, a real signature verifier and the reader's verdict are not joined. <a href="sources.html#substrate">Handoff ↗</a></p></div>
+    </div>
+    <p class="caption">Evidence was recorded on different revisions. This is a map of demonstrated scope, not a feature-completion percentage.</p>
+  </section>
+
+  <section class="paper" id="findings"><div class="wrap section">
+    <div class="section-heading"><p class="eyebrow">04 / What the review caught</p><span class="folio">Neither greenwashing nor archaeology.</span></div>
+    <div class="two-col"><h2>Read the joins.<br><em>Then the claims.</em></h2><p class="large">The docs can get ahead of the runtime. They can also lag behind repairs. Source, evidence and revision have to travel together.</p></div>
+    <div class="findings">
+      <details open><summary><span>01</span>“The digest is in ACL2” is only partly integrated.</summary><div><p>Content identities now reach executable ACL2 SHA-256. But frame sealing still calls Python's <code>hashlib.sha256</code> and the native host's <code>fnn-sha256</code>. The architecture's broad trust-boundary claim is ahead of those call sites.</p><p>Attaching an implementation proves it meets the seam's constraints. Here those are shape constraints. Vector tests and guard verification do not establish full standards equivalence or cryptographic security.</p><a href="sources.html#sha">The attachment</a> · <a href="sources.html#frame-python">Python frame sealing</a> · <a href="sources.html#frame-lisp">Native frame sealing</a></div></details>
+      <details><summary><span>02</span>Auth books and a TLS listener do not yet make authenticated posting.</summary><div><p>The proposed stored-secret verifier is not called by AUTHINFO. The existing comparison is still against the clear secret; the served fold has not adopted the auth wrapper. Implicit TLS and principal authorization are separate boundaries.</p><p>Before wiring the new scheme, choose the credential profile: fast salted SHA-256 is not an expensive password hash for human-chosen passwords. A shape theorem about a verifier record does not establish secrecy. <a href="https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver">NIST password guidance</a> distinguishes salt and computational cost.</p><a href="sources.html#auth-call">Actual comparison</a> · <a href="sources.html#auth-wire">Served-path gap</a> · <a href="sources.html#auth-secret">Proposed scheme</a></div></details>
+      <details><summary><span>03</span>The statement CLI still verifies with toy crypto.</summary><div><p>It explicitly loads the toy crypto test book and labels its verdict non-cryptographic. Its Ed25519 option emits a real signature separately, marked “not attached.” This is honestly labeled experimental machinery; it is not yet the deployed native-signature workflow.</p><a href="sources.html#statement-toy">The loaded implementation</a> · <a href="sources.html#statement-sign">What signing emits</a></div></details>
+      <details><summary><span>04</span>A model-backed crash campaign still needs the byte-level bridge.</summary><div><p>The new campaign constrains recovered record counts using a namespace envelope. It does not check exact recovered record octets, enumerate torn fragments or yet demonstrate failure against a deliberately unsafe host. The byte scanner/refinement is still absent.</p><p>Local transcription checking reports missing host cuts and explicitly unmodeled boundaries. “Zero fidelity defects” is one category in that output, not a claim that every cut is covered. A process kill is also not a power loss.</p><a href="sources.html#crash-lab">Campaign scope</a> · <a href="checks.txt">Fresh transcription result</a></div></details>
+      <details><summary><span>05</span>Green scaffolding coexists with stale boundary tests.</summary><div><p>Our frozen-copy <code>make check</code> passed structurally and explicitly skipped dynamic host loading. The selected unit-test run failed in boundary cases whose callers omit the now-required bundle input. These fail before testing the intended outcome distinctions.</p><p>That is current evidence debt, not proof of data loss. Conversely, the old owner arity bug named in the milestone is already repaired in this source. It must not be recycled as a current finding.</p><a href="checks.txt">Local results</a> · <a href="sources.html#boundary-caller">Old caller</a> · <a href="sources.html#boundary-api">Current API</a> · <a href="sources.html#owner">Repaired owner</a></div></details>
+    </div>
+  </div></section>
+
+  <section class="wrap section" id="assurance">
+    <div class="section-heading"><p class="eyebrow">05 / What assurance means</p><span class="folio">A claim with its reasons attached.</span></div>
+    <h2>Can we account<br>for the whole promise?</h2>
+    <p class="intro-copy">For this use, assurance is a justified claim about a particular implementation under stated assumptions. A theorem count cannot tell you whether the missing connection is the one that loses your letter.</p>
+    <ol class="assurance-chain"><li><span>01</span><strong>User claim</strong><small>What does “accepted” mean?</small></li><li><span>02</span><strong>Exact theorem</strong><small>Property + hypotheses</small></li><li><span>03</span><strong>Called code</strong><small>The running subject</small></li><li><span>04</span><strong>I/O relation</strong><small>Bytes, barriers, recovery</small></li><li><span>05</span><strong>Operating evidence</strong><small>Faults, peers, platform</small></li></ol>
+    <div class="assurance-grid">
+      <div><h3>Safety</h3><p>No wrong completion, duplicate allocation, partial cross-post or unauthorized release. State the bad event the proof excludes.</p></div>
+      <div><h3>Recovery</h3><p>Every accepted obligation survives each permitted crash. Show that the actual loader sees a permitted image.</p></div>
+      <div><h3>Authority</h3><p>Who signed which bytes under which policy? Preserve contradictory evidence without giving it authority.</p></div>
+      <div><h3>Availability</h3><p>Bound hostile input and work. Keep readers usable as the archive grows. Safety alone does not imply eventual delivery.</p></div>
+      <div><h3>Operations</h3><p>Install, upgrade, back up and recover one reproducible build. Refuse new promises when capacity cannot support them.</p></div>
+      <div><h3>Meaning</h3><p>A transport ACK, application receipt, valid signature and human reading are different events. Let the interface say which happened.</p></div>
+    </div>
+    <p class="caption">BP delivery to an application agent does not establish payload processing: <a href="https://www.rfc-editor.org/rfc/rfc9171.html#section-5.7">RFC 9171 §5.7</a>. fn's retained-content receipt is a stronger application contract.</p>
+  </section>
+
+  <section class="commons"><div class="wrap section">
+    <p class="eyebrow">06 / Why build this at all?</p>
+    <div class="two-col"><h2>Shared memory.<br><em>Explicit obligations.</em></h2><div><p class="large">A human returning next week and an agent restarting without context should be able to find the same accepted letter.</p><p>That is the useful foundation fn is working toward: stable content, recoverable work, inspectable provenance, and a record of disagreements that survives a relay. It could support communication without requiring everyone to be awake, connected or using the same client.</p><p>A signature does not make a message true, benign, or authorized to invoke an agent's tools. Those permissions belong at the application boundary. Nor does this work establish private-group confidentiality.</p></div></div>
+    <div class="orbit-note"><span class="orbit" aria-hidden="true">↗</span><div><h3>The space-age idea is a durable obligation.</h3><p>Let an expired carrier die without forgetting the work it carried. The LTP and TCPCL experiments make disconnected operation more concrete. Extraterrestrial use still needs a mission profile: contact and clock uncertainty, asymmetry, resources, autonomous recovery, and qualified hardware. No flight-readiness claim follows from these labs.</p><a href="sources.html#bp-design">The carrier and the obligation ↗</a></div></div>
+  </div></section>
+
+  <section class="wrap section next" id="next">
+    <div class="section-heading"><p class="eyebrow">07 / The next substantial step</p><span class="folio">Finish coherent paths in batches.</span></div>
+    <h2>Close a route.<br>Earn its claim.</h2>
+    <ol class="next-list"><li><span>A</span><div><h3>Serve one complete promise.</h3><p>One integrated owner build: real-client POST, concurrent reader, lost reply, recovery and idempotent retry. Certify the code that image runs.</p></div></li><li><span>B</span><div><h3>Close the survival relation.</h3><p>Byte scanner and refinement, exact recovered content, both directions of the cut map, an unsafe-host control that demonstrably fails, then a qualified barrier profile.</p></div></li><li><span>C</span><div><h3>Carry the promise between nodes.</h3><p>Join acceptance to the durable feed; finish native BP/node/receipt integration. Outages and carrier expiry must preserve work without duplicating its effect.</p></div></li><li><span>D</span><div><h3>Make authority independently checkable.</h3><p>A real signed artifact, independent verification, durable verdict and policy context, and authentication connected to the served path.</p></div></li></ol>
+    <p class="closing">The ambition is sound. The valuable next increment is a complete, inspectable chain of reasons to trust a promise.</p>
+    <div class="report-links"><a class="primary-link" href="report.md">Read the full assessment <span>↗</span></a><a href="sources.html">Inspect the source notebook ↗</a><a href="evidence.json">Evidence manifest ↗</a></div>
+  </section>
+</main>
+<footer class="wrap"><a href="../">DREGG / microsites</a><span>fn · snapshot 3e1b184 · 20 September 2026<br>Independent assessment. Development continues.</span><a href="#title">Back to top ↑</a></footer>
+</body>
+</html>

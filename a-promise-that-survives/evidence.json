@@ -1,0 +1,381 @@
+{
+  "assessment": "fn: a promise that survives",
+  "revision": "3e1b1849413d5168322fcf34c9f74e77d109be72",
+  "scope": "Frozen source sample and recorded lane evidence; no fresh ACL2 certification or deployment",
+  "generated_at": "2026-09-20T19:12:27.690905+00:00",
+  "environment": {
+    "python": "3.14.7",
+    "os": "Darwin",
+    "release": "25.6.0",
+    "machine": "arm64",
+    "FN_ACL2": "unset for these checks"
+  },
+  "source_files": {
+    "specs/storage.md": "356d4f8cc42bb3574ffc202a9880f54ec474cba3d29d751cbcb96773e34c98e2",
+    "books/store-node-invariants.lisp": "70f391a9ca9132c0f1488c612a4bd3c45809a5e701869354368aaa1654fc3074",
+    "host/store-node-host.lisp": "8628eb566308f4487a09ebb852c1f0d466cac54b69f378c794218b4fa6f9fda9",
+    "books/store-observed.lisp": "7e645aeaf98ea6c8694af34d6b33f497697c975109679666cf1a81a46ae2bde4",
+    "books/store-files.lisp": "c4a5cb1d26871acd9adc2ff96bab33ecdaf0ef4ee47ce9cd1117ff72bcc8111b",
+    "tests/acl2/store-node-teeth-tests.lisp": "0837fbd034ce070d67d2502be57fde849c2938e36099f0c59c6f5ebc08718049",
+    "books/served.lisp": "b6e8930785d476ac4bc4e8cc6b5de58540f7375c1fd936b07fdc5bad843fd885",
+    "host/owner-host.lisp": "62e5cb2003ae5d060a254b48c1dde2e087309a719303038a61aa0659ca987d00",
+    "books/owner.lisp": "aa682a1f5833c7a27b8ca1ff49fa9df52cee2cafcc00e00726ce1c186fa7e6ea",
+    "specs/nntp-audit.md": "f3e0956dfcc38a70d014e2936b349b5c6baf52c25a708726a2828e6e019211eb",
+    "books/crypto-attach.lisp": "54a655456b13ce20957d519608c284d3f1ec81c3a364d274373dd632547e945e",
+    "docs/architecture.md": "05cea9fe56517a623b51afe2ec433c4fa77ed02475abc55fe7fc48b84b68f0fa",
+    "tools/frame_bridge.py": "7345aa0ceca463e9c73b6a0e74fff1271a2792061e16d59533fbb99f14b1792c",
+    "host/native/io.lisp": "7a3c6d8882f5681c553be378cc9b59ad1f2f7e723369f7f07b5a2ab5c7f34a64",
+    "books/auth-secret.lisp": "09599f128c05ec547c9bffcfd83d0838f157a775c973d8009e67456664f77e85",
+    "books/nntp-auth.lisp": "4370ef936827dcba4fcb9d71b02670a4dd28a2f9cce9627ba176505ac3cb2cad",
+    "planning/lanes/HANDOFF-w9-server-polish.md": "9d2cc7f21ba3213f95790eae1b14aba4c588eec8c9dbfc52f36695c82a1c7825",
+    "tools/stx.py": "c0e15150c6127169c79085ccfecdd5bcc9722569cc4cefac5a2487895612f2b4",
+    "planning/lanes/HANDOFF-w9-peering-e2e.md": "3fde221cf12c38d26646b463e9205d483f86bb151907e9be07c81ba7a2a4bf69",
+    "planning/lanes/HANDOFF-w9-storage.md": "5f0e3ba957a7384c8e38ae874f734642f4388ec2c33ed745c407b41c622cd20d",
+    "planning/evidence/campaign-model-images-2026-09-20.md": "5383ed44dfd58d1e5d6e16a727ed0f5a75bf67033f0d1e13b4ec83385d8499ce",
+    "planning/lanes/HANDOFF-w9-dtn-e2e.md": "d8b1266187d6f322e97e4e41a3075db836195775f82badebeb57a0960c64f423",
+    "planning/evidence/tcpcl-dtn-w9-2026-09-20.md": "5ab3800843321ed847962ba27ab8d8f10efccb722be4be30cbbd32e03d4b6f54",
+    "tests/evidence/2026-09-19-ltp-feasibility.md": "4d8421157077b78c8cf90797ebd45d589ae633c071ce9b17e9f9f89494e6c939",
+    "tests/evidence/2026-09-20-four-node-lab.md": "ab265ea9e953265fdef8e01a496d668b030a894c1afe2d7e95e62123831a28cd",
+    "planning/lanes/HANDOFF-w9-substrate.md": "c7a2a17f1bd9d26e2cdcab7ba947dc077384fcbf66647900aa32b551a9ba70b7",
+    "planning/evidence/twonode-dfd8758-2026-09-20.md": "e03c50b9665d439130cf18c7e1e2e4f6e2cfff988370b3636a88bc0b7ab4f3b9",
+    "tests/test_host_boundary.py": "b39efd8a303056bcd1879e465ca08182d2a5c749f541442c0ac595f03fbeb0a2",
+    "tools/run_bp_ingress.py": "1d5f80873291bd07f1f252f6b5ebea7b3f0bbd6f63118eab5d8152614895c9e8",
+    "docs/proofs.md": "3994fae14a84a64867d8024debe4e6d76896083d1224fabd7caac46d287640e9",
+    "specs/bp-design.md": "76043f41d7dd909a46ad863cf5a1a9044be69c2888f7bda98f0a271bdffec9b2",
+    "planning/ledger.json": "fd0285e969abe692adb0e3c2d8b532898ba836dddea55fd3409a6634d6e775a6",
+    "planning/requirements.json": "2b92ff7e88c1229f4b4ccf170ee99ab89f43f54c3c9246cd8a0b1deca4c2f656",
+    "planning/proofs.json": "f6261c751afdd1bc2adbf08c33e674e36d66a0e633a8f0f555fb664bd5c80cdd",
+    "planning/decisions.md": "4904ade11c6e32ca458801b686526f5c7d3c6b552dfa2d35bfbc0bb0135e93f7",
+    "docs/README.md": "157c400a422b1b04913a8faf43d0517c8b295774fd0a2c5c952afee01dc6dc52",
+    "planning/milestones.md": "2b4a776386a88047164247f59e8754ccaa997ecf836f6013bdd8406a9b90d617",
+    "books/sha256.lisp": "dce8222e1b95ff23df78a6c8c67ea980aa6e7da115d5c9ad16426e6714307dd7",
+    "books/stx-lace.lisp": "f6c2332e245282004f3d5ae68de4c406fcfa86f11cf313164249934d949552a2",
+    "books/stx-policy.lisp": "3cb6918354c3c41f807d2f42412c74405d0abe32e392075ef23a6ff4cba578e1",
+    "tests/evidence/2026-09-20-four-node-lab.json": "a1dede69d8e4b7fc3afc361022a6db0d283dc0a8042f0a4e7acda7dbc3ea4ba7"
+  },
+  "excerpts": [
+    {
+      "id": "commit",
+      "title": "The obligation behind acceptance",
+      "path": "specs/storage.md",
+      "sha256": "356d4f8cc42bb3574ffc202a9880f54ec474cba3d29d751cbcb96773e34c98e2",
+      "first_line": 33,
+      "last_line": 72
+    },
+    {
+      "id": "completion",
+      "title": "Completion is tied to the exact record",
+      "path": "books/store-node-invariants.lisp",
+      "sha256": "70f391a9ca9132c0f1488c612a4bd3c45809a5e701869354368aaa1654fc3074",
+      "first_line": 107,
+      "last_line": 214
+    },
+    {
+      "id": "store-host",
+      "title": "The storage host calls the completion and loader",
+      "path": "host/store-node-host.lisp",
+      "sha256": "8628eb566308f4487a09ebb852c1f0d466cac54b69f378c794218b4fa6f9fda9",
+      "first_line": 389,
+      "last_line": 421
+    },
+    {
+      "id": "reopen",
+      "title": "Survival under the admissible crash-image hypothesis",
+      "path": "books/store-observed.lisp",
+      "sha256": "7e645aeaf98ea6c8694af34d6b33f497697c975109679666cf1a81a46ae2bde4",
+      "first_line": 608,
+      "last_line": 644
+    },
+    {
+      "id": "image",
+      "title": "What the crash-image hypothesis permits",
+      "path": "books/store-files.lisp",
+      "sha256": "c4a5cb1d26871acd9adc2ff96bab33ecdaf0ef4ee47ce9cd1117ff72bcc8111b",
+      "first_line": 584,
+      "last_line": 608
+    },
+    {
+      "id": "teeth",
+      "title": "A reachable transaction and a changed-payload counterexample",
+      "path": "tests/acl2/store-node-teeth-tests.lisp",
+      "sha256": "0837fbd034ce070d67d2502be57fde849c2938e36099f0c59c6f5ebc08718049",
+      "first_line": 20,
+      "last_line": 98
+    },
+    {
+      "id": "fold",
+      "title": "The inductive append law and its served bridge",
+      "path": "books/served.lisp",
+      "sha256": "b6e8930785d476ac4bc4e8cc6b5de58540f7375c1fd936b07fdc5bad843fd885",
+      "first_line": 894,
+      "last_line": 939
+    },
+    {
+      "id": "owner-call",
+      "title": "The actual host calls the composed read",
+      "path": "host/owner-host.lisp",
+      "sha256": "62e5cb2003ae5d060a254b48c1dde2e087309a719303038a61aa0659ca987d00",
+      "first_line": 455,
+      "last_line": 467
+    },
+    {
+      "id": "owner",
+      "title": "The repaired owner entry point",
+      "path": "books/owner.lisp",
+      "sha256": "aa682a1f5833c7a27b8ca1ff49fa9df52cee2cafcc00e00726ce1c186fa7e6ea",
+      "first_line": 589,
+      "last_line": 609
+    },
+    {
+      "id": "owner-read",
+      "title": "The owner reaches the served byte fold",
+      "path": "books/owner.lisp",
+      "sha256": "aa682a1f5833c7a27b8ca1ff49fa9df52cee2cafcc00e00726ce1c186fa7e6ea",
+      "first_line": 674,
+      "last_line": 707
+    },
+    {
+      "id": "reader",
+      "title": "Whole-archive validation removed from individual commands",
+      "path": "specs/nntp-audit.md",
+      "sha256": "f3e0956dfcc38a70d014e2936b349b5c6baf52c25a708726a2828e6e019211eb",
+      "first_line": 53,
+      "last_line": 89
+    },
+    {
+      "id": "sha",
+      "title": "What the digest attachment proves",
+      "path": "books/crypto-attach.lisp",
+      "sha256": "54a655456b13ce20957d519608c284d3f1ec81c3a364d274373dd632547e945e",
+      "first_line": 48,
+      "last_line": 99
+    },
+    {
+      "id": "architecture",
+      "title": "The broader architecture claim",
+      "path": "docs/architecture.md",
+      "sha256": "05cea9fe56517a623b51afe2ec433c4fa77ed02475abc55fe7fc48b84b68f0fa",
+      "first_line": 1,
+      "last_line": 95
+    },
+    {
+      "id": "frame-python",
+      "title": "The remaining Python framing digest",
+      "path": "tools/frame_bridge.py",
+      "sha256": "7345aa0ceca463e9c73b6a0e74fff1271a2792061e16d59533fbb99f14b1792c",
+      "first_line": 149,
+      "last_line": 160
+    },
+    {
+      "id": "frame-lisp",
+      "title": "The remaining native framing digest",
+      "path": "host/native/io.lisp",
+      "sha256": "7a3c6d8882f5681c553be378cc9b59ad1f2f7e723369f7f07b5a2ab5c7f34a64",
+      "first_line": 754,
+      "last_line": 767
+    },
+    {
+      "id": "auth-secret",
+      "title": "The proposed verifier and its claimed scope",
+      "path": "books/auth-secret.lisp",
+      "sha256": "09599f128c05ec547c9bffcfd83d0838f157a775c973d8009e67456664f77e85",
+      "first_line": 1,
+      "last_line": 45
+    },
+    {
+      "id": "auth-call",
+      "title": "The actual AUTHINFO comparison",
+      "path": "books/nntp-auth.lisp",
+      "sha256": "4370ef936827dcba4fcb9d71b02670a4dd28a2f9cce9627ba176505ac3cb2cad",
+      "first_line": 377,
+      "last_line": 383
+    },
+    {
+      "id": "auth-wire",
+      "title": "Authentication is not yet in the served path",
+      "path": "planning/lanes/HANDOFF-w9-server-polish.md",
+      "sha256": "9d2cc7f21ba3213f95790eae1b14aba4c588eec8c9dbfc52f36695c82a1c7825",
+      "first_line": 57,
+      "last_line": 100
+    },
+    {
+      "id": "statement-toy",
+      "title": "The statement CLI loads toy crypto",
+      "path": "tools/stx.py",
+      "sha256": "c0e15150c6127169c79085ccfecdd5bcc9722569cc4cefac5a2487895612f2b4",
+      "first_line": 1,
+      "last_line": 54
+    },
+    {
+      "id": "statement-sign",
+      "title": "The Ed25519 signature is emitted separately",
+      "path": "tools/stx.py",
+      "sha256": "c0e15150c6127169c79085ccfecdd5bcc9722569cc4cefac5a2487895612f2b4",
+      "first_line": 131,
+      "last_line": 148
+    },
+    {
+      "id": "peering",
+      "title": "Peering integration and recorded certification boundary",
+      "path": "planning/lanes/HANDOFF-w9-peering-e2e.md",
+      "sha256": "3fde221cf12c38d26646b463e9205d483f86bb151907e9be07c81ba7a2a4bf69",
+      "first_line": 32,
+      "last_line": 83
+    },
+    {
+      "id": "store-lane",
+      "title": "A counterexample discovered in the crash model",
+      "path": "planning/lanes/HANDOFF-w9-storage.md",
+      "sha256": "5f0e3ba957a7384c8e38ae874f734642f4388ec2c33ed745c407b41c622cd20d",
+      "first_line": 17,
+      "last_line": 52
+    },
+    {
+      "id": "crash-lab",
+      "title": "Model-backed campaign and exact limits",
+      "path": "planning/evidence/campaign-model-images-2026-09-20.md",
+      "sha256": "5383ed44dfd58d1e5d6e16a727ed0f5a75bf67033f0d1e13b4ec83385d8499ce",
+      "first_line": 1,
+      "last_line": 69
+    },
+    {
+      "id": "native-dtn",
+      "title": "Native TCPCL is not yet the native BP node",
+      "path": "planning/lanes/HANDOFF-w9-dtn-e2e.md",
+      "sha256": "d8b1266187d6f322e97e4e41a3075db836195775f82badebeb57a0960c64f423",
+      "first_line": 51,
+      "last_line": 100
+    },
+    {
+      "id": "tcpcl-lab",
+      "title": "Native TCPCL and dtn7 laboratory evidence",
+      "path": "planning/evidence/tcpcl-dtn-w9-2026-09-20.md",
+      "sha256": "5ab3800843321ed847962ba27ab8d8f10efccb722be4be30cbbd32e03d4b6f54",
+      "first_line": 1,
+      "last_line": 210
+    },
+    {
+      "id": "ltp",
+      "title": "ION carries fn over LTP, with a destructive receive seam",
+      "path": "tests/evidence/2026-09-19-ltp-feasibility.md",
+      "sha256": "4d8421157077b78c8cf90797ebd45d589ae633c071ce9b17e9f9f89494e6c939",
+      "first_line": 1,
+      "last_line": 85
+    },
+    {
+      "id": "media",
+      "title": "Restart and receipt evidence over mock BPA transport",
+      "path": "tests/evidence/2026-09-20-four-node-lab.md",
+      "sha256": "ab265ea9e953265fdef8e01a496d668b030a894c1afe2d7e95e62123831a28cd",
+      "first_line": 1,
+      "last_line": 24
+    },
+    {
+      "id": "substrate",
+      "title": "Statement authority: certified parts and open joins",
+      "path": "planning/lanes/HANDOFF-w9-substrate.md",
+      "sha256": "c7a2a17f1bd9d26e2cdcab7ba947dc077384fcbf66647900aa32b551a9ba70b7",
+      "first_line": 1,
+      "last_line": 94
+    },
+    {
+      "id": "older-gate",
+      "title": "Historical gate: owner fallback and unavailable peering",
+      "path": "planning/evidence/twonode-dfd8758-2026-09-20.md",
+      "sha256": "e03c50b9665d439130cf18c7e1e2e4f6e2cfff988370b3636a88bc0b7ab4f3b9",
+      "first_line": 1,
+      "last_line": 32
+    },
+    {
+      "id": "boundary-caller",
+      "title": "Boundary tests still omit the bundle input",
+      "path": "tests/test_host_boundary.py",
+      "sha256": "b39efd8a303056bcd1879e465ca08182d2a5c749f541442c0ac595f03fbeb0a2",
+      "first_line": 110,
+      "last_line": 136
+    },
+    {
+      "id": "boundary-api",
+      "title": "The current ingress API requires a bundle",
+      "path": "tools/run_bp_ingress.py",
+      "sha256": "1d5f80873291bd07f1f252f6b5ebea7b3f0bbd6f63118eab5d8152614895c9e8",
+      "first_line": 297,
+      "last_line": 315
+    },
+    {
+      "id": "proof-discipline",
+      "title": "Assurance grows with the implemented surface",
+      "path": "docs/proofs.md",
+      "sha256": "3994fae14a84a64867d8024debe4e6d76896083d1224fabd7caac46d287640e9",
+      "first_line": 1,
+      "last_line": 73
+    },
+    {
+      "id": "bp-design",
+      "title": "Content obligations outlive individual carriers",
+      "path": "specs/bp-design.md",
+      "sha256": "76043f41d7dd909a46ad863cf5a1a9044be69c2888f7bda98f0a271bdffec9b2",
+      "first_line": 1,
+      "last_line": 52
+    }
+  ],
+  "checks": [
+    {
+      "command": "make check",
+      "result": "structural checks passed; dynamic host check explicitly skipped because FN_ACL2 was unset",
+      "exit_code": 0,
+      "log_sha256": "eada83b7cb6071683fb6257e168e96f52fb11a34b8dc1dbd33870122cb0e67f5",
+      "observations": [
+        "Scaffold OK: 204 Markdown files, 56 requirements, 28 proof targets, 19 scenario specifications.",
+        "Ledger OK: cited events exist, are not SUSPECT, and planning/ledger.md is current.",
+        "Ledger lints: 179 warnings (export hygiene, teeth form, hand-written record, include hygiene, host names); see planning/ledger.json.",
+        "host_check: SKIPPED -- FN_ACL2 is unset or does not name an executable, so no host file was loaded.  This check is not evidence until it runs with a real ACL2."
+      ]
+    },
+    {
+      "command": "python3 -m unittest tests.test_ledger tests.test_certify_runner tests.test_host_boundary -v",
+      "result": "failed: boundary test callers omit required --bundle or bundle= input; ledger and certification-runner cases passed",
+      "exit_code": 1,
+      "log_sha256": "01d1f9711962565312b97af5bbf0de6a3869efdf1b633c8daed4f1a4d2607f94",
+      "observations": [
+        "ERROR: test_ingress_refusal_and_fault_stay_distinct (tests.test_host_boundary.ExitCodeTests.test_ingress_refusal_and_fault_stay_distinct) (error='BpIngressError')",
+        "ERROR: test_ingress_refusal_and_fault_stay_distinct (tests.test_host_boundary.ExitCodeTests.test_ingress_refusal_and_fault_stay_distinct) (error='StoreIndeterminate')",
+        "ERROR: test_ingress_refusal_and_fault_stay_distinct (tests.test_host_boundary.ExitCodeTests.test_ingress_refusal_and_fault_stay_distinct) (error='StoreFault')",
+        "ERROR: test_pending_bpa_delete_is_reported_as_acceptance_not_failure (tests.test_host_boundary.ExitCodeTests.test_pending_bpa_delete_is_reported_as_acceptance_not_failure)",
+        "ERROR: test_non_ascii_bid_is_refused_rather_than_raising_an_encoding_error (tests.test_host_boundary.ReceiverBoundaryTests.test_non_ascii_bid_is_refused_rather_than_raising_an_encoding_error)",
+        "ERROR: test_over_long_and_empty_bids_refuse_the_same_way (tests.test_host_boundary.ReceiverBoundaryTests.test_over_long_and_empty_bids_refuse_the_same_way) (bid=0)",
+        "ERROR: test_over_long_and_empty_bids_refuse_the_same_way (tests.test_host_boundary.ReceiverBoundaryTests.test_over_long_and_empty_bids_refuse_the_same_way) (bid=513)",
+        "Ran 112 tests in 31.336s",
+        "FAILED (errors=7)"
+      ]
+    },
+    {
+      "command": "python3 tools/transcribe_check.py",
+      "result": "completed with missing host cuts, advisory syscall drift and explicitly unmodeled boundaries; category fidelity-defects is zero",
+      "exit_code": 0,
+      "log_sha256": "6570927aeefa09f2bf993a846e2e8f09ca08989fd9408729f6d188d3b2160f96",
+      "observations": [
+        "transcriptions=10 fidelity-defects=0 missing-host-cuts=14 syscall-drift=5 unmodelled=4"
+      ]
+    }
+  ],
+  "absent_at_snapshot": [
+    "books/bp-node.lisp",
+    "books/bp-bundle.lisp",
+    "books/byte-store-scan.lisp"
+  ],
+  "external_references": [
+    {
+      "url": "https://acl2.org/doc/index-seo.php?xkey=ACL2____DEFATTACH",
+      "topic": "attachment constraints and execution"
+    },
+    {
+      "url": "https://www.rfc-editor.org/rfc/rfc9171.html#section-5.7",
+      "topic": "delivery is not application processing"
+    },
+    {
+      "url": "https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver",
+      "topic": "salt and cost factor for password verification"
+    }
+  ]
+}
