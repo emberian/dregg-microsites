@@ -10,6 +10,13 @@ Small, self-contained visual essays from the DREGG research process.
   source excerpts and a machine-readable evidence manifest. Publication is a
   separate step.
 
+The fn report's UI can be checked locally with `node tools/check_fn_report.cjs`
+(uses the existing `tools/node_modules/puppeteer-core` and local Google Chrome).
+It records its input digests and results in the report's `ui-check.json`, and
+writes screenshots to a temporary directory. This validates the report, not fn.
+The separate `evidence.json` links the raw logs of the checks run on frozen fn
+source; those checks did not include a fresh ACL2 certification.
+
 ## Published
 
 - [field guide](https://emberian.github.io/dregg-microsites/field-guide/)

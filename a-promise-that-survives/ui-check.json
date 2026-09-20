@@ -1,0 +1,367 @@
+{
+  "browser": "Chrome/155.0.8048.0",
+  "node": "v26.8.1",
+  "puppeteer": "25.9.0",
+  "checks": [
+    {
+      "name": "desktop has no horizontal overflow",
+      "ok": true
+    },
+    {
+      "name": "local link #report",
+      "ok": true
+    },
+    {
+      "name": "anchor #report",
+      "ok": true
+    },
+    {
+      "name": "local link ../",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html",
+      "ok": true
+    },
+    {
+      "name": "local link #verdict",
+      "ok": true
+    },
+    {
+      "name": "anchor #verdict",
+      "ok": true
+    },
+    {
+      "name": "local link evidence.json",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#commit",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#commit",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#completion",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#completion",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#teeth",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#teeth",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#fold",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#fold",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#owner-call",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#owner-call",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#reopen",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#reopen",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#image",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#image",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#store-lane",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#store-lane",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#older-gate",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#older-gate",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#peering",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#peering",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#media",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#media",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#ltp",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#ltp",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#tcpcl-lab",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#tcpcl-lab",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#substrate",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#substrate",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#sha",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#sha",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#frame-python",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#frame-python",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#frame-lisp",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#frame-lisp",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#auth-call",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#auth-call",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#auth-wire",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#auth-wire",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#auth-secret",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#auth-secret",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#statement-toy",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#statement-toy",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#statement-sign",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#statement-sign",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#crash-lab",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#crash-lab",
+      "ok": true
+    },
+    {
+      "name": "local link checks.txt",
+      "ok": true
+    },
+    {
+      "name": "local link checks.txt",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#boundary-caller",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#boundary-caller",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#boundary-api",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#boundary-api",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#owner",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#owner",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html#bp-design",
+      "ok": true
+    },
+    {
+      "name": "anchor sources.html#bp-design",
+      "ok": true
+    },
+    {
+      "name": "local link report.md",
+      "ok": true
+    },
+    {
+      "name": "local link sources.html",
+      "ok": true
+    },
+    {
+      "name": "local link evidence.json",
+      "ok": true
+    },
+    {
+      "name": "local link ../",
+      "ok": true
+    },
+    {
+      "name": "local link #title",
+      "ok": true
+    },
+    {
+      "name": "anchor #title",
+      "ok": true
+    },
+    {
+      "name": "cut staged",
+      "ok": true
+    },
+    {
+      "name": "one pressed button staged",
+      "ok": true
+    },
+    {
+      "name": "cut uncertain",
+      "ok": true
+    },
+    {
+      "name": "one pressed button uncertain",
+      "ok": true
+    },
+    {
+      "name": "cut durable",
+      "ok": true
+    },
+    {
+      "name": "one pressed button durable",
+      "ok": true
+    },
+    {
+      "name": "cut received",
+      "ok": true
+    },
+    {
+      "name": "one pressed button received",
+      "ok": true
+    },
+    {
+      "name": "details keyboard activation",
+      "ok": true
+    },
+    {
+      "name": "source deep link opens excerpt",
+      "ok": true
+    },
+    {
+      "name": "notebook no horizontal overflow",
+      "ok": true
+    },
+    {
+      "name": "no overflow at 390",
+      "ok": true
+    },
+    {
+      "name": "no overflow at 320",
+      "ok": true
+    },
+    {
+      "name": "no overflow at 768",
+      "ok": true
+    },
+    {
+      "name": "no-JS default contract readable",
+      "ok": true
+    },
+    {
+      "name": "no-JS report sections readable",
+      "ok": true
+    },
+    {
+      "name": "no browser errors",
+      "ok": true,
+      "details": []
+    }
+  ],
+  "command": "node tools/check_fn_report.cjs",
+  "scope": "Headless browser: interaction, local links, desktop/tablet/mobile overflow, keyboard and no-JS reading. This checks the report UI, not fn behavior.",
+  "checked_at": "2026-09-20T19:22:55.936Z",
+  "inputs": {
+    "index.html": "015f83982a799f153f1b7cf9dda2d6a3c8686a40e1d60e6d79e96912f4df8a91",
+    "sources.html": "617ffe09728849934ef83f44e0d691c5ad034aa348864055ac75e66259fb4573",
+    "report.md": "0c56b595ae5d5f8889353d7a2cc1c5827feab8d9980bd82a4a35a65e0df96820",
+    "style.css": "6bbc685c61d04d27a7eea4007dc03739b914261ac3265000f534fb0605c89031",
+    "report.js": "39fc6894aed0b712717b7f53d26439fc07fc761b88bdb7cccc3d6b261e7c9825"
+  },
+  "script_sha256": "a4ab9184b483d55187cdc63b09867cadc6b7f2ec385ed4f446eb8004e69d576b"
+}

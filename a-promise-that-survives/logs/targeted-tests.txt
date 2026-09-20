@@ -1,0 +1,327 @@
+test_accessor_guards_are_verified_by_event (tests.test_ledger.DefrecordExpansionTests.test_accessor_guards_are_verified_by_event) ... ok
+test_every_generated_name_is_defined (tests.test_ledger.DefrecordExpansionTests.test_every_generated_name_is_defined) ... ok
+test_export_names_recognizers_and_withdraws_them (tests.test_ledger.DefrecordExpansionTests.test_export_names_recognizers_and_withdraws_them) ... ok
+test_generated_functions_are_marked_generated (tests.test_ledger.DefrecordExpansionTests.test_generated_functions_are_marked_generated) ... ok
+test_injectivity_is_not_reflexive (tests.test_ledger.DefrecordExpansionTests.test_injectivity_is_not_reflexive) ... ok
+test_internals_are_withdrawn (tests.test_ledger.DefrecordExpansionTests.test_internals_are_withdrawn) ... ok
+test_recognizer_carries_field_types_and_extra (tests.test_ledger.DefrecordExpansionTests.test_recognizer_carries_field_types_and_extra) ... ok
+test_recognizer_formals_come_before_the_record_variable (tests.test_ledger.DefrecordExpansionTests.test_recognizer_formals_come_before_the_record_variable) ... ok
+test_recognizer_guard_and_deferred_verification (tests.test_ledger.DefrecordExpansionTests.test_recognizer_guard_and_deferred_verification) ... ok
+test_recognizer_nil_suppresses_it (tests.test_ledger.DefrecordExpansionTests.test_recognizer_nil_suppresses_it) ... ok
+test_tag_shifts_the_fields_by_one (tests.test_ledger.DefrecordExpansionTests.test_tag_shifts_the_fields_by_one) ... ok
+test_a_local_witness_is_not_a_definition (tests.test_ledger.EventTests.test_a_local_witness_is_not_a_definition) ... ok
+test_a_theorem_inside_must_fail_is_not_a_theorem (tests.test_ledger.EventTests.test_a_theorem_inside_must_fail_is_not_a_theorem) ... ok
+test_events_are_counted_per_book (tests.test_ledger.EventTests.test_events_are_counted_per_book) ... ok
+test_guard_status_distinguishes_four_states (tests.test_ledger.EventTests.test_guard_status_distinguishes_four_states) ... ok
+test_a_closing_in_theory_disable_exempts_the_rule (tests.test_ledger.ExportHygieneLintTests.test_a_closing_in_theory_disable_exempts_the_rule) ... ok
+test_a_preservation_lemma_in_one_vocabulary_is_not_flagged (tests.test_ledger.ExportHygieneLintTests.test_a_preservation_lemma_in_one_vocabulary_is_not_flagged) ... ok
+test_a_theory_name_withdrawn_at_the_end_of_the_book_exempts_its_rules (tests.test_ledger.ExportHygieneLintTests.test_a_theory_name_withdrawn_at_the_end_of_the_book_exempts_its_rules) ... ok
+test_a_theory_that_does_not_name_the_rule_still_leaves_it_enabled (tests.test_ledger.ExportHygieneLintTests.test_a_theory_that_does_not_name_the_rule_still_leaves_it_enabled) ... ok
+test_an_enabled_equality_between_two_different_accessors_is_flagged (tests.test_ledger.ExportHygieneLintTests.test_an_enabled_equality_between_two_different_accessors_is_flagged) ... ok
+test_len_backchaining_conclusions_are_flagged (tests.test_ledger.ExportHygieneLintTests.test_len_backchaining_conclusions_are_flagged) ... ok
+test_rule_classes_nil_local_and_defthmd_all_exempt (tests.test_ledger.ExportHygieneLintTests.test_rule_classes_nil_local_and_defthmd_all_exempt) ... ok
+test_rune_forms_and_theory_algebra_resolve_too (tests.test_ledger.ExportHygieneLintTests.test_rune_forms_and_theory_algebra_resolve_too) ... ok
+test_a_generated_record_is_not_a_finding (tests.test_ledger.HandWrittenRecordLintTests.test_a_generated_record_is_not_a_finding) ... ok
+test_a_macro_only_book_exports_no_rule (tests.test_ledger.HandWrittenRecordLintTests.test_a_macro_only_book_exports_no_rule) ... ok
+test_a_shape_predicate_alone_is_not_a_finding (tests.test_ledger.HandWrittenRecordLintTests.test_a_shape_predicate_alone_is_not_a_finding) ... ok
+test_accessors_over_a_different_variable_do_not_count (tests.test_ledger.HandWrittenRecordLintTests.test_accessors_over_a_different_variable_do_not_count) ... ok
+test_an_include_shim_does_not_count_as_rule_free (tests.test_ledger.HandWrittenRecordLintTests.test_an_include_shim_does_not_count_as_rule_free) ... ok
+test_mbe_accessors_are_a_finding (tests.test_ledger.HandWrittenRecordLintTests.test_mbe_accessors_are_a_finding) ... ok
+test_nth_style_accessors_are_a_finding_too (tests.test_ledger.HandWrittenRecordLintTests.test_nth_style_accessors_are_a_finding_too) ... ok
+test_two_accessors_are_not_a_finding (tests.test_ledger.HandWrittenRecordLintTests.test_two_accessors_are_not_a_finding) ... ok
+test_a_deleted_defconst_is_flagged (tests.test_ledger.HostNamesLintTests.test_a_deleted_defconst_is_flagged) ... ok
+test_a_macro_argument_is_syntax_and_a_cond_test_is_not_a_call (tests.test_ledger.HostNamesLintTests.test_a_macro_argument_is_syntax_and_a_cond_test_is_not_a_call) ... ok
+test_a_name_defined_in_a_host_file_this_one_does_not_load_is_named (tests.test_ledger.HostNamesLintTests.test_a_name_defined_in_a_host_file_this_one_does_not_load_is_named) ... ok
+test_a_name_from_an_included_book_is_clean (tests.test_ledger.HostNamesLintTests.test_a_name_from_an_included_book_is_clean) ... ok
+test_an_acl2_builtin_from_the_allowlist_is_clean (tests.test_ledger.HostNamesLintTests.test_an_acl2_builtin_from_the_allowlist_is_clean) ... ok
+test_an_ld_of_the_defining_host_file_is_clean (tests.test_ledger.HostNamesLintTests.test_an_ld_of_the_defining_host_file_is_clean) ... ok
+test_a_non_local_include_of_a_book_with_no_export_theory_is_flagged (tests.test_ledger.IncludeHygieneLintTests.test_a_non_local_include_of_a_book_with_no_export_theory_is_flagged) ... ok
+test_a_relative_include_resolves_to_the_book_it_names (tests.test_ledger.IncludeHygieneLintTests.test_a_relative_include_resolves_to_the_book_it_names) ... ok
+test_a_system_book_and_an_unresolvable_path_are_not_judged (tests.test_ledger.IncludeHygieneLintTests.test_a_system_book_and_an_unresolvable_path_are_not_judged) ... ok
+test_including_a_book_that_withdraws_on_exit_is_clean (tests.test_ledger.IncludeHygieneLintTests.test_including_a_book_that_withdraws_on_exit_is_clean) ... ok
+test_the_same_include_made_local_is_clean (tests.test_ledger.IncludeHygieneLintTests.test_the_same_include_made_local_is_clean) ... ok
+test_a_host_warning_carries_the_file_line_and_name (tests.test_ledger.LintReportingTests.test_a_host_warning_carries_the_file_line_and_name) ... ok
+test_an_include_warning_carries_the_includer_line_and_target (tests.test_ledger.LintReportingTests.test_an_include_warning_carries_the_includer_line_and_target) ... ok
+test_the_generated_ledger_carries_both_counts (tests.test_ledger.LintReportingTests.test_the_generated_ledger_carries_both_counts) ... ok
+test_warnings_carry_the_book_line_and_name (tests.test_ledger.LintReportingTests.test_warnings_carry_the_book_line_and_name) ... ok
+test_bar_escaped_symbol_keeps_its_spelling (tests.test_ledger.ReaderTests.test_bar_escaped_symbol_keeps_its_spelling) ... ok
+test_comments_strings_and_block_comments_are_not_code (tests.test_ledger.ReaderTests.test_comments_strings_and_block_comments_are_not_code) ... ok
+test_quote_character_and_dotted_forms_read (tests.test_ledger.ReaderTests.test_quote_character_and_dotted_forms_read) ... ok
+test_symbols_and_string_literals_stay_distinct (tests.test_ledger.ReaderTests.test_symbols_and_string_literals_stay_distinct) ... ok
+test_unbalanced_source_is_an_error_not_a_guess (tests.test_ledger.ReaderTests.test_unbalanced_source_is_an_error_not_a_guess) ... ok
+test_a_cited_function_must_have_verified_guards (tests.test_ledger.RegistryTests.test_a_cited_function_must_have_verified_guards) ... ok
+test_a_good_citation_passes_and_regenerates (tests.test_ledger.RegistryTests.test_a_good_citation_passes_and_regenerates) ... ok
+test_a_suspect_theorem_may_not_be_cited (tests.test_ledger.RegistryTests.test_a_suspect_theorem_may_not_be_cited) ... ok
+test_a_theorem_outside_the_root_closure_fails (tests.test_ledger.RegistryTests.test_a_theorem_outside_the_root_closure_fails) ... ok
+test_an_unknown_theorem_name_fails (tests.test_ledger.RegistryTests.test_an_unknown_theorem_name_fails) ... ok
+test_every_named_assumption_has_an_encapsulate (tests.test_ledger.RepositoryLedgerTests.test_every_named_assumption_has_an_encapsulate) ... ok
+test_the_checked_in_ledger_is_current (tests.test_ledger.RepositoryLedgerTests.test_the_checked_in_ledger_is_current) ... ok
+test_a_branch_hypothesis_with_real_content_is_not_flagged (tests.test_ledger.SuspectTests.test_a_branch_hypothesis_with_real_content_is_not_flagged)
+The hypothesis is the branch test, but the conclusion is a fact ... ok
+test_an_instance_that_discharges_a_hypothesis_is_not_flagged (tests.test_ledger.SuspectTests.test_an_instance_that_discharges_a_hypothesis_is_not_flagged) ... ok
+test_an_ordinary_induction_is_not_flagged (tests.test_ledger.SuspectTests.test_an_ordinary_induction_is_not_flagged) ... ok
+test_branch_of_definition_is_flagged_through_a_let (tests.test_ledger.SuspectTests.test_branch_of_definition_is_flagged_through_a_let) ... ok
+test_closed_theory_corollary_is_flagged (tests.test_ledger.SuspectTests.test_closed_theory_corollary_is_flagged) ... ok
+test_constant_propagation_trivia_is_not_a_vacuous_theorem (tests.test_ledger.SuspectTests.test_constant_propagation_trivia_is_not_a_vacuous_theorem)
+`(equal t t)` appearing because a call site passes a literal is a ... ok
+test_definition_restated_under_its_own_hypotheses_is_flagged (tests.test_ledger.SuspectTests.test_definition_restated_under_its_own_hypotheses_is_flagged) ... ok
+test_instance_corollary_is_flagged (tests.test_ledger.SuspectTests.test_instance_corollary_is_flagged) ... ok
+test_preserves_name_with_no_subject_call_is_flagged (tests.test_ledger.SuspectTests.test_preserves_name_with_no_subject_call_is_flagged) ... ok
+test_reflexive_conclusion_is_flagged_through_one_unfolding (tests.test_ledger.SuspectTests.test_reflexive_conclusion_is_flagged_through_one_unfolding) ... ok
+test_a_bare_general_claim_is_flagged (tests.test_ledger.TeethFormLintTests.test_a_bare_general_claim_is_flagged) ... ok
+test_a_keyword_option_is_not_a_witness (tests.test_ledger.TeethFormLintTests.test_a_keyword_option_is_not_a_witness) ... ok
+test_a_must_fail_around_something_other_than_a_theorem_is_not_judged (tests.test_ledger.TeethFormLintTests.test_a_must_fail_around_something_other_than_a_theorem_is_not_judged) ... ok
+test_a_must_fail_naming_a_value_is_not_flagged (tests.test_ledger.TeethFormLintTests.test_a_must_fail_naming_a_value_is_not_flagged) ... ok
+test_a_deep_change_selects_every_root_above_it (tests.test_certify_runner.AffectedByTests.test_a_deep_change_selects_every_root_above_it) ... ok
+test_an_unknown_affected_book_is_refused_rather_than_selecting_nothing (tests.test_certify_runner.AffectedByTests.test_an_unknown_affected_book_is_refused_rather_than_selecting_nothing) ... ok
+test_dry_run_lists_the_affected_roots_in_requested_order (tests.test_certify_runner.AffectedByTests.test_dry_run_lists_the_affected_roots_in_requested_order) ... ok
+test_only_the_affected_books_are_certified (tests.test_certify_runner.AffectedByTests.test_only_the_affected_books_are_certified) ... ok
+test_a_failing_run_publishes_nothing (tests.test_certify_runner.CachePublishTests.test_a_failing_run_publishes_nothing) ... ok
+test_a_passing_run_publishes_every_certificate_to_the_cache (tests.test_certify_runner.CachePublishTests.test_a_passing_run_publishes_every_certificate_to_the_cache) ... ok
+test_no_publish_leaves_the_cache_untouched (tests.test_certify_runner.CachePublishTests.test_no_publish_leaves_the_cache_untouched) ... ok
+test_dependency_closure_excludes_unrelated_work (tests.test_certify_runner.CertificationEvidenceTests.test_dependency_closure_excludes_unrelated_work) ... ok
+test_markers_reject_echo_spoof_and_previous_run (tests.test_certify_runner.CertificationEvidenceTests.test_markers_reject_echo_spoof_and_previous_run) ... ok
+test_source_audit_distinguishes_comments_and_escaped_symbols (tests.test_certify_runner.CertificationEvidenceTests.test_source_audit_distinguishes_comments_and_escaped_symbols) ... ok
+test_system_book_reference_is_not_resolved_as_local (tests.test_certify_runner.CertificationEvidenceTests.test_system_book_reference_is_not_resolved_as_local) ... ok
+test_closure_adds_the_dependencies_in_dependency_order (tests.test_certify_runner.ClosureTests.test_closure_adds_the_dependencies_in_dependency_order) ... ok
+test_closure_certifies_the_dependencies_and_the_manifest_says_so (tests.test_certify_runner.ClosureTests.test_closure_certifies_the_dependencies_and_the_manifest_says_so) ... ok
+test_affected_by_with_no_roots_named_searches_every_makefile_root (tests.test_certify_runner.MakefileRootsTests.test_affected_by_with_no_roots_named_searches_every_makefile_root) ... ok
+test_the_default_roots_are_the_makefile_roots (tests.test_certify_runner.MakefileRootsTests.test_the_default_roots_are_the_makefile_roots) ... ok
+test_a_book_that_fails_while_acl2_exits_zero_is_recorded_failed (tests.test_certify_runner.ParallelScheduleTests.test_a_book_that_fails_while_acl2_exits_zero_is_recorded_failed) ... ok
+test_a_failing_book_fails_the_parallel_run (tests.test_certify_runner.ParallelScheduleTests.test_a_failing_book_fails_the_parallel_run) ... ok
+test_dependencies_finish_before_dependents_start_under_four_jobs (tests.test_certify_runner.ParallelScheduleTests.test_dependencies_finish_before_dependents_start_under_four_jobs) ... ok
+test_dependency_through_an_unrequested_book_still_orders_the_run (tests.test_certify_runner.ParallelScheduleTests.test_dependency_through_an_unrequested_book_still_orders_the_run) ... ok
+test_include_book_cycle_is_refused_before_any_acl2_runs (tests.test_certify_runner.ParallelScheduleTests.test_include_book_cycle_is_refused_before_any_acl2_runs) ... ok
+test_manifest_records_jobs_start_order_and_per_book_wall_time (tests.test_certify_runner.ParallelScheduleTests.test_manifest_records_jobs_start_order_and_per_book_wall_time) ... ok
+test_one_job_keeps_the_requested_order_and_the_same_manifest_fields (tests.test_certify_runner.ParallelScheduleTests.test_one_job_keeps_the_requested_order_and_the_same_manifest_fields) ... ok
+test_one_slot_serializes_four_jobs_and_the_waits_are_recorded (tests.test_certify_runner.SlotTests.test_one_slot_serializes_four_jobs_and_the_waits_are_recorded) ... ok
+test_slots_above_the_job_count_do_not_constrain_the_schedule (tests.test_certify_runner.SlotTests.test_slots_above_the_job_count_do_not_constrain_the_schedule) ... ok
+test_a_filesystem_that_rejects_full_fsync_falls_back_to_fsync (tests.test_host_boundary.DurabilityBarrierTests.test_a_filesystem_that_rejects_full_fsync_falls_back_to_fsync) ... ok
+test_an_unrelated_barrier_error_is_not_swallowed (tests.test_host_boundary.DurabilityBarrierTests.test_an_unrelated_barrier_error_is_not_swallowed) ... ok
+test_darwin_barrier_asks_the_device_to_flush_its_cache (tests.test_host_boundary.DurabilityBarrierTests.test_darwin_barrier_asks_the_device_to_flush_its_cache) ... ok
+test_every_journal_barrier_goes_through_the_one_helper (tests.test_host_boundary.DurabilityBarrierTests.test_every_journal_barrier_goes_through_the_one_helper) ... ok
+test_documented_table (tests.test_host_boundary.ExitCodeTests.test_documented_table) ... ok
+test_ingress_refusal_and_fault_stay_distinct (tests.test_host_boundary.ExitCodeTests.test_ingress_refusal_and_fault_stay_distinct) ... 
+  test_ingress_refusal_and_fault_stay_distinct (tests.test_host_boundary.ExitCodeTests.test_ingress_refusal_and_fault_stay_distinct) (error='BpIngressError') ... ERROR
+  test_ingress_refusal_and_fault_stay_distinct (tests.test_host_boundary.ExitCodeTests.test_ingress_refusal_and_fault_stay_distinct) (error='StoreIndeterminate') ... ERROR
+  test_ingress_refusal_and_fault_stay_distinct (tests.test_host_boundary.ExitCodeTests.test_ingress_refusal_and_fault_stay_distinct) (error='StoreFault') ... ERROR
+test_pending_bpa_delete_is_reported_as_acceptance_not_failure (tests.test_host_boundary.ExitCodeTests.test_pending_bpa_delete_is_reported_as_acceptance_not_failure)
+A durable acceptance awaiting a delete keeps the accepted code. ... python3.14 -m unittest: error: the following arguments are required: --bundle
+ERROR
+test_store_cli_maps_each_outcome_to_its_own_code (tests.test_host_boundary.ExitCodeTests.test_store_cli_maps_each_outcome_to_its_own_code) ... ok
+test_store_cli_usage_error_is_its_own_code (tests.test_host_boundary.ExitCodeTests.test_store_cli_usage_error_is_its_own_code) ... ok
+test_a_contended_lock_is_still_a_clean_refusal (tests.test_host_boundary.OwnershipAndOrphanTests.test_a_contended_lock_is_still_a_clean_refusal) ... ok
+test_absent_lock_pathname_is_a_fault_not_a_held_lock (tests.test_host_boundary.OwnershipAndOrphanTests.test_absent_lock_pathname_is_a_fault_not_a_held_lock)
+An uninitialised store is an invalid state, never `already locked`. ... ok
+test_initialization_publishes_metadata_through_staging (tests.test_host_boundary.OwnershipAndOrphanTests.test_initialization_publishes_metadata_through_staging) ... ok
+test_orphan_report_stays_bounded (tests.test_host_boundary.OwnershipAndOrphanTests.test_orphan_report_stays_bounded) ... ok
+test_recovery_reports_staging_orphans_without_deleting_them (tests.test_host_boundary.OwnershipAndOrphanTests.test_recovery_reports_staging_orphans_without_deleting_them) ... ok
+test_non_ascii_bid_is_refused_rather_than_raising_an_encoding_error (tests.test_host_boundary.ReceiverBoundaryTests.test_non_ascii_bid_is_refused_rather_than_raising_an_encoding_error) ... ERROR
+test_over_long_and_empty_bids_refuse_the_same_way (tests.test_host_boundary.ReceiverBoundaryTests.test_over_long_and_empty_bids_refuse_the_same_way) ... 
+  test_over_long_and_empty_bids_refuse_the_same_way (tests.test_host_boundary.ReceiverBoundaryTests.test_over_long_and_empty_bids_refuse_the_same_way) (bid=0) ... ERROR
+  test_over_long_and_empty_bids_refuse_the_same_way (tests.test_host_boundary.ReceiverBoundaryTests.test_over_long_and_empty_bids_refuse_the_same_way) (bid=513) ... ERROR
+
+======================================================================
+ERROR: test_ingress_refusal_and_fault_stay_distinct (tests.test_host_boundary.ExitCodeTests.test_ingress_refusal_and_fault_stay_distinct) (error='BpIngressError')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2047, in _parse_known_args2
+    namespace, args = self._parse_known_args(args, namespace, intermixed)
+                      ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2344, in _parse_known_args
+    raise ArgumentError(None, _('the following arguments are required: %s') %
+               ', '.join(required_actions))
+argparse.ArgumentError: the following arguments are required: --bundle
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/fn-assessment-3e1b184/tests/test_host_boundary.py", line 134, in test_ingress_refusal_and_fault_stay_distinct
+    self.assertEqual(run_bp_ingress.main(arguments), expected)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/private/tmp/fn-assessment-3e1b184/tools/run_bp_ingress.py", line 314, in main
+    args = parser.parse_args(argv)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2008, in parse_args
+    args, argv = self.parse_known_args(args, namespace)
+                 ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2018, in parse_known_args
+    return self._parse_known_args2(args, namespace, intermixed=False)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2049, in _parse_known_args2
+    self.error(str(err))
+    ~~~~~~~~~~^^^^^^^^^^
+  File "/private/tmp/fn-assessment-3e1b184/tools/run_store.py", line 159, in error
+    self.exit(EXIT_USAGE, "{}: error: {}\n".format(self.prog, message))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2772, in exit
+    _sys.exit(status)
+    ~~~~~~~~~^^^^^^^^
+SystemExit: 5
+
+======================================================================
+ERROR: test_ingress_refusal_and_fault_stay_distinct (tests.test_host_boundary.ExitCodeTests.test_ingress_refusal_and_fault_stay_distinct) (error='StoreIndeterminate')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2047, in _parse_known_args2
+    namespace, args = self._parse_known_args(args, namespace, intermixed)
+                      ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2344, in _parse_known_args
+    raise ArgumentError(None, _('the following arguments are required: %s') %
+               ', '.join(required_actions))
+argparse.ArgumentError: the following arguments are required: --bundle
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/fn-assessment-3e1b184/tests/test_host_boundary.py", line 134, in test_ingress_refusal_and_fault_stay_distinct
+    self.assertEqual(run_bp_ingress.main(arguments), expected)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/private/tmp/fn-assessment-3e1b184/tools/run_bp_ingress.py", line 314, in main
+    args = parser.parse_args(argv)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2008, in parse_args
+    args, argv = self.parse_known_args(args, namespace)
+                 ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2018, in parse_known_args
+    return self._parse_known_args2(args, namespace, intermixed=False)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2049, in _parse_known_args2
+    self.error(str(err))
+    ~~~~~~~~~~^^^^^^^^^^
+  File "/private/tmp/fn-assessment-3e1b184/tools/run_store.py", line 159, in error
+    self.exit(EXIT_USAGE, "{}: error: {}\n".format(self.prog, message))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2772, in exit
+    _sys.exit(status)
+    ~~~~~~~~~^^^^^^^^
+SystemExit: 5
+
+======================================================================
+ERROR: test_ingress_refusal_and_fault_stay_distinct (tests.test_host_boundary.ExitCodeTests.test_ingress_refusal_and_fault_stay_distinct) (error='StoreFault')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2047, in _parse_known_args2
+    namespace, args = self._parse_known_args(args, namespace, intermixed)
+                      ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2344, in _parse_known_args
+    raise ArgumentError(None, _('the following arguments are required: %s') %
+               ', '.join(required_actions))
+argparse.ArgumentError: the following arguments are required: --bundle
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/fn-assessment-3e1b184/tests/test_host_boundary.py", line 134, in test_ingress_refusal_and_fault_stay_distinct
+    self.assertEqual(run_bp_ingress.main(arguments), expected)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/private/tmp/fn-assessment-3e1b184/tools/run_bp_ingress.py", line 314, in main
+    args = parser.parse_args(argv)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2008, in parse_args
+    args, argv = self.parse_known_args(args, namespace)
+                 ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2018, in parse_known_args
+    return self._parse_known_args2(args, namespace, intermixed=False)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2049, in _parse_known_args2
+    self.error(str(err))
+    ~~~~~~~~~~^^^^^^^^^^
+  File "/private/tmp/fn-assessment-3e1b184/tools/run_store.py", line 159, in error
+    self.exit(EXIT_USAGE, "{}: error: {}\n".format(self.prog, message))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2772, in exit
+    _sys.exit(status)
+    ~~~~~~~~~^^^^^^^^
+SystemExit: 5
+
+======================================================================
+ERROR: test_pending_bpa_delete_is_reported_as_acceptance_not_failure (tests.test_host_boundary.ExitCodeTests.test_pending_bpa_delete_is_reported_as_acceptance_not_failure)
+A durable acceptance awaiting a delete keeps the accepted code.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2047, in _parse_known_args2
+    namespace, args = self._parse_known_args(args, namespace, intermixed)
+                      ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2344, in _parse_known_args
+    raise ArgumentError(None, _('the following arguments are required: %s') %
+               ', '.join(required_actions))
+argparse.ArgumentError: the following arguments are required: --bundle
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/fn-assessment-3e1b184/tests/test_host_boundary.py", line 119, in test_pending_bpa_delete_is_reported_as_acceptance_not_failure
+    self.assertEqual(run_bp_ingress.main(arguments), run_store.EXIT_OK)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/private/tmp/fn-assessment-3e1b184/tools/run_bp_ingress.py", line 314, in main
+    args = parser.parse_args(argv)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2008, in parse_args
+    args, argv = self.parse_known_args(args, namespace)
+                 ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2018, in parse_known_args
+    return self._parse_known_args2(args, namespace, intermixed=False)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2049, in _parse_known_args2
+    self.error(str(err))
+    ~~~~~~~~~~^^^^^^^^^^
+  File "/private/tmp/fn-assessment-3e1b184/tools/run_store.py", line 159, in error
+    self.exit(EXIT_USAGE, "{}: error: {}\n".format(self.prog, message))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.7/Frameworks/Python.framework/Versions/3.14/lib/python3.14/argparse.py", line 2772, in exit
+    _sys.exit(status)
+    ~~~~~~~~~^^^^^^^^
+SystemExit: 5
+
+======================================================================
+ERROR: test_non_ascii_bid_is_refused_rather_than_raising_an_encoding_error (tests.test_host_boundary.ReceiverBoundaryTests.test_non_ascii_bid_is_refused_rather_than_raising_an_encoding_error)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/fn-assessment-3e1b184/tests/test_host_boundary.py", line 206, in test_non_ascii_bid_is_refused_rather_than_raising_an_encoding_error
+    run_bp_receive.receive_bpa_request(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        store_root="/nonexistent", inbox_root="/nonexistent",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        receipt_root="/nonexistent", bid="bid-é", inventory=list,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        download=lambda bid: b"", delete=lambda bid: None,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        source_eid="dtn://sender/")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: receive_bpa_request() missing 1 required keyword-only argument: 'bundle'
+
+======================================================================
+ERROR: test_over_long_and_empty_bids_refuse_the_same_way (tests.test_host_boundary.ReceiverBoundaryTests.test_over_long_and_empty_bids_refuse_the_same_way) (bid=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/fn-assessment-3e1b184/tests/test_host_boundary.py", line 218, in test_over_long_and_empty_bids_refuse_the_same_way
+    run_bp_receive.receive_bpa_request(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        store_root="/nonexistent", inbox_root="/nonexistent",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        receipt_root="/nonexistent", bid=bid, inventory=list,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        download=lambda found: b"", delete=lambda found: None,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        source_eid="dtn://sender/")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: receive_bpa_request() missing 1 required keyword-only argument: 'bundle'
+
+======================================================================
+ERROR: test_over_long_and_empty_bids_refuse_the_same_way (tests.test_host_boundary.ReceiverBoundaryTests.test_over_long_and_empty_bids_refuse_the_same_way) (bid=513)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/fn-assessment-3e1b184/tests/test_host_boundary.py", line 218, in test_over_long_and_empty_bids_refuse_the_same_way
+    run_bp_receive.receive_bpa_request(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        store_root="/nonexistent", inbox_root="/nonexistent",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        receipt_root="/nonexistent", bid=bid, inventory=list,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        download=lambda found: b"", delete=lambda found: None,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        source_eid="dtn://sender/")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: receive_bpa_request() missing 1 required keyword-only argument: 'bundle'
+
+----------------------------------------------------------------------
+Ran 112 tests in 31.336s
+
+FAILED (errors=7)

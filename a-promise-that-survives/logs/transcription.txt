@@ -1,0 +1,24 @@
+missing-host-cuts: checkpoint: checkpoint:candidate-stage-unlinked is a :cut of fn-bs-checkpoint-publish-program and no faults.at of publish()
+missing-host-cuts: store: frontier-created is a :cut of fn-bs-frontier-program and no faults.at of advance_frontier()
+missing-host-cuts: store: frontier-written is a :cut of fn-bs-frontier-program and no faults.at of advance_frontier()
+missing-host-cuts: store: init-root-created is a :cut of fn-bs-init-program and no faults.at of initialize()
+missing-host-cuts: store: init-transactions-created is a :cut of fn-bs-init-program and no faults.at of initialize()
+missing-host-cuts: store: init-staging-created is a :cut of fn-bs-init-program and no faults.at of initialize()
+missing-host-cuts: store: init-barrier is a :cut of fn-bs-init-program and no faults.at of initialize()
+missing-host-cuts: store: init-barrier is a :cut of fn-bs-init-program and no faults.at of initialize()
+missing-host-cuts: store: init-barrier is a :cut of fn-bs-init-program and no faults.at of initialize()
+missing-host-cuts: store: init-barrier is a :cut of fn-bs-init-program and no faults.at of initialize()
+missing-host-cuts: store: init-barrier is a :cut of fn-bs-init-program and no faults.at of initialize()
+missing-host-cuts: store: record-created is a :cut of fn-bs-record-program and no faults.at of publish()
+missing-host-cuts: store: record-written is a :cut of fn-bs-record-program and no faults.at of publish()
+missing-host-cuts: store: record-stage-unlinked is a :cut of fn-bs-record-program and no faults.at of publish()
+syscall-drift: checkpoint:select() issues [':create', ':write-all', ':fsync-file', ':rename', ':unlink', ':fsync-dir'] and fn-bs-checkpoint-select-program has [':create', ':write-all', ':fsync-file', ':rename', ':fsync-dir']
+syscall-drift: receipt:publish() issues [':create', ':fsync-file', ':write-all', ':link', ':fsync-dir', ':unlink'] and fn-bs-receipt-program has [':create', ':write-all', ':fsync-file', ':link', ':fsync-dir', ':unlink']
+syscall-drift: store:initialize() issues [':fsync-dir', ':fsync-file', ':fsync-file', ':fsync-file', ':fsync-dir', ':fsync-dir', ':fsync-dir'] and fn-bs-init-program has [':mkdir', ':mkdir', ':mkdir', ':fsync-file', ':fsync-file', ':fsync-dir', ':fsync-dir', ':fsync-dir']
+syscall-drift: workflow:publish() issues [':create', ':write-all', ':fsync-file', ':unlink', ':link', ':fsync-dir', ':unlink'] and fn-bs-workflow-program has [':create', ':write-all', ':fsync-file', ':link', ':fsync-dir', ':unlink']
+syscall-drift: workflow:stage_inbound() issues [':fsync-dir', ':create', ':fsync-file', ':write-all', ':link', ':fsync-dir', ':unlink'] and fn-bs-inbox-program has [':create', ':write-all', ':fsync-file', ':link', ':fsync-dir', ':unlink']
+unmodelled: receive:_delete_after_decision(): bpa-deleted -- BPA delete only: a transport side effect outside the storage model
+unmodelled: receive:_durably_decide(): receipt-intent,receipt-committed,receipt-regenerated -- receipt decision machine over the receipt journal; its storage boundary is receipt:publish
+unmodelled: receive:receive_bpa_request(): staged,context-persisted,store-published,context-persisted -- composite receiver: its cuts are store and journal cuts in sequence, not a storage program of its own (crash model v2 §3.4 covers the journals it drives)
+unmodelled: workflow:retry_staged_delete(): inbound-retry-deleted -- retry_staged_delete issues no storage syscall: its only boundary is the BPA delete, a transport side effect outside the storage model
+transcriptions=10 fidelity-defects=0 missing-host-cuts=14 syscall-drift=5 unmodelled=4

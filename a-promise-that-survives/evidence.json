@@ -2,7 +2,7 @@
   "assessment": "fn: a promise that survives",
   "revision": "3e1b1849413d5168322fcf34c9f74e77d109be72",
   "scope": "Frozen source sample and recorded lane evidence; no fresh ACL2 certification or deployment",
-  "generated_at": "2026-09-20T19:12:27.690905+00:00",
+  "generated_at": "2026-09-20T19:22:53.701574+00:00",
   "environment": {
     "python": "3.14.7",
     "os": "Darwin",
@@ -20,6 +20,9 @@
     "books/served.lisp": "b6e8930785d476ac4bc4e8cc6b5de58540f7375c1fd936b07fdc5bad843fd885",
     "host/owner-host.lisp": "62e5cb2003ae5d060a254b48c1dde2e087309a719303038a61aa0659ca987d00",
     "books/owner.lisp": "aa682a1f5833c7a27b8ca1ff49fa9df52cee2cafcc00e00726ce1c186fa7e6ea",
+    "books/owner-invariants.lisp": "f52cef432cac39930be7ab357a140d9e03a997ae747670465c6cee04a86b14dd",
+    "books/assumptions.lisp": "ba3240ac1892124a6b158f2bcb9b5f8e8c8bb659e9302e4232a271d09949bb3e",
+    "docs/proof-style.md": "4f10a14b8dd325fbe0ea7853b1e7112de8a889e96342816b91c3e2211721591b",
     "specs/nntp-audit.md": "f3e0956dfcc38a70d014e2936b349b5c6baf52c25a708726a2828e6e019211eb",
     "books/crypto-attach.lisp": "54a655456b13ce20957d519608c284d3f1ec81c3a364d274373dd632547e945e",
     "docs/architecture.md": "05cea9fe56517a623b51afe2ec433c4fa77ed02475abc55fe7fc48b84b68f0fa",
@@ -127,6 +130,30 @@
       "last_line": 609
     },
     {
+      "id": "owner-bridge",
+      "title": "The pinned-prefix correspondence theorem",
+      "path": "books/owner-invariants.lisp",
+      "sha256": "f52cef432cac39930be7ab357a140d9e03a997ae747670465c6cee04a86b14dd",
+      "first_line": 657,
+      "last_line": 690
+    },
+    {
+      "id": "assumptions",
+      "title": "Named assumptions and the limits of defining them",
+      "path": "books/assumptions.lisp",
+      "sha256": "ba3240ac1892124a6b158f2bcb9b5f8e8c8bb659e9302e4232a271d09949bb3e",
+      "first_line": 1,
+      "last_line": 78
+    },
+    {
+      "id": "proof-style",
+      "title": "Generated support facts and proof discipline",
+      "path": "docs/proof-style.md",
+      "sha256": "4f10a14b8dd325fbe0ea7853b1e7112de8a889e96342816b91c3e2211721591b",
+      "first_line": 1,
+      "last_line": 25
+    },
+    {
       "id": "owner-read",
       "title": "The owner reaches the served byte fold",
       "path": "books/owner.lisp",
@@ -155,8 +182,8 @@
       "title": "The broader architecture claim",
       "path": "docs/architecture.md",
       "sha256": "05cea9fe56517a623b51afe2ec433c4fa77ed02475abc55fe7fc48b84b68f0fa",
-      "first_line": 1,
-      "last_line": 95
+      "first_line": 77,
+      "last_line": 115
     },
     {
       "id": "frame-python",
@@ -330,7 +357,8 @@
         "Ledger OK: cited events exist, are not SUSPECT, and planning/ledger.md is current.",
         "Ledger lints: 179 warnings (export hygiene, teeth form, hand-written record, include hygiene, host names); see planning/ledger.json.",
         "host_check: SKIPPED -- FN_ACL2 is unset or does not name an executable, so no host file was loaded.  This check is not evidence until it runs with a real ACL2."
-      ]
+      ],
+      "log_path": "logs/scaffold.txt"
     },
     {
       "command": "python3 -m unittest tests.test_ledger tests.test_certify_runner tests.test_host_boundary -v",
@@ -347,7 +375,8 @@
         "ERROR: test_over_long_and_empty_bids_refuse_the_same_way (tests.test_host_boundary.ReceiverBoundaryTests.test_over_long_and_empty_bids_refuse_the_same_way) (bid=513)",
         "Ran 112 tests in 31.336s",
         "FAILED (errors=7)"
-      ]
+      ],
+      "log_path": "logs/targeted-tests.txt"
     },
     {
       "command": "python3 tools/transcribe_check.py",
@@ -356,7 +385,8 @@
       "log_sha256": "6570927aeefa09f2bf993a846e2e8f09ca08989fd9408729f6d188d3b2160f96",
       "observations": [
         "transcriptions=10 fidelity-defects=0 missing-host-cuts=14 syscall-drift=5 unmodelled=4"
-      ]
+      ],
+      "log_path": "logs/transcription.txt"
     }
   ],
   "absent_at_snapshot": [

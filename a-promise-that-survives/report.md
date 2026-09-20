@@ -74,6 +74,12 @@ records to the stable history, optionally extended by the exact durable candidat
 It is the important boundary still to justify from bytes and platform behavior;
 the theorem does not establish that an arbitrary disk image satisfies it.
 
+Named assumptions now have constrained-function specifications, which makes them
+inspectable. Their existence alone does not connect them to a deployment: the
+reopen theorem above takes the concrete crash-image predicate, and no hardware
+qualification follows from its local witness. Every assumption still needs a
+named dependency and an argument that the selected platform satisfies it.
+
 **Proof work has rejected an intended theorem.** The byte model treated a pending
 empty write beyond EOF differently from its tear semantics: one path extended
 the file; the other had no pieces to apply. The storage lane recorded the concrete
@@ -210,6 +216,11 @@ profile**. A missing edge matters more than a large number of declarations.
 ACL2 admission, guard verification, certification, known-answer vectors, mutation
 tests, fault experiments and hardware qualification answer different questions.
 The generated ledger is a useful locator and drift detector, not a coverage score.
+
+The new record macros and proof-style guidance are also useful investments: let
+machines generate repetitive accessor/shape facts so proof effort goes into the
+composition properties. Shape, termination and guard facts are necessary support;
+they should not stand in for a user's preservation or authorization guarantee.
 
 ## Infrastructure people and agents can share
 
