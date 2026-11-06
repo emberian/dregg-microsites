@@ -38,6 +38,7 @@ source; those checks did not include a fresh ACL2 certification.
 - [Promises, priced](https://emberian.github.io/dregg-microsites/promises-priced/)
 - [Which model?](https://emberian.github.io/dregg-microsites/which-model/)
 - [Reading a millennium proof](https://emberian.github.io/dregg-microsites/reading-a-millennium-proof/)
+- [Absence receipt](https://emberian.github.io/dregg-microsites/absence-receipt/) — 100,000 public crates.io index documents, two forbidden byte patterns, count 0, which leg is proved, re-executed, hashed, signed.
 
 The site is plain, dependency-free HTML published from the root of `main` with
 GitHub Pages.
