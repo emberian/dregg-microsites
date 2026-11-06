@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>An absence receipt</title>
+  <meta name="description" content="100,000 public documents, a policy that forbids two secret shapes, and a signed sentence saying none of them occurs · with every leg named for what it is.">
+  <meta name="theme-color" content="#10110c">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/absence-receipt/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="An absence receipt">
+  <meta property="og:description" content="100,000 public documents, zero secrets, one signed sentence · and which leg of it is a proof.">
+  <style>
+    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--green); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(52px, 9vw, 104px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--orange); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--orange); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    .gap {
+      margin: 30px 0; padding: 22px 24px; border: 1px solid var(--rule); border-left: 4px solid var(--orange);
+      font: 700 17px/1.55 var(--mono); color: var(--paper);
+    }
+    .notclaims { border-top: 4px solid var(--paper); margin: 22px 0; }
+    .nc { display: grid; grid-template-columns: 26px 1fr; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--rule); }
+    .nc .x { color: var(--orange); font: 900 16px/1.4 var(--mono); }
+    .nc p { margin: 0; font-size: 14.5px; }
+    .stance { margin: 34px 0; padding: 20px 24px; background: #0a0b07; border: 1px solid var(--rule); border-left: 4px solid var(--green); }
+    .stance p { margin: 0; max-width: none; font-size: 15.5px; color: var(--dim); }
+    .stance p strong { color: var(--green); }
+    .status { margin-top: 44px; padding-top: 14px; border-top: 1px solid var(--rule); font: 600 11px/1.8 var(--mono); color: var(--dimmer); letter-spacing: .05em; text-transform: uppercase; }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 56px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    pre {
+      overflow-x: auto; margin: 22px 0; padding: 18px 20px;
+      background: #0a0b07; border: 1px solid var(--rule); border-left: 3px solid var(--green);
+      font: 500 12.5px/1.7 var(--mono); color: #c9c6b8;
+    }
+    pre .ok { color: var(--green); }
+    pre .hot { color: var(--orange); }
+    code { font: 500 0.92em var(--mono); color: var(--paper); }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">Automata · demo</span>
+  </header>
+
+  <section class="titleblock">
+    <p class="kicker">Automata program · demo (a)</p>
+    <h1>Nothing<br>was <span>there.</span></h1>
+    <p class="dek">A receipt for an absence: one hundred thousand public
+    documents, a policy forbidding two shapes of secret, and a signed sentence
+    saying neither shape occurs anywhere in them. The interesting part is not
+    the zero. It is saying exactly which part of the sentence was proved, which
+    was re-executed, and which was merely hashed.</p>
+  </section>
+
+  <h2>The sentence.</h2>
+  <pre>
+{"v":"absence-receipt-v1",
+ "policy_blake3":"984aba5f…",     <span class="ok">the policy source</span>
+ "table_blake3":"7434e218…",      <span class="ok">the automaton it compiled to</span>
+ "corpus_mmr_root":"17d69bbf…",   <span class="ok">100,000 documents, in order</span>
+ "corpus_pin":"681f94fc…",        <span class="ok">crates.io-index commit</span>
+ "n":100000,
+ "count":<span class="hot">0</span>}</pre>
+  <p>The documents are the first 100,000 files of the public
+  <strong>crates.io index</strong> at a pinned commit · 1.77 GB of package
+  metadata. The policy forbids an AWS access-key id
+  (<code>AKIA</code> and sixteen capitals or digits) and any PEM
+  private-key header. The policy compiles to a 129-state automaton that
+  accepts exactly the documents containing neither.</p>
+
+  <h2>Which leg is <em>which.</em></h2>
+  <div class="notclaims">
+    <div class="nc"><div class="x">1</div><p><strong>Committed.</strong> The
+    corpus is a Merkle mountain range over the documents' blake3 hashes. The
+    100,000 hashes are published, so anyone can recompute the root without
+    downloading the index.</p></div>
+    <div class="nc"><div class="x">2</div><p><strong>Re-executed.</strong> The
+    count comes from a Lean program, compiled to native code, that folds the
+    automaton over every byte of every document: 1.77 billion steps in about
+    48 seconds on a laptop. Lean proves that this fold is the house DFA's
+    acceptance, and that a count of zero means every document is accepted. A
+    second, independent run through the Rust runtime has to agree, and
+    does.</p></div>
+    <div class="nc"><div class="x">3</div><p><strong>Proved.</strong> One
+    record, a 2,048-byte document, has its run emitted by Lean as a descriptor
+    of the served table-routing family and proved as a STARK: 724 ms to prove,
+    16 ms to verify, 91 KB of proof. The same proof refuses a different final
+    state.</p></div>
+    <div class="nc"><div class="x">4</div><p><strong>Signed.</strong> The body
+    is signed with an ordinary SSH key (<code>ssh-keygen -Y sign</code>), and
+    <code>ssh-keygen -Y verify</code> checks it.</p></div>
+  </div>
+
+  <div class="gap">the zero is cheap.<br>the labels on the legs are the product.</div>
+
+  <h2>What this does <em>not</em> claim.</h2>
+  <div class="notclaims">
+    <div class="nc"><div class="x">✗</div><p>a proof about the corpus · the
+    100,000 verdicts are re-execution, and checking them means running them
+    again</p></div>
+    <div class="nc"><div class="x">✗</div><p>that the automaton is the
+    policy · today's policy compiler is interim Rust, unproved, and is
+    replaced by the Lean-compiled table when the policy language
+    lands</p></div>
+    <div class="nc"><div class="x">✗</div><p>that the hashed documents are
+    the first 100,000 of the pinned commit · re-running the selection against a
+    clone checks that; nothing proves it</p></div>
+    <div class="nc"><div class="x">✗</div><p>privacy · the one proved record's
+    bytes are public inside its own descriptor, and the proof is not tied to
+    the corpus root</p></div>
+  </div>
+
+  <h2>One thing it <em>found.</em></h2>
+  <p>The runtime crate's own regex-derivative compiler never finished the
+  absence automaton for even one four-letter literal: it normalizes
+  alternation without associativity, so the derivatives of "anything, then
+  <code>AKIA</code>" keep nesting differently and never repeat. Brzozowski's
+  theorem only promises finitely many derivatives up to that similarity, and
+  the Lean side proves exactly the up-to-similarity version. The demo
+  normalizes before each lookup and gets 9,153 states, which minimize to 129.</p>
+
+  <p class="status">Status, plainly: a demo, built in a day on public data. The
+  pipeline, the hash list, the table, the receipt and its signature are in
+  the dregg repository under <code>demo/absence-receipt/</code>, with the
+  commands to reproduce every number.</p>
+
+  <footer>
+    <span>DREGG research field notes · Automata</span>
+    <span>Plain HTML · no trackers</span>
+  </footer>
+</main>
+</body>
+</html>
