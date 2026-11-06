@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>So far</title>
+  <meta name="description" content="A live Claude Code session, a Büchi policy, and a receipt every hundred events that a Lean follower checks without re-reading the past.">
+  <meta name="theme-color" content="#10110c">
+  <style>    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--green); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(52px, 9vw, 104px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--orange); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--orange); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    .gap {
+      margin: 30px 0; padding: 22px 24px; border: 1px solid var(--rule); border-left: 4px solid var(--orange);
+      font: 700 17px/1.55 var(--mono); color: var(--paper);
+    }
+    .notclaims { border-top: 4px solid var(--paper); margin: 22px 0; }
+    .nc { display: grid; grid-template-columns: 26px 1fr; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--rule); }
+    .nc .x { color: var(--orange); font: 900 16px/1.4 var(--mono); }
+    .nc p { margin: 0; font-size: 14.5px; }
+    .stance { margin: 34px 0; padding: 20px 24px; background: #0a0b07; border: 1px solid var(--rule); border-left: 4px solid var(--green); }
+    .stance p { margin: 0; max-width: none; font-size: 15.5px; color: var(--dim); }
+    .stance p strong { color: var(--green); }
+    .status { margin-top: 44px; padding-top: 14px; border-top: 1px solid var(--rule); font: 600 11px/1.8 var(--mono); color: var(--dimmer); letter-spacing: .05em; text-transform: uppercase; }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 56px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    pre {
+      overflow-x: auto; margin: 22px 0; padding: 18px 20px;
+      background: #0a0b07; border: 1px solid var(--rule); border-left: 3px solid var(--green);
+      font: 500 12.5px/1.7 var(--mono); color: #c9c6b8;
+    }
+    pre .ok { color: var(--green); }
+    pre .hot { color: var(--orange); }
+    code { font: 500 0.92em var(--mono); color: var(--paper); }
+    .tablewrap { overflow-x: auto; margin: 18px 0; }
+    table { border-collapse: collapse; font: 500 12px/1.5 var(--mono); color: #c9c6b8; min-width: 560px; }
+    th, td { padding: 5px 9px; border-bottom: 1px solid var(--rule); text-align: left; white-space: nowrap; }
+    th { color: var(--dimmer); font-weight: 700; }
+    figure { margin: 18px 0 26px; }
+    figcaption { color: var(--dimmer); font: 600 11px/1.6 var(--mono); margin-top: 6px; }
+    @media (max-width: 520px) { .page { width: calc(100% - 32px); } }
+</style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">Automata · streaming receipts</span>
+  </header>
+
+  <section class="titleblock">
+    <p class="kicker">Initiative 11 · L3</p>
+    <h1>So<br><span>far.</span></h1>
+    <p class="dek">A Claude Code session writes its transcript one line at a time. Every hundred
+    lines a receipt says what a policy automaton has seen: the state it is in, how often its
+    acceptance condition has been met, whether anything has gone irrecoverably wrong, and the root
+    of a Merkle mountain range over every line so far. A follower written in Lean checks each
+    receipt against the previous one, in work that depends on the window, not on the session's
+    length.</p>
+  </section>
+
+  <h2>The policy.</h2>
+  <p>Two clauses, as one deterministic Büchi automaton (the product of a safety monitor and a
+  liveness automaton, <code>prod_accepts_iff</code>):</p>
+  <div class="notclaims">
+    <div class="nc"><div class="x">□</div><p><strong>Safety.</strong> No Bash call runs a command
+    the operator has forbidden: <code>git stash</code>, <code>git add -A</code>,
+    <code>pkill -f</code> / <code>-x</code>, <code>killall</code>, <code>kill -u</code>. Wrappers
+    such as <code>sudo</code>, <code>bash -c</code> and <code>ssh host '…'</code> are peeled. Once
+    tripped, tripped for ever.</p></div>
+    <div class="nc"><div class="x">◇</div><p><strong>Liveness.</strong> Every human prompt is
+    eventually followed by assistant text. Accepting: no prompt waiting. Büchi: accepting
+    infinitely often.</p></div>
+  </div>
+  <p>No finite prefix can say a liveness clause holds: whatever has happened, the assistant could
+  fall silent for ever (<code>respLive_is_liveness</code>). So the verdict is three-valued.
+  <strong>viol</strong> is final and means every infinite continuation is rejected
+  (<code>verdict_viol_sound</code>, <code>verdict_monotone</code>). Otherwise it is
+  <strong>unknown</strong>, and that is a real "?": both outcomes stay possible
+  (<code>unknown_is_genuine</code>). What the receipts carry for the liveness clause instead is
+  exact: the number of accepting positions so far, which is unbounded exactly when the
+  infinite session is accepted (<code>buchi_iff_count_unbounded</code>), and the last accepting
+  position, so the current wait is certified to be at most <code>n − last</code> events.</p>
+
+  <h2>The receipts, <em>live.</em></h2>
+  <p>This lane's own session transcript, tailed while the lane was still writing it: the producer
+  cut a window every hundred lines as they appeared and a Lean follower checked them as they
+  landed. When the producer was stopped the whole chain was checked once more, from genesis,
+  against an independently computed root. That run's last line:</p>
+  <pre>ACCEPT 53 windows, 5300 entries, root dca8270ab18828c3f9401feb285effc68c0fa8401e9dbe70897e8e95d620f8ad, verdict unknown (anchored)</pre>
+  <div class="tablewrap"><table>
+    <tr><th>k</th><th>positions</th><th>verdict</th><th>tripped</th><th>waiting</th><th>marks</th><th>last mark</th><th>hashes</th><th>root</th></tr>
+    <tr><td>1</td><td>[0, 100)</td><td>unknown</td><td>no</td><td>no</td><td>74</td><td>100</td><td>301</td><td><code>47c6d96b98da…</code></td></tr><tr><td>2</td><td>[100, 200)</td><td>unknown</td><td>no</td><td>no</td><td>174</td><td>200</td><td>304</td><td><code>e14391e0f735…</code></td></tr><tr><td>3</td><td>[200, 300)</td><td>unknown</td><td>no</td><td>no</td><td>274</td><td>300</td><td>304</td><td><code>62bb1d619871…</code></td></tr><tr><td>51</td><td>[5000, 5100)</td><td>unknown</td><td>no</td><td>yes</td><td>4317</td><td>5093</td><td>306</td><td><code>bd4eded8173e…</code></td></tr><tr><td>52</td><td>[5100, 5200)</td><td>unknown</td><td>no</td><td>no</td><td>4371</td><td>5200</td><td>309</td><td><code>14c740acc963…</code></td></tr><tr><td>53</td><td>[5200, 5300)</td><td>unknown</td><td>no</td><td>no</td><td>4457</td><td>5300</td><td>305</td><td><code>dca8270ab188…</code></td></tr>
+  </table></div>
+  <p>The root a log owner would publish was computed separately, from the source transcript's
+  first 5,300 lines, and the chain was re-verified against it
+  (<code>stream-check verify --anchor</code>). Without that anchor the chain proves only that the
+  receipts match the windows it was shown: a producer that deletes a line before cutting windows
+  and recomputes every receipt passes the chain check, and the demo shows the anchor refusing it
+  (<code>anchored_is_genuine</code>).</p>
+
+  <h2>A violation, and <em>after.</em></h2>
+  <p>Another real session, replayed. At position 502 the agent ran
+  <code>git add -A</code> in a freshly initialised repository. Window 6 says
+  <strong>viol</strong>, and no later window could say anything else.</p>
+  <div class="tablewrap"><table>
+    <tr><th>k</th><th>positions</th><th>verdict</th><th>tripped</th><th>waiting</th><th>marks</th><th>last mark</th><th>hashes</th><th>root</th></tr>
+    <tr><td>1</td><td>[0, 100)</td><td>unknown</td><td>no</td><td>no</td><td>94</td><td>100</td><td>301</td><td><code>9d174cdb9c31…</code></td></tr><tr><td>2</td><td>[100, 200)</td><td>unknown</td><td>no</td><td>no</td><td>194</td><td>200</td><td>304</td><td><code>ce6f89e18c4b…</code></td></tr><tr><td>3</td><td>[200, 300)</td><td>unknown</td><td>no</td><td>no</td><td>294</td><td>300</td><td>304</td><td><code>3fc43fd00be6…</code></td></tr><tr><td>4</td><td>[300, 400)</td><td>unknown</td><td>no</td><td>no</td><td>394</td><td>400</td><td>305</td><td><code>faaa901173f3…</code></td></tr><tr><td>5</td><td>[400, 500)</td><td>unknown</td><td>no</td><td>no</td><td>494</td><td>500</td><td>304</td><td><code>4e16a16aa011…</code></td></tr><tr><td>6</td><td>[500, 530)</td><td>viol</td><td>yes</td><td>no</td><td>495</td><td>501</td><td>97</td><td><code>6c7c87a882db…</code></td></tr>
+  </table></div>
+
+  <h2>Cost, <em>counted.</em></h2>
+  <p>The largest session on this machine, 27,775 transcript lines (44.9 MB), replayed through
+  the same producer and follower in 278 windows. Per window the follower spends 2·w hash
+  calls on the entries (their digests and their leaves), one per carry, and one per peak to bag the
+  root. The peaks grow as log n (3 at the start, 11 at the end); nothing else
+  does.</p>
+  <figure><svg viewBox="0 0 700 190" role="img" aria-label="hash calls per window" style="width:100%;height:auto;display:block"><line x1="52" x2="690" y1="164.0" y2="164.0" stroke="rgba(242,237,223,.12)"/><text x="46" y="168.0" text-anchor="end" fill="#77796f" font-size="10" font-family="ui-monospace,monospace">0</text><line x1="52" x2="690" y1="87.0" y2="87.0" stroke="rgba(242,237,223,.12)"/><text x="46" y="91.0" text-anchor="end" fill="#77796f" font-size="10" font-family="ui-monospace,monospace">200</text><line x1="52" x2="690" y1="10.0" y2="10.0" stroke="rgba(242,237,223,.12)"/><text x="46" y="14.0" text-anchor="end" fill="#77796f" font-size="10" font-family="ui-monospace,monospace">400</text><text x="52" y="184" fill="#77796f" font-size="10" font-family="ui-monospace,monospace">window 1</text><text x="690" y="184" text-anchor="end" fill="#77796f" font-size="10" font-family="ui-monospace,monospace">window 278</text><polyline fill="none" stroke="#9fc55b" stroke-width="1.6" points="52.0,48.1 54.3,47.0 56.6,47.0 58.9,46.6 61.2,47.0 63.5,45.8 65.8,46.6 68.1,45.8 70.4,47.0 72.7,46.6 75.0,45.8 77.3,46.6 79.6,46.6 81.9,46.6 84.2,45.8 86.5,45.4 88.9,47.0 91.2,46.2 93.5,46.6 95.8,45.4 98.1,45.8 100.4,46.6 102.7,46.6 105.0,45.4 107.3,46.6 109.6,46.2 111.9,46.6 114.2,46.2 116.5,45.8 118.8,45.8 121.1,45.4 123.4,46.2 125.7,47.0 128.0,45.8 130.3,46.2 132.6,45.4 134.9,46.6 137.2,45.4 139.5,45.4 141.8,45.0 144.1,45.8 146.4,47.3 148.7,46.6 151.0,46.2 153.3,46.6 155.6,46.2 157.9,45.4 160.3,45.8 162.6,46.6 164.9,46.2 167.2,46.2 169.5,45.0 171.8,46.6 174.1,45.8 176.4,46.2 178.7,45.0 181.0,45.8 183.3,46.2 185.6,45.8 187.9,45.8 190.2,45.4 192.5,45.0 194.8,46.2 197.1,45.8 199.4,47.0 201.7,45.8 204.0,45.8 206.3,45.8 208.6,46.2 210.9,45.0 213.2,45.4 215.5,44.6 217.8,46.6 220.1,46.2 222.4,45.4 224.7,45.4 227.0,45.4 229.4,45.8 231.7,45.0 234.0,44.6 236.3,45.8 238.6,45.0 240.9,47.3 243.2,46.2 245.5,46.6 247.8,46.2 250.1,46.2 252.4,45.0 254.7,46.6 257.0,46.2 259.3,46.2 261.6,45.8 263.9,45.4 266.2,46.2 268.5,45.8 270.8,45.8 273.1,46.6 275.4,45.4 277.7,46.2 280.0,45.4 282.3,46.2 284.6,45.0 286.9,45.0 289.2,45.8 291.5,46.6 293.8,46.6 296.1,45.8 298.4,45.4 300.8,46.2 303.1,45.8 305.4,45.0 307.7,45.0 310.0,45.8 312.3,46.2 314.6,46.2 316.9,45.0 319.2,45.8 321.5,45.0 323.8,45.8 326.1,44.6 328.4,45.4 330.7,45.4 333.0,45.0 335.3,46.6 337.6,46.2 339.9,45.8 342.2,45.8 344.5,45.4 346.8,47.0 349.1,45.8 351.4,45.8 353.7,45.4 356.0,45.8 358.3,44.6 360.6,45.8 362.9,45.0 365.2,46.2 367.5,45.8 369.8,45.0 372.2,45.4 374.5,45.4 376.8,45.4 379.1,44.6 381.4,44.3 383.7,46.6 386.0,45.8 388.3,46.2 390.6,45.0 392.9,45.4 395.2,45.4 397.5,45.4 399.8,44.3 402.1,45.4 404.4,45.0 406.7,45.8 409.0,45.4 411.3,45.0 413.6,45.0 415.9,44.6 418.2,45.0 420.5,45.8 422.8,44.6 425.1,45.0 427.4,44.3 429.7,47.3 432.0,46.2 434.3,46.2 436.6,45.8 438.9,46.6 441.2,47.0 443.6,46.2 445.9,45.8 448.2,46.2 450.5,45.8 452.8,45.0 455.1,45.8 457.4,46.6 459.7,46.2 462.0,46.2 464.3,45.0 466.6,46.2 468.9,45.4 471.2,45.8 473.5,44.6 475.8,45.4 478.1,46.6 480.4,46.2 482.7,46.2 485.0,45.8 487.3,45.4 489.6,45.8 491.9,45.4 494.2,46.6 496.5,45.4 498.8,45.4 501.1,45.8 503.4,46.2 505.7,45.0 508.0,45.4 510.3,44.6 512.6,46.2 515.0,45.8 517.3,45.0 519.6,45.0 521.9,45.0 524.2,46.6 526.5,45.8 528.8,45.4 531.1,46.6 533.4,45.8 535.7,46.6 538.0,45.4 540.3,45.8 542.6,45.4 544.9,45.4 547.2,44.3 549.5,46.2 551.8,45.8 554.1,45.8 556.4,45.4 558.7,45.0 561.0,45.4 563.3,45.0 565.6,45.0 567.9,45.8 570.2,44.6 572.5,46.2 574.8,45.4 577.1,46.2 579.4,45.0 581.7,45.0 584.1,45.0 586.4,45.8 588.7,45.8 591.0,45.0 593.3,44.6 595.6,45.8 597.9,45.4 600.2,44.6 602.5,44.6 604.8,45.4 607.1,45.4 609.4,45.4 611.7,44.3 614.0,45.0 616.3,44.3 618.6,46.6 620.9,45.4 623.2,46.2 625.5,46.2 627.8,45.8 630.1,46.2 632.4,45.8 634.7,45.4 637.0,45.4 639.3,45.0 641.6,47.0 643.9,45.8 646.2,45.8 648.5,45.4 650.8,45.8 653.1,44.6 655.5,45.4 657.8,44.6 660.1,45.8 662.4,45.4 664.7,44.6 667.0,45.8 669.3,45.8 671.6,45.8 673.9,45.0 676.2,44.6 678.5,46.2 680.8,45.4 683.1,45.8 685.4,44.6 687.7,45.0 690.0,74.3"/></svg><figcaption><span style="color:#9fc55b">■</span> hash calls per window · min 233, max 311</figcaption></figure>
+  <p>Clock time per window is dominated by hashing and parsing the window's own bytes: median
+  19.4 ms per window, 123 ns per byte. By quarter of the session the
+  median was 121, 111, 120 and 165 ns per byte; the
+  middle quarters ran while other builds loaded the same laptop, which is noise, not growth. The
+  orange line is what a verifier without the previous receipt pays at each window: everything so
+  far, again.</p>
+  <figure><svg viewBox="0 0 700 190" role="img" aria-label="milliseconds per window" style="width:100%;height:auto;display:block"><line x1="52" x2="690" y1="164.0" y2="164.0" stroke="rgba(242,237,223,.12)"/><text x="46" y="168.0" text-anchor="end" fill="#77796f" font-size="10" font-family="ui-monospace,monospace">0</text><line x1="52" x2="690" y1="87.0" y2="87.0" stroke="rgba(242,237,223,.12)"/><text x="46" y="91.0" text-anchor="end" fill="#77796f" font-size="10" font-family="ui-monospace,monospace">4,683</text><line x1="52" x2="690" y1="10.0" y2="10.0" stroke="rgba(242,237,223,.12)"/><text x="46" y="14.0" text-anchor="end" fill="#77796f" font-size="10" font-family="ui-monospace,monospace">9,366</text><text x="52" y="184" fill="#77796f" font-size="10" font-family="ui-monospace,monospace">window 1</text><text x="690" y="184" text-anchor="end" fill="#77796f" font-size="10" font-family="ui-monospace,monospace">window 278</text><polyline fill="none" stroke="#9fc55b" stroke-width="1.6" points="52.0,163.7 54.3,163.8 56.6,163.7 58.9,163.8 61.2,163.8 63.5,162.6 65.8,163.1 68.1,163.8 70.4,163.3 72.7,163.6 75.0,163.5 77.3,163.5 79.6,163.0 81.9,163.2 84.2,163.7 86.5,163.8 88.9,163.8 91.2,163.8 93.5,163.5 95.8,163.3 98.1,162.8 100.4,163.5 102.7,163.8 105.0,163.8 107.3,163.1 109.6,163.4 111.9,162.1 114.2,163.8 116.5,163.7 118.8,163.3 121.1,163.6 123.4,163.1 125.7,163.1 128.0,163.7 130.3,162.7 132.6,163.7 134.9,163.0 137.2,163.1 139.5,163.8 141.8,163.8 144.1,163.7 146.4,162.8 148.7,163.8 151.0,163.8 153.3,163.8 155.6,163.7 157.9,163.8 160.3,163.8 162.6,163.7 164.9,163.1 167.2,163.6 169.5,163.7 171.8,163.8 174.1,163.7 176.4,163.7 178.7,163.5 181.0,162.5 183.3,163.2 185.6,163.6 187.9,163.3 190.2,163.6 192.5,163.8 194.8,163.7 197.1,163.4 199.4,163.6 201.7,163.8 204.0,163.8 206.3,163.8 208.6,163.8 210.9,163.0 213.2,163.8 215.5,163.8 217.8,163.8 220.1,163.2 222.4,163.2 224.7,163.8 227.0,163.6 229.4,163.3 231.7,163.3 234.0,163.3 236.3,163.6 238.6,163.8 240.9,163.8 243.2,163.6 245.5,163.8 247.8,162.2 250.1,163.3 252.4,163.8 254.7,163.0 257.0,163.6 259.3,163.8 261.6,163.7 263.9,163.7 266.2,163.8 268.5,163.8 270.8,163.3 273.1,162.5 275.4,163.4 277.7,163.7 280.0,163.3 282.3,163.7 284.6,163.8 286.9,163.8 289.2,163.8 291.5,163.8 293.8,163.8 296.1,163.7 298.4,163.2 300.8,163.4 303.1,163.1 305.4,163.5 307.7,163.8 310.0,163.5 312.3,163.5 314.6,163.7 316.9,163.8 319.2,163.7 321.5,163.8 323.8,162.9 326.1,163.8 328.4,163.8 330.7,162.9 333.0,163.6 335.3,163.2 337.6,163.8 339.9,163.5 342.2,163.3 344.5,163.4 346.8,163.8 349.1,163.8 351.4,162.6 353.7,163.3 356.0,163.8 358.3,163.1 360.6,163.8 362.9,163.6 365.2,163.7 367.5,163.5 369.8,163.6 372.2,163.8 374.5,163.7 376.8,163.7 379.1,163.8 381.4,163.0 383.7,163.8 386.0,163.2 388.3,163.8 390.6,163.8 392.9,163.8 395.2,163.7 397.5,163.7 399.8,162.8 402.1,163.7 404.4,163.8 406.7,163.2 409.0,163.4 411.3,162.7 413.6,163.8 415.9,163.7 418.2,162.9 420.5,163.8 422.8,163.8 425.1,163.5 427.4,163.8 429.7,163.8 432.0,163.7 434.3,162.9 436.6,163.6 438.9,163.4 441.2,163.8 443.6,163.8 445.9,163.3 448.2,162.7 450.5,162.1 452.8,163.8 455.1,163.7 457.4,161.9 459.7,163.8 462.0,163.6 464.3,162.9 466.6,163.7 468.9,163.8 471.2,163.7 473.5,163.6 475.8,163.8 478.1,163.3 480.4,163.8 482.7,163.8 485.0,163.8 487.3,163.3 489.6,163.2 491.9,163.8 494.2,163.6 496.5,163.7 498.8,163.7 501.1,163.8 503.4,163.6 505.7,163.8 508.0,162.5 510.3,163.7 512.6,163.8 515.0,162.5 517.3,163.8 519.6,163.8 521.9,163.4 524.2,163.8 526.5,162.8 528.8,163.8 531.1,162.6 533.4,163.7 535.7,162.2 538.0,163.6 540.3,162.9 542.6,163.2 544.9,163.8 547.2,163.2 549.5,163.8 551.8,163.8 554.1,163.8 556.4,162.9 558.7,163.8 561.0,163.1 563.3,163.8 565.6,163.4 567.9,163.8 570.2,163.8 572.5,163.7 574.8,163.5 577.1,163.8 579.4,163.7 581.7,163.8 584.1,163.8 586.4,163.7 588.7,163.8 591.0,163.1 593.3,162.6 595.6,163.2 597.9,161.8 600.2,162.9 602.5,163.0 604.8,163.8 607.1,163.1 609.4,163.8 611.7,163.8 614.0,163.5 616.3,163.8 618.6,163.7 620.9,163.0 623.2,163.8 625.5,163.7 627.8,163.6 630.1,163.7 632.4,163.5 634.7,163.7 637.0,163.8 639.3,162.9 641.6,163.8 643.9,163.3 646.2,163.2 648.5,163.1 650.8,163.5 653.1,163.0 655.5,163.4 657.8,163.7 660.1,163.8 662.4,163.5 664.7,163.4 667.0,163.7 669.3,163.8 671.6,163.7 673.9,163.1 676.2,163.2 678.5,163.8 680.8,163.5 683.1,162.8 685.4,163.8 687.7,163.5 690.0,163.9"/><polyline fill="none" stroke="#e56f3d" stroke-width="1.6" points="52.0,163.7 54.3,163.5 56.6,163.3 58.9,163.0 61.2,162.8 63.5,161.4 65.8,160.5 68.1,160.3 70.4,159.6 72.7,159.1 75.0,158.6 77.3,158.1 79.6,157.1 81.9,156.3 84.2,156.0 86.5,155.8 88.9,155.6 91.2,155.4 93.5,154.9 95.8,154.1 98.1,152.9 100.4,152.5 102.7,152.3 105.0,152.0 107.3,151.1 109.6,150.5 111.9,148.6 114.2,148.4 116.5,148.1 118.8,147.4 121.1,146.9 123.4,146.0 125.7,145.1 128.0,144.8 130.3,143.5 132.6,143.2 134.9,142.2 137.2,141.2 139.5,141.0 141.8,140.8 144.1,140.5 146.4,139.3 148.7,139.1 151.0,138.9 153.3,138.7 155.6,138.4 157.9,138.2 160.3,138.0 162.6,137.7 164.9,136.8 167.2,136.4 169.5,136.1 171.8,136.0 174.1,135.6 176.4,135.4 178.7,134.9 181.0,133.4 183.3,132.5 185.6,132.1 187.9,131.4 190.2,130.9 192.5,130.7 194.8,130.4 197.1,129.8 199.4,129.4 201.7,129.2 204.0,129.0 206.3,128.8 208.6,128.7 210.9,127.7 213.2,127.5 215.5,127.3 217.8,127.1 220.1,126.3 222.4,125.4 224.7,125.2 227.0,124.9 229.4,124.2 231.7,123.5 234.0,122.8 236.3,122.5 238.6,122.3 240.9,122.1 243.2,121.7 245.5,121.6 247.8,119.8 250.1,119.1 252.4,118.8 254.7,117.8 257.0,117.4 259.3,117.3 261.6,117.0 263.9,116.7 266.2,116.5 268.5,116.3 270.8,115.6 273.1,114.1 275.4,113.4 277.7,113.1 280.0,112.4 282.3,112.1 284.6,111.9 286.9,111.7 289.2,111.5 291.5,111.3 293.8,111.1 296.1,110.8 298.4,110.0 300.8,109.4 303.1,108.6 305.4,108.0 307.7,107.8 310.0,107.4 312.3,106.9 314.6,106.6 316.9,106.4 319.2,106.1 321.5,105.9 323.8,104.8 326.1,104.6 328.4,104.4 330.7,103.3 333.0,102.9 335.3,102.1 337.6,101.9 339.9,101.4 342.2,100.7 344.5,100.1 346.8,99.9 349.1,99.7 351.4,98.4 353.7,97.7 356.0,97.5 358.3,96.6 360.6,96.4 362.9,96.0 365.2,95.7 367.5,95.3 369.8,94.9 372.2,94.7 374.5,94.5 376.8,94.2 379.1,94.0 381.4,93.0 383.7,92.8 386.0,92.1 388.3,91.8 390.6,91.6 392.9,91.4 395.2,91.1 397.5,90.8 399.8,89.6 402.1,89.3 404.4,89.1 406.7,88.3 409.0,87.7 411.3,86.4 413.6,86.2 415.9,85.9 418.2,84.8 420.5,84.6 422.8,84.4 425.1,83.8 427.4,83.6 429.7,83.4 432.0,83.1 434.3,82.1 436.6,81.6 438.9,81.0 441.2,80.8 443.6,80.6 445.9,79.9 448.2,78.6 450.5,76.7 452.8,76.5 455.1,76.2 457.4,74.2 459.7,74.0 462.0,73.5 464.3,72.4 466.6,72.1 468.9,71.9 471.2,71.7 473.5,71.3 475.8,71.1 478.1,70.4 480.4,70.2 482.7,70.0 485.0,69.8 487.3,69.1 489.6,68.3 491.9,68.1 494.2,67.7 496.5,67.4 498.8,67.2 501.1,67.0 503.4,66.6 505.7,66.4 508.0,64.8 510.3,64.6 512.6,64.4 515.0,62.9 517.3,62.7 519.6,62.5 521.9,61.9 524.2,61.7 526.5,60.5 528.8,60.3 531.1,58.9 533.4,58.6 535.7,56.7 538.0,56.3 540.3,55.2 542.6,54.3 544.9,54.1 547.2,53.3 549.5,53.1 551.8,52.9 554.1,52.7 556.4,51.7 558.7,51.5 561.0,50.6 563.3,50.4 565.6,49.8 567.9,49.6 570.2,49.4 572.5,49.1 574.8,48.6 577.1,48.4 579.4,48.1 581.7,47.9 584.1,47.7 586.4,47.4 588.7,47.3 591.0,46.4 593.3,45.0 595.6,44.1 597.9,41.9 600.2,40.8 602.5,39.8 604.8,39.6 607.1,38.7 609.4,38.5 611.7,38.3 614.0,37.8 616.3,37.6 618.6,37.3 620.9,36.3 623.2,36.1 625.5,35.9 627.8,35.4 630.1,35.1 632.4,34.6 634.7,34.3 637.0,34.0 639.3,32.9 641.6,32.7 643.9,32.0 646.2,31.2 648.5,30.3 650.8,29.8 653.1,28.8 655.5,28.2 657.8,28.0 660.1,27.7 662.4,27.2 664.7,26.6 667.0,26.3 669.3,26.2 671.6,25.9 673.9,25.0 676.2,24.2 678.5,24.0 680.8,23.5 683.1,22.3 685.4,22.1 687.7,21.6 690.0,21.4"/></svg><figcaption><span style="color:#9fc55b">■</span> one window, incremental (ms) · <span style="color:#e56f3d">■</span> re-check from genesis (ms, cumulative)</figcaption></figure>
+
+  <h2>Which leg is <em>which.</em></h2>
+  <div class="notclaims">
+    <div class="nc"><div class="x">1</div><p><strong>Proved (Lean, axioms propext / choice /
+    Quot.sound).</strong> <code>window_sound</code>: an accepted receipt states exactly the
+    automaton's run over the committed window, its counters and the MMR range it occupies.
+    <code>windows_compose</code>: a chain accepted from genesis tracks the whole log; for every
+    infinite continuation the state and counter are the infinite run's; a viol is a bad prefix;
+    any range answer against any log with the final root is the monitored log's, every position
+    present, unless a named hash collision occurred. Falsifiers: a dropped position, a dropped
+    violating position, swapped windows, a flag-DFA reading and a counter reading of
+    acceptance.</p></div>
+    <div class="nc"><div class="x">2</div><p><strong>Executed.</strong> The follower is
+    <code>lake exe stream-check</code>: Lean compiled to native code, deciding by the very
+    function the theorems are about. Its hash is a pure-Lean BLAKE3; the Rust producer computes the
+    same roots independently and stops if they ever differ.</p></div>
+    <div class="nc"><div class="x">3</div><p><strong>Not proved.</strong> That the classifier
+    means what its prose says: it reads command text syntactically (no <code>eval</code>,
+    variables or scripts). That BLAKE3 has no collisions. The Rust audit read
+    (<code>verify_range</code>) corresponds to the Lean range check by documentation only.</p></div>
+  </div>
+
+  <h2>What this does <em>not</em> claim.</h2>
+  <div class="notclaims">
+    <div class="nc"><div class="x">✗</div><p>that the session satisfies the liveness clause ·
+    nothing finite can</p></div>
+    <div class="nc"><div class="x">✗</div><p>succinctness · the follower reads each window's
+    lines. A follower that sees only receipts needs the window proved in a circuit; counted
+    (about 9,100 Poseidon2 permutations per 100 median-sized entries), not built</p></div>
+    <div class="nc"><div class="x">✗</div><p>a checkpoint join · the follower starts at genesis;
+    no theorem lets it adopt a stranger's receipt k</p></div>
+    <div class="nc"><div class="x">✗</div><p>first-order obligations · "every tool call gets its
+    result" needs a register per open call; the alphabet here is four symbols</p></div>
+    <div class="nc"><div class="x">✗</div><p>a cross-model audit · the required rounds with a
+    second model are owed; a fresh-context audit found two major and seven minor issues, all
+    repaired before this run</p></div>
+  </div>
+
+  <div class="stance"><p><strong>Private by construction.</strong> This page shows roots, states,
+  counts and timings. The transcript lines stay on the machine that wrote them; checking these
+  receipts yourself needs them.</p></div>
+
+  <footer><span>breadstuffs · metatheory/Dregg2/Stream · demo/stream-receipts</span><span>2026-11-06</span></footer>
+</main>
+</body>
+</html>
