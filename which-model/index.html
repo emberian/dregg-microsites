@@ -12,6 +12,7 @@
   <meta property="og:title" content="Which model?">
   <meta property="og:description" content="A zk proof of inference proves the computation ran · not which model ran. The missing piece is a public name for the weights.">
   <style>
+  code { font: 600 0.9em var(--mono); color: var(--paper); }
     :root {
       --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
       --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
@@ -75,30 +76,58 @@
   has no opinion, because the proof was never about a <em>named</em> model.
   Only about whatever the prover committed to.</p>
   <div class="gap">the missing piece was never a better proof.<br>it is a
-  public name for the weights.</div>
+  public name for the weights, bound to the commitment.</div>
   <p>Call the attack what it is: a hollow model behind an honest proof. Closing
   it requires a <strong>public weight registry</strong> · an artifact an open
   project can ship and a closed one structurally cannot, because a closed
   provider cannot publish the very names its proofs would be checked
   against.</p>
 
-  <h2>The <em>registry.</em></h2>
-  <p>So the first artifact of this pillar is deliberately the one with no proof
-  system in it at all: the published open-weight checkpoints now have
-  <strong>publicly recomputable fingerprints</strong>. Computed without
-  downloading the models · from each checkpoint's own index and ranged reads of
-  its published files · with the tool and the format written down well enough
-  that someone else gets the same number. A proof of inference can then bind to
-  a fingerprint that has a public name attached, and "which model?" stops being
-  a trust question.</p>
-  <p>What this deliberately does <strong>not</strong> claim:</p>
+  <h2>The <em>registry,</em> corrected.</h2>
+  <p>The first registry fingerprinted published checkpoints by SHA-256 over their files. That is a checksum: it
+  names bytes for a person with a downloader, and <strong>no proof system can open it</strong>. We said so at the
+  time, and kept it as an integrity tool. Version 2 is the object a proof can meet: a root over the
+  <strong>integers a prover actually commits</strong>, one leaf per row, one root per routed expert, so an opening of
+  the experts that fired costs what fired.</p>
+
+  <h2>One <em>receipt.</em></h2>
+  <p>FlashProve published a commitment to a public 4-bit conversion of Llama 4 Maverick (232 GB of GGUF files),
+  ID <code>c7982f8a…7c38</code>. A commitment ID is a fingerprint of a <em>randomised</em> encoding, so it shares no
+  preimage with anything we could compute. What links it to a name is a chain, and the receipt carries the chain:</p>
   <div class="notclaims">
-    <div class="nc"><div class="x">✗</div><p>that any model has been
-    <em>verified</em> · a fingerprint is a name, not a verdict</p></div>
-    <div class="nc"><div class="x">✗</div><p>that the committed bytes are "the
-    real model" in any sense beyond being the published bytes</p></div>
-    <div class="nc"><div class="x">✗</div><p>that anything about serving-time
-    behavior follows yet · nothing consumes the registry so far</p></div>
+    <div class="nc"><div class="x">E1</div><p><strong>files</strong>: the five GGUF files' SHA-256, which
+    FlashProve published. <strong>Checked</strong> on our stream: all five equal.</p></div>
+    <div class="nc"><div class="x">E2</div><p><strong>files → integers</strong>: FlashProve's conversion rule,
+    re-implemented and run over the whole 232 GB stream on a CPU. Our sums file has the SHA-256 FlashProve published
+    for theirs, <code>689cd1d0…b519</code>, byte for byte; over those integers we computed the registry v2 roots:
+    434 tensors, 3,072 routed experts, root set <code>bf23bfb3…e830</code>.</p></div>
+    <div class="nc"><div class="x">E3</div><p><strong>files → commitment</strong>: FlashProve's committer with the
+    published seed. <strong>Not recomputed by us</strong>: it needs an H100 and 330 GB of host memory. FlashProve
+    published the result of their reproductions; the receipt says that is what vouches for this edge, and a
+    verifier in strict mode refuses it until a recomputer it trusts signs it.</p></div>
+  </div>
+  <p>Around the chain sits a provenance graph · base model, quantization, integers, configuration, tokenizer, adapter,
+  system prompt, tools · and an evaluation record signed over all of it, naming the <em>deployment built from these
+  integers</em>. The verifier's accept decision is a Lean function, and the Lean theorem behind it says: if the
+  receipt verifies and FlashProve's verifier accepts a proof against this ID, the proof's claim holds for the
+  integers with this root set, inside the deployment the evaluation names · <strong>or</strong> FlashProve's
+  verifier failed, or its binding broke, or SHA-256 collided on the file list. Nothing in between.</p>
+  <div class="gap">what it refuses, measured:<br>
+  a real FlashProve proof that their verifier accepts (YES), presented against this receipt → REFUSE<br>
+  Meta's published bf16 scores, properly signed, presented for the 4-bit commitment → REFUSE<br>
+  25 altered receipts, including a colluding evaluator → REFUSE, every one</div>
+  <p>Re-run it: <code>zkml-research/research/model_identity_receipt_2026_11_06/gates.sh</code> streams nothing
+  and checks G12-G16 in minutes; <code>--sample</code> re-fetches six tensors (one of them 3 GB) by range request and
+  recomputes their roots. The full stream took 35 minutes on 14 CPU cores and kept no weights on disk.</p>
+  <p>What the receipt deliberately does <strong>not</strong> claim:</p>
+  <div class="notclaims">
+    <div class="nc"><div class="x">✗</div><p>that anyone evaluated this checkpoint · no lab has; the evaluation
+    record on the published receipt is signed by a demonstration key and says so in its text</p></div>
+    <div class="nc"><div class="x">✗</div><p>that the 4-bit model behaves like Meta's bf16 model · two lossy
+    conversions sit between them, and an evaluation does not cross either</p></div>
+    <div class="nc"><div class="x">✗</div><p>that the provider spent the computation of this model · the
+    Hollow-LLM effort gap is a different problem; for <em>published</em> weights the root binding refuses ghost
+    weights, for private weights there is no stranger to recompute it</p></div>
   </div>
 
   <h2>Exactness is the <em>boundary.</em></h2>
@@ -133,11 +162,12 @@
     sense that matters here.</p>
   </div>
 
-  <p class="status">Status, plainly: the registry fingerprints, tool, and
-  format exist and are recomputable; nothing consumes them yet. The proving
-  research is measurements and machine-checked theorems, not a product. The
-  far shore · training runs where the weights stay encrypted end to end · is
-  named so you can watch us walk toward it.</p>
+  <p class="status">Status, plainly: one receipt exists for one real checkpoint, built from a full 232 GB stream on a
+  CPU; its verifier's accept decision is a Lean function with a machine-checked statement of what acceptance means;
+  two of its three edges are checked, the third rests on FlashProve's published reproduction until someone with an
+  H100 recomputes it. No lab has signed an evaluation of it. The proving research is measurements and theorems, not a
+  product. The far shore · training runs where the weights stay encrypted end to end · is named so you can watch us
+  walk toward it.</p>
 
   <footer>
     <span>DREGG research field notes · verifiability</span>
