@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
   <title>An absence receipt</title>
-  <meta name="description" content="100,000 public documents, a policy that forbids two secret shapes, and a signed sentence saying none of them occurs · with every leg named for what it is.">
+  <meta name="description" content="Zero rejections under a two-pattern scanner over 100,000 public documents, in a signed sentence · with every leg named for what it is.">
   <meta name="theme-color" content="#10110c">
   <link rel="canonical" href="https://emberian.github.io/dregg-microsites/absence-receipt/">
   <meta property="og:type" content="article">
   <meta property="og:title" content="An absence receipt">
-  <meta property="og:description" content="100,000 public documents, zero secrets, one signed sentence · and which leg of it is a proof.">
+  <meta property="og:description" content="Zero rejections under a two-pattern scanner over 100,000 public documents · and which leg of it is a proof.">
   <style>
     :root {
       --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
@@ -70,8 +70,8 @@
     <p class="kicker">Automata program · demo (a)</p>
     <h1>Nothing<br>was <span>there.</span></h1>
     <p class="dek">A receipt for an absence: one hundred thousand public
-    documents, a policy forbidding two shapes of secret, and a signed sentence
-    saying neither shape occurs anywhere in them. The interesting part is not
+    documents, a two-pattern scanner, and a signed sentence saying it rejected
+    none of them. Zero rejections, not zero secrets. The interesting part is not
     the zero. It is saying exactly which part of the sentence was proved, which
     was re-executed, and which was merely hashed.</p>
   </section>
@@ -89,8 +89,10 @@
   <strong>crates.io index</strong> at a pinned commit · 1.77 GB of package
   metadata. The policy forbids an AWS access-key id
   (<code>AKIA</code> and sixteen capitals or digits) and any PEM
-  private-key header. The policy compiles to a 129-state automaton that
-  accepts exactly the documents containing neither.</p>
+  private-key header. The policy compiles to a 129-state automaton meant to
+  accept exactly the documents containing neither; that is tested, not
+  proved. No claim about other secret formats, encoded secrets, credential
+  validity, or semantic confidentiality.</p>
 
   <h2>Which leg is <em>which.</em></h2>
   <div class="notclaims">
@@ -105,14 +107,20 @@
     acceptance, and that a count of zero means every document is accepted. A
     second, independent run through the Rust runtime has to agree, and
     does.</p></div>
-    <div class="nc"><div class="x">3</div><p><strong>Proved.</strong> One
-    record, a 2,048-byte document, has its run emitted by Lean as a descriptor
-    of the served table-routing family and proved as a STARK: 724 ms to prove,
-    16 ms to verify, 91 KB of proof. The same proof refuses a different final
-    state.</p></div>
+    <div class="nc"><div class="x">3</div><p><strong>Proved.</strong> For one
+    2,048-byte document, a witness generated from that record is emitted by
+    Lean as a descriptor of the served table-routing family and proved as a
+    STARK: 724 ms to prove, 16 ms to verify, 91 KB of proof. The same proof
+    refuses a different final state. What is public is the multiset of
+    transitions, not their order: the proof does not fix a unique word or tie
+    it to that document.</p></div>
     <div class="nc"><div class="x">4</div><p><strong>Signed.</strong> The body
     is signed with an ordinary SSH key (<code>ssh-keygen -Y sign</code>), and
-    <code>ssh-keygen -Y verify</code> checks it.</p></div>
+    <code>ssh-keygen -Y verify</code> checks it. That authenticates the body
+    under the demo key; it does not attest the checker binary, its execution,
+    or where the scanned bytes came from. To check the claim itself, recompute
+    the corpus root, re-run the table, and compare every field with the signed
+    body.</p></div>
   </div>
 
   <div class="gap">the zero is cheap.<br>the labels on the legs are the product.</div>
@@ -123,15 +131,21 @@
     100,000 verdicts are re-execution, and checking them means running them
     again</p></div>
     <div class="nc"><div class="x">✗</div><p>that the automaton is the
-    policy · today's policy compiler is interim Rust, unproved, and is
-    replaced by the Lean-compiled table when the policy language
+    policy · the table comes from the runtime crate's Rust compiler,
+    differential-tested against an earlier compiler and a direct scanner, not
+    proved; the Lean-compiled table replaces it when the policy language
     lands</p></div>
+    <div class="nc"><div class="x">✗</div><p>zero secrets · the scanner
+    looks for two byte patterns; nothing about other secret formats, encoded
+    secrets, whether a match is a live credential, or confidentiality in
+    general</p></div>
     <div class="nc"><div class="x">✗</div><p>that the hashed documents are
     the first 100,000 of the pinned commit · re-running the selection against a
     clone checks that; nothing proves it</p></div>
-    <div class="nc"><div class="x">✗</div><p>privacy · the one proved record's
-    bytes are public inside its own descriptor, and the proof is not tied to
-    the corpus root</p></div>
+    <div class="nc"><div class="x">✗</div><p>a proof about a particular
+    document · the one proof exposes the multiset of its transitions, which
+    is not shown to determine one ordered word, and is tied neither to that document
+    nor to the corpus root; the document's bytes are public anyway</p></div>
   </div>
 
   <h2>One thing it <em>found.</em></h2>
@@ -140,8 +154,10 @@
   alternation without associativity, so the derivatives of "anything, then
   <code>AKIA</code>" keep nesting differently and never repeat. Brzozowski's
   theorem only promises finitely many derivatives up to that similarity, and
-  the Lean side proves exactly the up-to-similarity version. The demo
-  normalizes before each lookup and gets 9,153 states, which minimize to 129.</p>
+  the Lean side proves exactly the up-to-similarity version. The demo first
+  worked around it (9,153 states, minimized to 129); the crate now keeps its
+  regexes in that normal form and produces the same 129-state table itself,
+  in under three seconds instead of forty.</p>
 
   <p class="status">Status, plainly: a demo, built in a day on public data. The
   pipeline, the hash list, the table, the receipt and its signature are in
