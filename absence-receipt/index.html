@@ -71,16 +71,16 @@
     <h1>Nothing<br>was <span>there.</span></h1>
     <p class="dek">A receipt for an absence: one hundred thousand public
     documents, a two-pattern scanner, and a signed sentence saying it rejected
-    none of them. Zero rejections, not zero secrets. The interesting part is not
-    the zero. It is saying exactly which part of the sentence was proved, which
-    was re-executed, and which was merely hashed.</p>
+    none of them. Each part has a specific job: a compiler with a semantic proof,
+    two independent corpus scans, one record proved as a STARK, and an authenticated
+    tuple that anyone can reproduce.</p>
   </section>
 
   <h2>The sentence.</h2>
   <pre>
 {"v":"absence-receipt-v1",
- "policy_blake3":"984aba5f…",     <span class="ok">the policy source</span>
- "table_blake3":"7434e218…",      <span class="ok">the automaton it compiled to</span>
+ "policy_blake3":"9ed0fa10…",     <span class="ok">the policy source</span>
+ "table_blake3":"21d0cd70…",      <span class="ok">the automaton it compiled to</span>
  "corpus_mmr_root":"17d69bbf…",   <span class="ok">100,000 documents, in order</span>
  "corpus_pin":"681f94fc…",        <span class="ok">crates.io-index commit</span>
  "n":100000,
@@ -89,10 +89,10 @@
   <strong>crates.io index</strong> at a pinned commit · 1.77 GB of package
   metadata. The policy forbids an AWS access-key id
   (<code>AKIA</code> and sixteen capitals or digits) and any PEM
-  private-key header. The policy compiles to a 129-state automaton meant to
-  accept exactly the documents containing neither; that is tested, not
-  proved. No claim about other secret formats, encoded secrets, credential
-  validity, or semantic confidentiality.</p>
+  private-key header with an uppercase label. The Lean policy compiler produces
+  a 129-state automaton, with a proof that it accepts exactly the byte strings
+  containing neither pattern. This is a claim about those two pattern families;
+  it says nothing about other formats, encoded secrets, or credential validity.</p>
 
   <h2>Which leg is <em>which.</em></h2>
   <div class="notclaims">
@@ -100,21 +100,25 @@
     corpus is a Merkle mountain range over the documents' blake3 hashes. The
     100,000 hashes are published, so anyone can recompute the root without
     downloading the index.</p></div>
-    <div class="nc"><div class="x">2</div><p><strong>Re-executed.</strong> The
+    <div class="nc"><div class="x">2</div><p><strong>Compiled with a proof.</strong>
+    <code>policyc</code> compiles the two alternatives, combines their certified
+    tables, and checks a smaller reachable table before building the absence
+    automaton. Every returned table carries its semantic proof in Lean. The
+    native compilation took 28.86 seconds: 129 states and 33,024 transitions.</p></div>
+    <div class="nc"><div class="x">3</div><p><strong>Re-executed.</strong> The
     count comes from a Lean program, compiled to native code, that folds the
-    automaton over every byte of every document: 1.77 billion steps in about
-    48 seconds on a laptop. Lean proves that this fold is the house DFA's
+    automaton over every byte of every document: 1.77 billion steps in 33.91
+    seconds on the shared Mac. Lean proves that this fold is the house DFA's
     acceptance, and that a count of zero means every document is accepted. A
-    second, independent run through the Rust runtime has to agree, and
-    does.</p></div>
-    <div class="nc"><div class="x">3</div><p><strong>Proved.</strong> For one
-    2,048-byte document, a witness generated from that record is emitted by
-    Lean as a descriptor of the served table-routing family and proved as a
-    STARK: 724 ms to prove, 16 ms to verify, 91 KB of proof. The same proof
-    refuses a different final state. What is public is the multiset of
-    transitions, not their order: the proof does not fix a unique word or tie
-    it to that document.</p></div>
-    <div class="nc"><div class="x">4</div><p><strong>Signed.</strong> The body
+    second run through the Rust runtime agrees: zero rejections, in 25.91 seconds.</p></div>
+    <div class="nc"><div class="x">4</div><p><strong>One record proved.</strong>
+    Lean emits a descriptor for one 2,048-byte document. It has 20 columns,
+    32 constraints, and 11 public inputs, including an eight-lane commitment to
+    the ordered transitions and their length. The verifier recomputes that route
+    from the supplied record and the policy table. The same proof and inputs
+    refuse a different record; changed final state, route root, and length are
+    refused too. This is one record's served-path evidence.</p></div>
+    <div class="nc"><div class="x">5</div><p><strong>Signed.</strong> The body
     is signed with an ordinary SSH key (<code>ssh-keygen -Y sign</code>), and
     <code>ssh-keygen -Y verify</code> checks it. That authenticates the body
     under the demo key; it does not attest the checker binary, its execution,
@@ -130,11 +134,9 @@
     <div class="nc"><div class="x">✗</div><p>a proof about the corpus · the
     100,000 verdicts are re-execution, and checking them means running them
     again</p></div>
-    <div class="nc"><div class="x">✗</div><p>that the automaton is the
-    policy · the table comes from the runtime crate's Rust compiler,
-    differential-tested against an earlier compiler and a direct scanner, not
-    proved; the Lean-compiled table replaces it when the policy language
-    lands</p></div>
+    <div class="nc"><div class="x">✗</div><p>that every surrounding tool
+    is proved · JSON rendering, native code generation, command handling, and
+    filesystem I/O remain outside the compiler's kernel statement</p></div>
     <div class="nc"><div class="x">✗</div><p>zero secrets · the scanner
     looks for two byte patterns; nothing about other secret formats, encoded
     secrets, whether a match is a live credential, or confidentiality in
@@ -142,22 +144,36 @@
     <div class="nc"><div class="x">✗</div><p>that the hashed documents are
     the first 100,000 of the pinned commit · re-running the selection against a
     clone checks that; nothing proves it</p></div>
-    <div class="nc"><div class="x">✗</div><p>a proof about a particular
-    document · the one proof exposes the multiset of its transitions, which
-    is not shown to determine one ordered word, and is tied neither to that document
-    nor to the corpus root; the document's bytes are public anyway</p></div>
+    <div class="nc"><div class="x">✗</div><p>an MMR inclusion proof inside
+    the record STARK · its route binds the supplied word under the hash assumption,
+    but the link from those bytes to the corpus's Blake3 leaf and root is checked
+    externally by the replay</p></div>
   </div>
 
-  <h2>One thing it <em>found.</em></h2>
-  <p>The runtime crate's own regex-derivative compiler never finished the
-  absence automaton for even one four-letter literal: it normalizes
-  alternation without associativity, so the derivatives of "anything, then
-  <code>AKIA</code>" keep nesting differently and never repeat. Brzozowski's
-  theorem only promises finitely many derivatives up to that similarity, and
-  the Lean side proves exactly the up-to-similarity version. The demo first
-  worked around it (9,153 states, minimized to 129); the crate now keeps its
-  regexes in that normal form and produces the same 129-state table itself,
-  in under three seconds instead of forty.</p>
+  <h2>What it <em>improved.</em></h2>
+  <p>The first Rust compiler kept semantically identical derivatives in different
+  shapes because its alternation normalizer omitted associativity. Repairing
+  that made the original demo possible. The active pipeline now uses the proved
+  Lean compiler. Repeated normalization was cached without changing the worklist
+  result; the raw union became a certified product; 638 possible state pairs
+  became 49 reachable pairs through a checked simulation. A cubic linked-list
+  lookup in the factor construction was replaced by precomputed active targets,
+  with a theorem that the result is exactly the old one.</p>
+
+  <h2>Repeat the <em>computation.</em></h2>
+  <p>Clone the repository, then run one command. The first run builds the tools
+  and fetches the pinned public corpus. It hashes and scans every document,
+  re-emits the record descriptor, compares the complete computed tuple with
+  the original signed receipt, and runs the one-record STARK test:</p>
+  <pre>git clone https://github.com/emberian/dregg.git
+cd dregg
+demo/absence-receipt/run.sh replay</pre>
+  <p>Requires Git, Rust, cargo-nextest, Python 3, OpenSSH with <code>ssh-keygen -Y</code>, and the
+  pinned Lean toolchain. Set <code>INDEX=/path/to/index</code> to reuse the corpus.
+  Outputs go to a fresh directory. The original receipt and trusted signer are
+  preserved. For a quick signature and metadata check without scanning the
+  corpus, use <code>demo/absence-receipt/run.sh verify</code>; that command
+  explicitly reports that it has not rerun the computation.</p>
 
   <p class="status">Status, plainly: a demo, built in a day on public data. The
   pipeline, the hash list, the table, the receipt and its signature are in
