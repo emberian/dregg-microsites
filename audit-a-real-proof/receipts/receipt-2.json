@@ -1,0 +1,64 @@
+{
+  "version": "fpaudit-receipt-v2",
+  "decide_src_sha256": "32b332d7ab9c305f6574ba5fafea5dee98731b7ca74619c8b1dfd22e5d60e997",
+  "record": {
+    "session": "d8a5ba883d5880a91b8d4c337219d09de787cc32d491163a8ff57eb522575668",
+    "position": 2,
+    "nonce": "c28fe9fc339ac7f06008789eeb90bfcdfcde3a682ac260cc98a2199950b44963",
+    "commitment_id": "79a5a2bc7a469b40df73dedf40abeb740671e8ae8077738bd3743897aeb22183",
+    "r": 60,
+    "e": 64,
+    "req_sha256": "ce700974a03d43586d66ca742f9bbc8ad45c936d03dfdb8614dd559a2780aa13",
+    "y_sha256": "a77802d8305178be2db1ab04fdd5ca3b8c03ad5d45ca35132ff6a04c7faec115",
+    "proof_sha256": "5ed47fd101093e826a5bc833e57633e5a9237b49213c8f37cf518a3c1c8d9d99",
+    "seen_round": 33731245
+  },
+  "record_digest": "7251bcec34c06090c57ce12e3a7f89802bd43f6bc7b28c9be7918447ac6b9ad4",
+  "mmr_root": "35054c7b7989dadb5623ad7ecf6f7222c07f3c245f9b4e4c761670dcbf3123a3",
+  "opening": {
+    "peaks": [
+      {
+        "height": 1,
+        "hash": "e64dc4b2b00aaf84e098594787b302caf486e92579b9f038913ec08ec6d526ee"
+      },
+      {
+        "height": 0,
+        "hash": "1ab213a63077e1321384379d8e337f114666fe2427d6df198eef2f3dd684e32c"
+      }
+    ],
+    "paths": [
+      []
+    ]
+  },
+  "countersig": "972291a13d79afaf15556e24cbd7eff2cf312250cf0876522bd68a4e7262b3fd07d6377779dc2a69bec813cb82a61d6830469fed842ab841c427c40f5671ed05",
+  "beacon": {
+    "round": 33731247,
+    "randomness": "0e48886338053a5f7ac9d65cf3b5a3f115fc630802ac5fc6df1e306c41cf151c",
+    "signature": "8fda0270e7d37e4f72481e004721e3c9188b79c4396148a63aa5c0f53e18b3d8f9fc11c15d5a0b050dab9c9c84cd0e6a"
+  },
+  "coin": 17808751779149078369,
+  "fired": true,
+  "expect": {
+    "id": "79a5a2bc7a469b40df73dedf40abeb740671e8ae8077738bd3743897aeb22183",
+    "build": "93afdaf592393a54ebd17b681d1c03295eb883f0161ff0e6ab872a3b39939595",
+    "r": 60,
+    "e": 64,
+    "accept_work": true
+  },
+  "staged": {
+    "req_sha256": "ce700974a03d43586d66ca742f9bbc8ad45c936d03dfdb8614dd559a2780aa13",
+    "y_sha256": "a77802d8305178be2db1ab04fdd5ca3b8c03ad5d45ca35132ff6a04c7faec115",
+    "proof_sha256": "5ed47fd101093e826a5bc833e57633e5a9237b49213c8f37cf518a3c1c8d9d99",
+    "fault": null
+  },
+  "open_ok": true,
+  "call": {
+    "stdout": "---- the call ----\nrefused by the stage request: the proof is about another reply\nNO: reply-differs\n",
+    "exit": 1,
+    "millis": 2173,
+    "killed_for_time": false,
+    "fault": null
+  },
+  "verdict": "reject",
+  "alarm": true
+}

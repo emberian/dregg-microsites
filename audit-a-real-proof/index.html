@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Audit a real proof</title>
+  <meta name="description" content="A commit-then-audit sampler over FlashProve's verifier: the decision is compiled from a Lean instance of the audit theorem, the coin is a drand round that did not exist at commitment, and every receipt re-checks offline.">
+  <meta name="theme-color" content="#10110c">
+  <style>
+    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 32px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--green); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(48px, 9vw, 100px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--orange); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--orange); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    .gap { margin: 30px 0; padding: 22px 24px; border: 1px solid var(--rule); border-left: 4px solid var(--orange); font: 700 16px/1.55 var(--mono); color: var(--paper); }
+    .notclaims { border-top: 4px solid var(--paper); margin: 22px 0; }
+    .nc { display: grid; grid-template-columns: 26px 1fr; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--rule); }
+    .nc .x { color: var(--orange); font: 900 16px/1.4 var(--mono); }
+    .nc p { margin: 0; font-size: 14.5px; }
+    .stance { margin: 34px 0; padding: 20px 24px; background: #0a0b07; border: 1px solid var(--rule); border-left: 4px solid var(--green); }
+    .stance p { margin: 0; max-width: none; font-size: 15.5px; color: var(--dim); }
+    .stance p strong { color: var(--green); }
+    .status { margin-top: 44px; padding-top: 14px; border-top: 1px solid var(--rule); font: 600 11px/1.8 var(--mono); color: var(--dimmer); letter-spacing: .05em; text-transform: uppercase; }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 56px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    pre { margin: 18px 0 24px; padding: 16px 18px; overflow-x: auto; background: #0a0b07; border: 1px solid var(--rule); font: 500 13px/1.6 var(--mono); color: var(--paper); }
+    pre .s { color: var(--dimmer); }
+    pre .bad { color: var(--orange); }
+    pre .ok { color: var(--green); }
+    .tablewrap { overflow-x: auto; }
+    table { width: 100%; margin: 18px 0 28px; border-collapse: collapse; font: 500 13.5px/1.5 var(--mono); }
+    th, td { padding: 8px 10px 8px 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--rule); }
+    th { color: var(--dimmer); font-weight: 700; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+    td { color: var(--dim); }
+    td.n { color: var(--paper); white-space: nowrap; }
+    code { font: 500 0.92em var(--mono); color: var(--paper); }
+    @media (max-width: 520px) { pre { font-size: 11.5px; } table { font-size: 12px; } td.n { white-space: normal; } th, td { padding-right: 6px; } }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">17 · Audit sampling</span>
+  </header>
+
+  <section class="titleblock">
+    <p class="kicker">Initiative 8 · commit-then-audit over FlashProve</p>
+    <h1>Audit a<br><span>real proof.</span></h1>
+    <p class="dek">A provider serves answers and claims each one is its committed
+    model's. Checking every proof is expensive, so you check a few, chosen by a coin
+    nobody could see when the answer was committed. How many lies get through before
+    the first alarm? A theorem says at most about <strong>1/p</strong> on average.
+    This page shows that number measured on FlashProve's real verifier, and one
+    receipt you can check yourself.</p>
+  </section>
+
+  <div class="gap">the proofs here are FlashProve's two stored exact-match proofs,
+  made with synthetic weights. We have no H100, so the audited population is
+  replays of those proofs, and the corrupt answers are false claims made from them.
+  Every audit that fired is a real <code>cp_verify</code> call.</div>
+
+  <h2>The loop, <em>in order</em></h2>
+  <p><strong>1. Commit.</strong> Each answer becomes a record: the hashes of the
+  request, the answer token and the proof, the pinned model ID, and the latest drand
+  round the requester has seen. The record goes into an append-only Merkle mountain
+  range, and the requester signs the position, the record, the root and that round.</p>
+  <p><strong>2. Coin.</strong> The audit coin comes from drand round
+  <em>seen + 2</em>. That round did not exist when the requester signed. The coin is
+  a hash of the round's BLS signature, the session and the position.</p>
+  <p><strong>3. Decide.</strong> Three questions are answered by Lean code compiled
+  into the auditor: did the audit fire? What did the verifier say? Is there an alarm?
+  It is the same code the Lean instance of the theorem is built from. Rust only moves
+  bytes.</p>
+  <p><strong>4. Fail closed.</strong> A fired audit alarms on anything except an
+  accepted proof of the committed answer. That includes a rejection, a missing proof,
+  a timeout, a crash, files that don't match the record, and output that doesn't parse.</p>
+
+  <h2>The count, <em>measured</em></h2>
+  <p>Corrupt answers served before the first alarm, averaged over seeds (± standard
+  error). Every fired audit ran <code>cp_verify</code> on real files. The coins come
+  from one historical drand round per seed, so this is a simulation of fresh coins.
+  The live receipts below use rounds from the future.</p>
+  <div class="tablewrap"><table><tr><th>adversary</th><th>p</th><th>seeds</th><th>corrupt before alarm</th><th>1/p</th><th>censored</th><th>calls</th></tr>
+<tr><td>rate f=0.25, fixed schedule</td><td class="n">0.01</td><td class="n">1000</td><td class="n">101.44 ± 3.25</td><td class="n">100</td><td class="n">0</td><td class="n">4206</td></tr>
+<tr><td>rate f=0.25, fixed schedule</td><td class="n">0.05</td><td class="n">1000</td><td class="n">19.68 ± 0.63</td><td class="n">20</td><td class="n">0</td><td class="n">3850</td></tr>
+<tr><td>rate f=0.25, fixed schedule</td><td class="n">0.20</td><td class="n">1000</td><td class="n">4.98 ± 0.13</td><td class="n">5</td><td class="n">0</td><td class="n">3996</td></tr>
+<tr><td>burst: f=0.1 + 20 rounds after each fired audit</td><td class="n">0.05</td><td class="n">1000</td><td class="n">19.61 ± 0.60</td><td class="n">20</td><td class="n">0</td><td class="n">2300</td></tr>
+<tr><td>always corrupt</td><td class="n">0.05</td><td class="n">1000</td><td class="n">20.69 ± 0.65</td><td class="n">20</td><td class="n">0</td><td class="n">1000</td></tr>
+<tr><td>rate f=0.5, full-size proof (1,001 tokens)</td><td class="n">0.20</td><td class="n">60</td><td class="n">3.83 ± 0.37</td><td class="n">5</td><td class="n">0</td><td class="n">103</td></tr>
+<tr><td>FALSIFIER fail-open: withholds proofs</td><td class="n">0.05</td><td class="n">200</td><td class="n">100.11 ± 0.63</td><td class="n">20</td><td class="n">200</td><td class="n">4090</td></tr>
+<tr><td>FALSIFIER commit-after-coin</td><td class="n">0.05</td><td class="n">200</td><td class="n">379.55 ± 0.31</td><td class="n">20</td><td class="n">200</td><td class="n">4090</td></tr>
+</table></div>
+  <p>The falsifiers show the theorem's hypotheses are needed. If "no verdict" counts
+  as no alarm, a provider that just withholds its proofs is never caught. If the
+  provider can commit after it sees the coin, it lies only when no audit will fire.</p>
+
+  <h2>One receipt, <em>an alarm</em></h2>
+  <p>A live session on 2026-11-06, run at a 99.9999% rate so every answer was
+  audited. Position 2 served a false next token with the honest proof.</p>
+<pre><span class="s">position</span>      2
+<span class="s">seen round</span>    33731245   <span class="s">(countersigned by the requester)</span>
+<span class="s">audit round</span>   33731247   <span class="s">(BLS-verified drand quicknet)</span>
+<span class="s">mmr root</span>      35054c7b7989dadb5623ad7ecf6f7222c07f3c245f9b4e4c761670dcbf3123a3
+<span class="s">record</span>        7251bcec34c06090c57ce12e3a7f89802bd43f6bc7b28c9be7918447ac6b9ad4
+<span class="s">coin</span>          f725656369495f61   <span class="s">fired</span> yes
+<span class="s">opening</span>       files hash to the record · record opens under the root
+<span class="s">cp_verify</span>     exit 1 · NO: reply-differs
+<span class="s">verdict</span>       <span class="bad">reject</span>   <span class="s">alarm</span> <span class="bad">true</span></pre>
+
+  <h2>Re-verify it <em>yourself</em></h2>
+<pre><span class="s"># the auditor (breadstuffs audit-flashprove), built against minidregg's Lean</span>
+MINIDREGG_DIR=../minidregg cargo build --release -p audit-flashprove
+<span class="s"># offline: MMR opening, countersignature, round rule, BLS, coin, decision</span>
+fpaudit recheck --pins pins.json receipt-*.json
+<span class="s"># acceptance evidence: re-run cp_verify on the committed files</span>
+fpaudit recheck --pins pins.json receipt-*.json \
+  --rerun FlashProve/bin/cp_verify --files live2 --stored FlashProve/examples/accepted-proof</pre>
+  <p>The receipts and pins are in <a href="receipts/">receipts/</a>; the files are FlashProve's <code>examples/accepted-proof</code>, with token 200 in place of 199 at position 2. Altered copies of these receipts give these results:</p>
+<pre>coin changed by one bit          <span class="bad">FAIL coin</span>
+alarm dropped                    <span class="bad">FAIL alarm</span>
+older beacon round swapped in    <span class="bad">FAIL the beacon round is not seen + 2</span>
+record's token hash swapped      <span class="bad">FAIL record digest</span>
+accepting transcript forged      <span class="ok">OK</span> offline · <span class="bad">RERUN DISAGREES reject</span></pre>
+  <p>The last line matters. An auditor can make up an accepting transcript, and an
+  offline check of the receipt will pass it. Only re-running the verifier on the
+  committed files catches the forgery. A receipt shows that the auditor's decision
+  follows from what it recorded. It does not show that the auditor recorded the truth.</p>
+
+  <div class="notclaims">
+    <div class="nc"><div class="x">✗</div><p>a theorem about <code>cp_verify</code> ·
+    FlashProve's soundness theorem is about its Lean <code>verify</code>. The C++ link
+    is a named hypothesis, [FP-chk-transport], with one <code>lean-verify</code>
+    cross-check as evidence</p></div>
+    <div class="nc"><div class="x">✗</div><p>ordering proved offline · a historical
+    drand round verifies as well as a fresh one. That the requester signed before the
+    round came out rests on the requester's honesty, or on a timestamp witness we do
+    not have</p></div>
+    <div class="nc"><div class="x">✗</div><p>a new statement · Rinberg et al.
+    (2511.02620), eprint 2026/541 and covert security state commit-then-audit. What is
+    new here is an instance whose decision is compiled from its own proof</p></div>
+    <div class="nc"><div class="x">✗</div><p>a served model · these are synthetic-weight
+    proofs. Fresh proofs of a real model need an H100 and 330 GB of host memory</p></div>
+  </div>
+
+  <div class="stance">
+    <p><strong>Why bother:</strong> sampling is how proof-carrying inference will
+    actually be paid for. "We check 1%" means something only if the 1% can't be
+    predicted, a missing answer counts as a failure, and the bound says what it
+    costs. Here those three conditions are hypotheses of a checked theorem, and the
+    code that enforces them is compiled from it.</p>
+  </div>
+
+  <p class="status">Status, plainly: the Lean instance and its decision module are
+  kernel-checked, with axioms pinned, on a minidregg lane branch. The auditor and the
+  measurements are in breadstuffs. Two cross-model attack rounds (gpt-6-astra) were
+  run and their findings repaired. The requester key in the live demo is held by the
+  same process.</p>
+
+  <footer>
+    <span>DREGG research field notes · audit sampling</span>
+    <span>Plain HTML · no trackers</span>
+  </footer>
+</main>
+</body>
+</html>

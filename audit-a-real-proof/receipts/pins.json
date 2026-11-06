@@ -1,0 +1,10 @@
+{
+  "policy": {
+    "session": "d8a5ba883d5880a91b8d4c337219d09de787cc32d491163a8ff57eb522575668",
+    "commitment_id": "79a5a2bc7a469b40df73dedf40abeb740671e8ae8077738bd3743897aeb22183",
+    "build": "93afdaf592393a54ebd17b681d1c03295eb883f0161ff0e6ab872a3b39939595",
+    "accept_work": true,
+    "p_num": 18446725626965477906
+  },
+  "requester_pk": "cd6f4be78338fef345787700ed8e5633b7e32d0ffb2abbf192b9afe952485b3f"
+}
