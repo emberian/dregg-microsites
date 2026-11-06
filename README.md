@@ -17,6 +17,11 @@ writes screenshots to a temporary directory. This validates the report, not fn.
 The separate `evidence.json` links the raw logs of the checks run on frozen fn
 source; those checks did not include a fresh ACL2 certification.
 
+- [The record is a tree](tree-receipt/) — tree certificates over one agent session's 3,382 tool
+  calls: one path opened per record, exact counts (13 mentions of `pkill -f`, 7 at command position
+  with backticks, 0 without), checked by the Lean-extracted `tree-check`. Publication is a
+  separate step.
+
 ## Published
 
 - [field guide](https://emberian.github.io/dregg-microsites/field-guide/)

@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>The record is a tree</title>
+  <meta name="description" content="Structural claims about committed agent tool calls as tree certificates: one path opened per record, an exact count over 3,382 records, checked by a Lean-extracted verifier.">
+  <meta name="theme-color" content="#10110c">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/tree-receipt/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="The record is a tree">
+  <meta property="og:description" content="A flat string search over agent logs misses an escaped command and counts prose as commands. A tree certificate does neither, and says exactly what it counted.">
+  <style>
+    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--green); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(52px, 9vw, 104px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--orange); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--orange); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    .gap {
+      margin: 30px 0; padding: 22px 24px; border: 1px solid var(--rule); border-left: 4px solid var(--orange);
+      font: 700 17px/1.55 var(--mono); color: var(--paper);
+    }
+    .notclaims { border-top: 4px solid var(--paper); margin: 22px 0; }
+    .nc { display: grid; grid-template-columns: 26px 1fr; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--rule); }
+    .nc .x { color: var(--orange); font: 900 16px/1.4 var(--mono); }
+    .nc p { margin: 0; font-size: 14.5px; }
+    .stance { margin: 34px 0; padding: 20px 24px; background: #0a0b07; border: 1px solid var(--rule); border-left: 4px solid var(--green); }
+    .stance p { margin: 0; max-width: none; font-size: 15.5px; color: var(--dim); }
+    .stance p strong { color: var(--green); }
+    .status { margin-top: 44px; padding-top: 14px; border-top: 1px solid var(--rule); font: 600 11px/1.8 var(--mono); color: var(--dimmer); letter-spacing: .05em; text-transform: uppercase; }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 56px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+
+    pre { margin: 18px 0 24px; padding: 16px 18px; overflow-x: auto; background: #0a0b07; border: 1px solid var(--rule); font: 500 13px/1.6 var(--mono); color: var(--paper); }
+    pre .s { color: var(--dimmer); }
+    table { width: 100%; margin: 18px 0 28px; border-collapse: collapse; font: 500 13.5px/1.5 var(--mono); }
+    th, td { padding: 8px 10px 8px 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--rule); }
+    th { color: var(--dimmer); font-weight: 700; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+    td { color: var(--dim); }
+    td.n { color: var(--paper); white-space: nowrap; }
+    code { font: 500 0.92em var(--mono); color: var(--paper); }
+    @media (max-width: 520px) { pre { font-size: 11.5px; } table { font-size: 12px; } td.n { white-space: normal; } th, td { padding-right: 6px; } }
+  </style>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">17 · Tree automata</span>
+  </header>
+
+  <div class="titleblock">
+    <p class="kicker">Initiative 12 · tree certificates</p>
+    <h1>The record<br>is a <span>tree</span></h1>
+    <p class="dek">Every tool call an agent makes is a JSON record. Ask "does any Bash command
+    contain <code>pkill -f</code>?" of the raw log and a string search answers the wrong question
+    twice. Ask it of the canonical tree, one opened path per record, and the answer is a count with
+    a certificate behind it.</p>
+  </div>
+
+  <h2>Two ways a flat search is <em>wrong</em></h2>
+  <p>The log is 3,382 tool calls from one Claude Code session and its 72 helpers. A byte search
+  of the 3,382 raw lines for <code>pkill -f</code> hits 47. Of those, <strong>34 are not
+  Bash commands at all</strong>: they are prompts handed to other agents, and files being written.
+  And it <strong>misses</strong> a control we planted:</p>
+  <pre>{"name":"Bash","input":{"command":"&#92;u0070kill -f node"}}</pre>
+  <p>JSON may spell <code>p</code> as <code>&#92;u0070</code>. The tree certificate reads the
+  <strong>decoded</strong> string at <code>input.command</code>, only on records whose
+  <code>name</code> is <code>Bash</code>, so it catches the control and ignores the prompts.</p>
+
+  <h2>Three questions, <em>one root</em></h2>
+  <table>
+    <tr><th>question about input.command</th><th>count</th><th>what the matches are</th></tr>
+    <tr><td>contains <code>pkill -f</code></td><td class="n">13</td><td>all mentions: notes about an incident, searches for it, quoted rules</td></tr>
+    <tr><td><code>pkill … -f</code> at command position, backticks counted as boundaries</td><td class="n">7</td><td>all markdown code spans inside heredoc prose</td></tr>
+    <tr><td>the same, without the backtick boundary</td><td class="n">0</td><td>none: the absence receipt</td></tr>
+  </table>
+  <p>The first answer is 13, not 0, and 13 is right: thirteen commands <em>talk about</em>
+  <code>pkill -f</code>, and reading them, none invokes it (that reading is ours, not a theorem). Each count is a certificate over the same committed
+  corpus (the Merkle Mountain Range of 3,382 record roots, <code>219ace22…4a61</code>). A
+  non-Bash record is refuted by opening its <code>name</code>; a Bash record opens its
+  <code>command</code>. An opening also shows the keys of each object on the way down and a
+  digest of every sibling value. The digests are unsalted, so a value you can guess (the
+  <code>name</code> "Bash", a <code>timeout</code> of 120000) can be confirmed by hashing the
+  guess. Unopened values are hidden only as well as they are hard to guess.</p>
+
+  <div class="gap">count = 0 means: for any records whose roots commit to this MMR root, none has
+  name = "Bash" with a command this byte pattern accepts, or a hash collides at a pair the theorem
+  names. It does not mean no agent ran <code>pkill -f</code>. The pattern skips
+  <code>`pkill -f x`</code> substitutions, <code>bash -c '…'</code>, aliases, and shell commands
+  issued from other tools.</div>
+
+  <h2>One certificate, <em>opened</em></h2>
+  <p>Record 2580, opened at <code>input.command</code> against the third table. The verifier
+  hashes three frames: the record (its keys and two child digests), its <code>input</code>
+  object, and the leaf.</p>
+  <pre><span class="s">// statement (data only)</span>
+{"kind": "field", "path": "/input/command", "verdict": "reject",
+ "tree_root":    "d309c9ed7950cde295815e21f5145bc69facdbdaf9f8a041f31633c286931e22",
+ "table_digest": "23cd7276617172202e566d9fec86ae0295aaf9b285da4c4bd699085f98add95c"}
+<span class="s">// opening</span>
+obj  [name: #…, input: #…]
+  obj  [command: #…]
+    here "cv recipes 2>&amp;1 | head -80; cv schema 2>&amp;1 | head -80"
+<span class="s">// tree-check verify field-cert-2580-c.json</span>
+frames hashed 3 · frame bytes 184 · Keccak-f 3 (opening) + 85 (table) = 88 · ACCEPT</pre>
+  <pre><span class="s"># re-verify (breadstuffs)</span>
+cd metatheory &amp;&amp; lake build tree-check
+./.lake/build/bin/tree-check verify ../demo/tree-absence/field-cert-2580-c.json</pre>
+
+  <h2>What the <em>theorems</em> say</h2>
+  <p><strong>The record is canonical.</strong> Values are deterministic CBOR (RFC 8949 §4.2.1):
+  exact decimals, no floats, decoded strings, keys in one order, duplicate keys refused. The
+  checker re-encodes what it reads and compares bytes; <code>canon_injective</code> says two
+  trees never share a byte string, and the reader accepts only the one encoding of each tree.
+  That two JSON spellings of one value parse to one tree is tested, not proved. (RFC 8785 JCS was
+  the obvious alternative. It works on IEEE doubles, so a parser that converts
+  <code>9007199254740993</code> to binary64 hands JCS the same number as
+  <code>9007199254740992</code>. JCS itself advises strings for numbers that need more
+  precision.)</p>
+  <p><strong>The opening tells the truth.</strong> <code>walk_sound</code>: an accepted opening
+  reports the named record's real value at the path, or its real absence, or the hash collides
+  at a pair computed from the record and the opening. Without the kind tag in each frame,
+  <code>[]</code> and <code>{}</code> would share a digest; the falsifier is pinned.</p>
+  <p><strong>The count is the count.</strong> <code>corpus_count_mmr</code> composes the
+  openings with the MMR's own binding theorem: exactly <code>count</code> records match, or a
+  hash collides at a computed pair. The MMR collision is lifted to SHAKE256 for short inputs;
+  that the pair has that shape is not proved yet. Schemas compile to bottom-up tree automata
+  (<code>compile_correct</code>), and a string leaf's check is the house DFA's accepting run.</p>
+
+  <div class="notclaims">
+    <div class="nc"><div class="x">✗</div><p>what a shell would execute · the pattern is bytes
+    of the decoded command; <code>bash -c '…'</code>, aliases and <code>kill $(pgrep -f …)</code>
+    are outside it, and it says so</p></div>
+    <div class="nc"><div class="x">✗</div><p>that the tables denote the patterns · they are
+    compiled by a derivative compiler and differential-tested on every command, not proved</p></div>
+    <div class="nc"><div class="x">✗</div><p>that the export is the session · that is the job
+    of the session-verification receipts (initiative 10)</p></div>
+    <div class="nc"><div class="x">✗</div><p>privacy · the opened command is disclosed, and so are
+    sibling keys and guessable sibling values (unsalted digests); keeping the field private while
+    proving the DFA run is the next leg</p></div>
+    <div class="nc"><div class="x">✗</div><p>that you can recheck the counts today · you can
+    recheck the one-record certificate and the theorems. The full corpus certificates disclose
+    every Bash command of the session and are not published, so the counts are our local
+    measurements</p></div>
+  </div>
+
+  <div class="stance">
+    <p><strong>Why bother:</strong> "grep says no" is two mistakes in a trench coat. A tree
+    certificate counts the field you meant, reads the decoded string, opens one path per record,
+    and is checked by a program whose meaning is a theorem.</p>
+  </div>
+
+  <p class="status">Status, plainly: the Lean statements are kernel-checked and audited by a
+  second model; the verifier is the extracted Lean checker, on SHAKE256 standing in for the
+  deployed cSHAKE256. The full certificates disclose every Bash command of the session and are
+  not published. There is no proof-system leg yet.</p>
+
+  <footer>
+    <span>DREGG research field notes · tree certificates</span>
+    <span>Plain HTML · no trackers</span>
+  </footer>
+</main>
+</body>
+</html>
