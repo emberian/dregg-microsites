@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>A receipt for what the agents did</title>
+  <meta name="description" content="A question about what a swarm of AI agents did to files, answered as a stratified Datalog certificate with an exact count, checked by a checker extracted from Lean, and signed.">
+  <meta name="theme-color" content="#10110c">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/governance-receipt/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="A receipt for what the agents did">
+  <meta property="og:description" content="Count = 0, as a certificate: the answer is a function of the committed log and the rules, not of whoever computed it.">
+  <style>
+    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--green); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(52px, 9vw, 104px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--orange); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--orange); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    .gap {
+      margin: 30px 0; padding: 22px 24px; border: 1px solid var(--rule); border-left: 4px solid var(--orange);
+      font: 700 17px/1.55 var(--mono); color: var(--paper);
+    }
+    .notclaims { border-top: 4px solid var(--paper); margin: 22px 0; }
+    .nc { display: grid; grid-template-columns: 26px 1fr; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--rule); }
+    .nc .x { color: var(--orange); font: 900 16px/1.4 var(--mono); }
+    .nc p { margin: 0; font-size: 14.5px; }
+    .stance { margin: 34px 0; padding: 20px 24px; background: #0a0b07; border: 1px solid var(--rule); border-left: 4px solid var(--green); }
+    .stance p { margin: 0; max-width: none; font-size: 15.5px; color: var(--dim); }
+    .stance p strong { color: var(--green); }
+    .status { margin-top: 44px; padding-top: 14px; border-top: 1px solid var(--rule); font: 600 11px/1.8 var(--mono); color: var(--dimmer); letter-spacing: .05em; text-transform: uppercase; }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 56px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+
+    pre { margin: 18px 0 24px; padding: 16px 18px; overflow-x: auto; background: #0a0b07; border: 1px solid var(--rule); font: 500 13px/1.6 var(--mono); color: var(--paper); }
+    pre .s { color: var(--dimmer); }
+    table { width: 100%; margin: 18px 0 28px; border-collapse: collapse; font: 500 13.5px/1.5 var(--mono); }
+    th, td { padding: 8px 10px 8px 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--rule); }
+    th { color: var(--dimmer); font-weight: 700; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+    td { color: var(--dim); }
+    td.n { color: var(--paper); white-space: nowrap; }
+    code { font: 500 0.92em var(--mono); color: var(--paper); }
+    @media (max-width: 520px) { pre { font-size: 11.5px; } table { font-size: 12px; } td.n { white-space: normal; } th, td { padding-right: 6px; } }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">16 · Datalog</span>
+  </header>
+
+  <section class="titleblock">
+    <p class="kicker">Automata program · demo (b) · stratified Datalog with an exact count</p>
+    <h1>A receipt for what<br><span>the agents did.</span></h1>
+    <p class="dek">An AI agent spawns three helpers. Together they make about 190
+    tool calls on a codebase. Did any helper change a file it had never looked at?
+    Did any write where it must not? This page shows the answer as a certificate:
+    a count that someone who was not there can <em>check</em>.</p>
+  </section>
+
+  <div class="gap">every number on this page comes from a SYNTHETIC session:<br>
+  a seeded generator, an invented project, no real transcript.</div>
+  <p>The generator, <code>synth_transcript.py</code>, writes two versions of one
+  small session. In <strong>violating</strong>, one helper edits a file nobody had
+  read and another writes to <code>/etc/hosts</code>. In <strong>fixed</strong>,
+  the first reads the file before editing and the second writes inside the project.
+</p>
+
+  <h2>The <em>question.</em></h2>
+  <p>A helper agent (a <strong>sub-agent</strong>) is allowed to edit a file only
+  if it, or the agent that started it, had already read or written that file. An
+  edit of a file neither of them had seen is a <strong>blind edit</strong>. A
+  helper also must not write anywhere under six forbidden directories, a fixed
+  list in the program. A <strong>violation</strong> is either one. The claim is
+  the exact number of violations: 2 in the violating session, 0 in the fixed one.</p>
+  <p>"Zero" is the hard kind of answer. Showing one violation means pointing at it.
+  Showing none means proving that nothing was left out. So the certificate carries
+  a <strong>closure</strong> check: every fact the rules could derive is present.
+  Without that check, a prover could report zero simply by not looking.</p>
+  <div class="gap">count(violation) = 0 is a statement about the committed log<br>
+  and the rules, not about whoever computed it.</div>
+
+  <h2>The <em>rules.</em></h2>
+  <p>The log becomes facts: one <code>tool_call</code> per call (with its own
+  occurrence number, so two identical calls stay two), plus <code>reads</code>,
+  <code>writes</code>, <code>edits</code>, <code>spawned</code>, <code>next</code>
+  (consecutive steps of one agent), and the forbidden directories. Then two
+  strata, with the negation reading only the first stratum's finished result:</p>
+<pre>written_path(P)      :- writes(W, P).
+touched(R, P)        :- reads(R, P).
+touched(R, P)        :- writes(R, P).
+touch_upto(A, P, S)  :- touched(R, P), tool_call(R, A, T, S), written_path(P).
+touch_upto(A, P, S2) :- touch_upto(A, P, S1), next(A, S1, S2).
+prior_touch(W) :- edits(W, P), tool_call(W, A, T, S), next(A, S0, S),
+                  touch_upto(A, P, S0).
+prior_touch(W) :- edits(W, P), tool_call(W, A, T, S), spawned(A, Q, K),
+                  next(Q, K0, K), touch_upto(Q, P, K0).
+<span class="s">--- stratum 1 ---</span>
+blind_edit(W)      :- edits(W, P), tool_call(W, A, T, S), spawned(A, Q, K),
+                      not prior_touch(W).
+forbidden_write(W) :- writes(W, P), tool_call(W, A, T, S), spawned(A, Q, K),
+                      prefix_of(P, X), forbidden_prefix(X).
+violation(W) :- blind_edit(W).
+violation(W) :- forbidden_write(W).</pre>
+
+  <h2>What gets <em>checked.</em></h2>
+  <p>The certificate is the facts plus a log of every rule firing, stratum by
+  stratum. The checker is a Lean function extracted to a native program,
+  <code>datalog-check</code>. It recomputes the hash root of the facts, replays
+  every firing, and checks that each stratum is closed. Negated facts are read
+  against the <strong>finished</strong> lower stratum, never a half-built one.
+  Finally it compares the count. Lean proves that if the checker accepts, its
+  database is exactly the standard stratified model of these rules over these
+  facts. A second accepted certificate for the same rules and root could only
+  claim a different count if the instantiated list hash collided. Reducing that
+  to a SHAKE256 collision also needs the byte encoding to be injective, which is
+  checked on examples, not proved.</p>
+
+  <table>
+    <tr><th>quantity</th><th>violating</th><th>fixed</th></tr>
+    <tr><td>agents (1 root + 3 helpers) / tool calls</td><td class="n">4 / 192</td><td class="n">4 / 193</td></tr>
+    <tr><td>facts committed under the root</td><td class="n">550</td><td class="n">557</td></tr>
+    <tr><td>· tool_call / next / reads / name</td><td class="n">192 / 188 / 75 / 42</td><td class="n">193 / 189 / 76 / 43</td></tr>
+    <tr><td>· prefix_of / writes / edits / spawned</td><td class="n">30 / 8 / 6 / 3</td><td class="n">33 / 8 / 6 / 3</td></tr>
+    <tr><td>integers hashed into the root</td><td class="n">2,769</td><td class="n">2,800</td></tr>
+    <tr><td>stratum 0: rounds / firings</td><td class="n">41 / 412</td><td class="n">42 / 416</td></tr>
+    <tr><td>stratum 1: firings</td><td class="n">4</td><td class="n">0</td></tr>
+    <tr><td>final database</td><td class="n">966 facts</td><td class="n">973 facts</td></tr>
+    <tr><td>count(violation)</td><td class="n">2</td><td class="n">0</td></tr>
+    <tr><td>check, native (the checker's own number)</td><td class="n">0.70 s</td><td class="n">0.57 s</td></tr>
+    <tr><td>verify the receipt signature</td><td class="n">0.015 s</td><td class="n">0.012 s</td></tr>
+  </table>
+
+  <p>Both certificates are accepted. The violating one is accepted at <strong>2</strong>,
+  because the certificate states the true count, whatever it is. Three forged
+  certificates are refused on the fixed data. One leaves stratum 0 unfinished, so
+  all 6 helper edits come out "blind" and it claims 6. Another
+  claims the wrong count. A third deletes one fact but keeps the root. A weaker
+  checker that tests closure only at the top stratum <strong>accepts</strong> the
+  first forgery. That weaker checker's acceptance is why the per-stratum closure
+  check exists.</p>
+
+  <h2>The <em>receipt.</em></h2>
+  <p>For the fixed session:</p>
+<pre>dregg datalog receipt v1
+program_digest=0xfbfed331b71870666a978d5daf2736c01e97f0496da36f500de4f5b31c3d350a
+root=0x20f64ad495f946e1fa29d923da2eade62410f4db04f830fa6c47469fc3f1227d
+pred=16
+count=0
+checker=lake exe datalog-check (metatheory/DatalogCheck.lean)</pre>
+  <p>It is signed with <code>ssh-keygen -Y sign</code>, under a demo key. The
+  signature authenticates the text under that key. One command re-runs the
+  checker for both certificates and compares the complete checked tuple—program,
+  root, predicate and count—with each original signed receipt:</p>
+<pre>git clone https://github.com/emberian/dregg.git
+cd dregg
+demo/datalog-governance/run.sh verify</pre>
+  <p>Requires Python 3, OpenSSH with <code>ssh-keygen -Y</code>, and the Lean toolchain
+  selected by <code>metatheory/lean-toolchain</code>. The first run builds the checker.
+  Run <code>demo/datalog-governance/run.sh</code> to regenerate both synthetic
+  sessions and certificates, verify them against the original receipts, and run
+  the three forgery checks. Outputs go to a fresh temporary directory; the
+  trusted signer and published artifacts stay unchanged.</p>
+
+  <p>What this does <strong>not</strong> prove:</p>
+  <div class="notclaims">
+    <div class="nc"><div class="x">✗</div><p>anything succinct · checking is
+    re-running the extracted checker natively, with no STARK and no proof system</p></div>
+    <div class="nc"><div class="x">✗</div><p>that the facts are a faithful
+    reading of the session · the two short scripts that turn the log into facts
+    are trusted, not proved</p></div>
+    <div class="nc"><div class="x">✗</div><p>anything about writes made through
+    shell commands · only the structured file tools become facts</p></div>
+    <div class="nc"><div class="x">✗</div><p>that a requested call succeeded, or
+    that two different strings are different files · facts are tool requests,
+    and paths are compared as text</p></div>
+    <div class="nc"><div class="x">✗</div><p>order across agents beyond one
+    rule · a parent's look counts only if it came before it started the helper</p></div>
+    <div class="nc"><div class="x">✗</div><p>the deployed hash · SHAKE256 with a
+    domain prefix stands in for it, and its byte encoding is checked by test
+    cases, not by a theorem</p></div>
+    <div class="nc"><div class="x">✗</div><p>that a helper never created a file
+    without reading · that is allowed. The literal "read before every write"
+    question flags every helper write, because they are creations, which is why
+    the question counts edits</p></div>
+  </div>
+
+  <div class="stance">
+    <p><strong>Why bother:</strong> agent swarms are going to touch real files, and
+    "the logs look fine" is a feeling. A count with a closure leg, bound to a
+    committed log and checked by a program whose meaning is a theorem, is a
+    statement someone else can recheck without trusting whoever ran the agents
+    or whoever counted.</p>
+  </div>
+
+  <p class="status">Status, plainly: the Lean theorems (stratified negation,
+  aggregates, closure by join, and the coincidence with the standard semantics
+  for safe programs) are kernel-checked. The checker runs on both synthetic sessions
+  shown here. Receipts are signed with a demo key. There is no proof-system leg yet.</p>
+
+  <footer>
+    <span>DREGG research field notes · Datalog receipts</span>
+    <span>Plain HTML · no trackers</span>
+  </footer>
+</main>
+</body>
+</html>
