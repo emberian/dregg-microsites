@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>The call tree, certified</title>
+  <meta name="description" content="One agent turn over HTTPS (a model, a tool, the page the tool fetched), every hop an MPC-TLS attestation, the tree one Merkle root, checked offline by a Lean-extracted verifier.">
+  <meta name="theme-color" content="#10110c">
+  <link rel="canonical" href="https://emberian.github.io/dregg-microsites/call-tree/">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="The call tree, certified">
+  <meta property="og:description" content="Combine TLSNotary with receipts and you can certify a whole API call tree: the model's request, the tool it asked for, the page the tool read, and what flowed between them.">
+  <style>
+    :root {
+      --night: #10110c; --paper: #f2eddf; --rule: rgba(242,237,223,.17);
+      --green: #9fc55b; --orange: #e56f3d; --dim: #a9aa9f; --dimmer: #77796f;
+      --sans: Inter, ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+      --display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", Impact, sans-serif;
+      --mono: "SFMono-Regular", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--night); }
+    body { margin: 0; color: var(--paper); background: var(--night); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration-color: rgba(159,197,91,.45); }
+    .page { width: min(760px, calc(100% - 44px)); margin: 0 auto; padding: 30px 0 80px; }
+    header.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); font: 750 11px/1.3 var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .brand { color: var(--green); text-decoration: none; }
+    .issue { color: var(--dimmer); }
+    .titleblock { padding: 66px 0 40px; }
+    .kicker { margin: 0 0 14px; color: var(--green); font: 800 11px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 0 0 22px; font: 900 clamp(52px, 9vw, 104px)/0.84 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+    h1 span { color: var(--orange); }
+    .dek { max-width: 58ch; color: var(--dim); font-size: 18px; }
+    h2 { margin: 54px 0 14px; font: 850 clamp(26px, 4vw, 40px)/0.95 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+    h2 em { color: var(--orange); font-style: normal; }
+    p { max-width: 64ch; margin: 0 0 16px; color: var(--dim); font-size: 16px; }
+    p strong { color: var(--paper); font-weight: 600; }
+    .gap {
+      margin: 30px 0; padding: 22px 24px; border: 1px solid var(--rule); border-left: 4px solid var(--orange);
+      font: 700 17px/1.55 var(--mono); color: var(--paper);
+    }
+    .notclaims { border-top: 4px solid var(--paper); margin: 22px 0; }
+    .nc { display: grid; grid-template-columns: 26px 1fr; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--rule); }
+    .nc .x { color: var(--orange); font: 900 16px/1.4 var(--mono); }
+    .nc p { margin: 0; font-size: 14.5px; }
+    .stance { margin: 34px 0; padding: 20px 24px; background: #0a0b07; border: 1px solid var(--rule); border-left: 4px solid var(--green); }
+    .stance p { margin: 0; max-width: none; font-size: 15.5px; color: var(--dim); }
+    .stance p strong { color: var(--green); }
+    .status { margin-top: 44px; padding-top: 14px; border-top: 1px solid var(--rule); font: 600 11px/1.8 var(--mono); color: var(--dimmer); letter-spacing: .05em; text-transform: uppercase; }
+    footer { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; margin-top: 56px; padding-top: 16px; color: var(--dimmer); border-top: 1px solid var(--rule); font: 600 10px/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+
+    pre { margin: 18px 0 24px; padding: 16px 18px; overflow-x: auto; background: #0a0b07; border: 1px solid var(--rule); font: 500 13px/1.6 var(--mono); color: var(--paper); }
+    pre .s { color: var(--dimmer); }
+    table { width: 100%; margin: 18px 0 28px; border-collapse: collapse; font: 500 13.5px/1.5 var(--mono); }
+    th, td { padding: 8px 10px 8px 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--rule); }
+    th { color: var(--dimmer); font-weight: 700; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+    td { color: var(--dim); }
+    td.n { color: var(--paper); white-space: nowrap; }
+    code { font: 500 0.92em var(--mono); color: var(--paper); }
+    .tree { margin: 22px 0 30px; padding: 18px 20px; background: #0a0b07; border: 1px solid var(--rule); font: 500 13.5px/1.75 var(--mono); color: var(--dim); overflow-x: auto; }
+    .tree b { color: var(--paper); font-weight: 650; }
+    .tree .k { color: var(--green); }
+    .tree .e { color: var(--orange); }
+    @media (max-width: 520px) { pre { font-size: 11.5px; } table { font-size: 12px; } td.n { white-space: normal; } th, td { padding-right: 6px; } }
+  </style>
+</head>
+<body>
+<main class="page">
+  <header class="masthead">
+    <a class="brand" href="../">dregg microsites</a>
+    <span class="issue">18 · Call trees</span>
+  </header>
+
+  <div class="titleblock">
+    <p class="kicker">Initiative 9 · attested transport + receipts</p>
+    <h1>The call tree,<br><span>certified</span></h1>
+    <p class="dek">An agent asked a model a question. The model asked for a tool. The tool fetched a
+    page. The model answered. Each of those four HTTPS exchanges was witnessed by a notary while it
+    happened, and the whole tree is one 256-bit root that a stranger checks offline in a tenth of a
+    second.</p>
+  </div>
+
+  <h2>The tree that <em>happened</em></h2>
+  <div class="tree">
+<b>turn</b> <span class="k">kind 0</span> · root <b>afd03350…8d4a76</b>
+├─ <b>POST api.z.ai</b> /api/coding/paas/v4/chat/completions <span class="k">kind 1</span> · glm-5.3-flash · 7.7 s
+│    asks for fetch_page("https://example.com/")
+├─ <b>POST tool.calltree.invalid</b> /fetch <span class="k">kind 2</span> · 6.5 s
+│  │  returns a span of the page and "subtree_root":"…"
+│  └─ <b>GET example.com</b> / <span class="k">kind 1</span> · fetched by the tool, through its own attested hop · 3.3 s
+└─ <b>POST api.z.ai</b> … <span class="k">kind 1</span> · 5.4 s
+     "This page exists as a domain reserved for use in documentation examples, without needing permission."
+
+<span class="e">edge 0</span>  "https://example.com/"            model response → tool request
+<span class="e">edge 1</span>  "This domain is for use in docum…"  page response → tool response (child → parent)
+<span class="e">edge 0</span>  the same span                     tool response → model's second request</div>
+  <p>Every hop is a <strong>TLSNotary MPC-TLS session</strong> (tlsn alpha.15): the prover and a
+  separate notary jointly ran the TLS client, so the notary never saw the plaintext and the prover
+  could not have forged the server's bytes without the notary's key share. The
+  <code>Authorization</code> header's value is hidden in both model presentations; the key appears
+  nowhere in the record. The tool server records its own outbound fetch the same way and returns
+  the root of that subtree inside its attested response, so the agent's attestation of the tool
+  call binds what the tool says it did.</p>
+
+  <h2>What the checker <em>decides</em></h2>
+  <p>The verifier binary runs <code>presentation.verify()</code> on each hop and passes on only what
+  it authenticated. Everything else is a Lean function, <code>CallTreeDeploy.deployedVerify</code>,
+  compiled and run as <code>calltree-check</code>:</p>
+  <table>
+    <tr><th>check</th><th>over</th></tr>
+    <tr><td>the tree's commitment equals the root you trust</td><td class="n">BLAKE3, MMR of children</td></tr>
+    <tr><td>only the root is local; every other node is an attested hop</td><td class="n">kinds</td></tr>
+    <tr><td>each hop's host, request and response digests are the presentation's</td><td class="n">authenticated bytes</td></tr>
+    <tr><td>notary key pinned, host allowed, notary time in the window</td><td class="n">your policy</td></tr>
+    <tr><td>a recording callee carries its subtree root in its attested body</td><td class="n"><code>"subtree_root"</code></td></tr>
+    <tr><td>no notarised session backs two hops</td><td class="n">signed headers</td></tr>
+    <tr><td>required dataflow edges hold, inside bodies, forward or child→parent</td><td class="n">unmasked bytes</td></tr>
+  </table>
+  <p><strong>The theorems.</strong> <code>commit_binds_or_collides</code>: two trees with one root
+  are equal, or a total extractor names the two inputs on which the hash collides, and
+  <code>deployed_coll_is_blake3_coll</code> shows that pair is a BLAKE3-256 collision on distinct
+  messages. <code>verify_sound</code> and <code>no_omission</code>: an accepted tree is the
+  committed one, every node with exactly its children, none dropped, added or reordered.
+  <code>verify_attested</code>: every non-root node is a transport hop, attested, given the named
+  carrier that a verified presentation means what TLSNotary says it means.</p>
+
+  <h2>Re-verify it <em>yourself</em></h2>
+  <pre><span class="s"># breadstuffs (github.com/emberian/dregg), offline after the build</span>
+calltree/verify/run.sh
+<span class="s"># = lake build calltree-check; cargo build calltree/verify; then</span>
+dregg-calltree-verify --recording calltree/fixtures/glm.recording.json \
+  --policy calltree/fixtures/glm.policy.json \
+  --root afd0335078e2d1ec0e13ea6cc6be2e20df7695d20559ffdc7c782ba12e8d4a76 \
+  --extra-root tool.calltree.invalid=calltree/fixtures/tool-root.der \
+  --checker metatheory/.lake/build/bin/calltree-check
+<span class="s">verdict ACCEPT · extract 7 ms · Lean check 92 ms</span>
+<span class="s">fresh sparse clone + build + verify on a 32-core box: 19 s + 57 s</span></pre>
+  <p>Ten tamperings of the real recording are refused, each by the check you would expect: a dropped
+  child, reordered children, the tool relabelled as a plain hop, its subtree dropped, one flipped
+  byte or one trailing byte in a presentation, an edge made of header boilerplate or of masked bytes,
+  a missing required edge, and a different trusted root.</p>
+
+  <div class="gap">ACCEPT means: under the notary key you pinned, these four TLS sessions happened
+  with these hosts and carried these bytes; the tree is exactly the committed one; and the bytes the
+  model asked for, the page returned and the model was then shown match across the hops. It does
+  not mean the agent made no other calls.</div>
+
+  <div class="notclaims">
+    <div class="nc"><div class="x">✗</div><p>the notary's honesty · MPC-TLS needs the notary not to
+    collude with the prover. Here both are ember's (one box, separate processes); a stranger who
+    wants independence pins an independent notary's key, and the recording names its operator</p></div>
+    <div class="nc"><div class="x">✗</div><p>completeness · a recorder that makes a call outside the
+    tree leaves no trace; non-omission is about the committed tree, and dataflow edges bound only
+    what a bypass could hide from the model</p></div>
+    <div class="nc"><div class="x">✗</div><p>the root's origin · you trust the root you pass on the
+    command line. The grain turn it was minted into is shown, but that cell comes from the host
+    that ran the executor, so it is reported, not counted</p></div>
+    <div class="nc"><div class="x">✗</div><p>the tool's identity · the tool server has no public
+    name; its self-signed root is pinned per host, and it can only vouch for that host</p></div>
+    <div class="nc"><div class="x">✗</div><p>meaning · edges are byte spans of at least 16 bytes in
+    request and response bodies, not typed JSON fields keyed by tool-call id (next)</p></div>
+    <div class="nc"><div class="x">✗</div><p>freshness · the policy bounds the notary's time
+    window; there is no verifier challenge yet</p></div>
+  </div>
+
+  <div class="stance">
+    <p><strong>Why bother:</strong> a zkTLS proof per call says each call happened. A certified
+    tree also says these were all of the calls in this turn, in this order, under these parents,
+    and that what the model saw is what the tool's page said.</p>
+  </div>
+
+  <p class="status">Status, plainly: the general theorems are kernel-checked; concrete falsifiers
+  are compiled evaluation; two cross-model audits adjudicated in calltree/GROUNDING.md. One real
+  tree, one notary operator, a self-signed tool. Publication is a separate step.</p>
+
+  <footer>
+    <span>DREGG research field notes · call-tree certificates</span>
+    <span>Plain HTML · no trackers</span>
+  </footer>
+</main>
+</body>
+</html>
